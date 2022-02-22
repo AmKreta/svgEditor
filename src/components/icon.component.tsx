@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconContext, IconType } from 'react-icons';
-import styled from 'styled-components';
+//import styled from 'styled-components';
 
 
 interface ICON_PROPS {

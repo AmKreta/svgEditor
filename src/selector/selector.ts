@@ -70,3 +70,7 @@ export function getFiltersOfCurrentPage(state: State): { [key: string]: AVAILABL
     const activePage = state.page.pages[activePageIndex];
     return activePage.filters;
 }
+
+export function getCurrentProjectColors(state: State):string[] {
+    return state.page.colors;
+}

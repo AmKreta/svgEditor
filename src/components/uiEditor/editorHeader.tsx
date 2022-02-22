@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { SHAPE_TYPES, ToolBarOptions, TOOLS } from '../../utils/constant';
-import Icon from '../../components/icon.component';
+import Icon from '../icon.component';
 import { THEME } from '../../theme/theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveTool } from '../../actions/pages/pages.actions';
 import { State } from '../../store/store';
 import { getActiveTool } from '../../selector/selector';
+import ColorPalette from './colorPalette';
+
 
 const EditorHeader: React.FC<{}> = function () {
 
@@ -61,6 +63,11 @@ const EditorHeader: React.FC<{}> = function () {
                             </>
                         )
                         : null
+                }
+                {
+                    activeOption === ToolBarOptions.COLORS
+                    ?<ColorPalette />
+                    :null
                 }
             </div>
         </StyledHeader>

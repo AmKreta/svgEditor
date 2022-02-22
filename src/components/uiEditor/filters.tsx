@@ -26,7 +26,10 @@ const Filters: React.FC = function () {
                                 filterList.push(<Outline {...f} key={f.id} />);
                                 break;
                             }
-                            default: { };
+
+                            default:
+                                console.log(filters[filterId] + "doesn't exist");
+                                break;
                         }
                     }
                     return filterList;

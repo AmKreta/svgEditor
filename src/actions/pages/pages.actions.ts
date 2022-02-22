@@ -33,7 +33,9 @@ import {
     EDIT_SVG_FILTER_ACTION,
     EDIT_SVG_FILTER_Payload,
     REMOVE_SVG_FILTER_ACTION,
-    REMOVE_SVG_FILTER_PAYLOAD
+    REMOVE_SVG_FILTER_PAYLOAD,
+    ADD_COLOR_IN_PALETTE_ACTION,
+    ADD_COLOR_IN_PALETTE_PAYLOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -150,4 +152,8 @@ export const editSvgFilter: (props: EDIT_SVG_FILTER_Payload) => EDIT_SVG_FILTER_
 
 export const removeSvgFilter: (props: REMOVE_SVG_FILTER_PAYLOAD) => REMOVE_SVG_FILTER_ACTION = (props: REMOVE_SVG_FILTER_PAYLOAD) => {
     return { type: PAGES_ACTION_TYPES.REMOVE_SVG_FILTER, payload: props };
+}
+
+export const addColorInPalette:(color:ADD_COLOR_IN_PALETTE_PAYLOAD)=>ADD_COLOR_IN_PALETTE_ACTION=(color:ADD_COLOR_IN_PALETTE_PAYLOAD)=>{
+    return {type:PAGES_ACTION_TYPES.ADD_COLOR_IN_PALETTE,payload:color};
 }

@@ -1,7 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Icon from './icon.component';
 import { IconType } from 'react-icons';
+import { THEME } from '../theme/theme';
 
 interface props {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -24,17 +25,34 @@ const Button: React.FC<props> = function ({ onClick, title, startIcon, endIcon, 
 }
 
 const StyledButton = styled.button`
-    padding:4px 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    &:hover{
-        cursor:pointer;
-        opacity:.8;
-    }
-    &:active{
-        opacity:.6;
-    }
+    ${props => {
+        const theme = props.theme as THEME;
+        return css`
+            padding:4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            font-weight: 700;
+    
+        &>svg{
+            &:first-child{
+                margin-right:${theme.spacing(.5)}px;
+            }
+            &:last-child{
+                margin-left:${theme.spacing(.5)}px;
+            }
+        }
+
+        &:hover{
+            cursor:pointer;
+            opacity:.8;
+        }
+
+        &:active{
+            opacity:.6;
+        }
+    `;
+    }}
 `;
 
 export default Button;

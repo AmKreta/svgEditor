@@ -19,7 +19,10 @@ const initialState: PAGES = {
     contextMenu: { show: false, x: 0, y: 0 },
     pages: [
         { id: id, activeShapes: [], shapes: [], filters: {} }
-    ]
+    ],
+    colors: [],
+    gradients: [],
+    images: []
 }
 
 const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initialState, action: PAGE_ACTION): PAGES {
@@ -301,6 +304,12 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             currentShape.style.svgFilters = { ...svgFilters };
             currentPage = { ...currentPage };
             return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.ADD_COLOR_IN_PALETTE:{
+            const colors=[...state.colors,action.payload];
+            state.colors=colors;
+            return {...state};
         }
 
         default: return state;

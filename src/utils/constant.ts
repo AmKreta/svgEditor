@@ -21,8 +21,9 @@ export enum SHAPE_TYPES {
 export const ToolBarOptions = {
     FILE: 'File',
     TOOLS: 'Tools',
-    ADD: 'Add',
-    INSERT: 'Insert'
+    COLORS: 'Colors',
+    Gradients: 'Gradients',
+    images: 'Images'
 }
 
 export const multiPointShpes = [
