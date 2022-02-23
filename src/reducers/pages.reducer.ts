@@ -306,10 +306,26 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             return { ...state };
         }
 
-        case PAGES_ACTION_TYPES.ADD_COLOR_IN_PALETTE:{
-            const colors=[...state.colors,action.payload];
-            state.colors=colors;
-            return {...state};
+        case PAGES_ACTION_TYPES.ADD_COLOR_IN_PALETTE: {
+            const colors = [...state.colors, action.payload];
+            state.colors = colors;
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.EDIT_PALETTE_COLOR_AT_INDEX: {
+            const colors = [...state.colors];
+            colors[action.payload.index] = action.payload.color;
+            state.colors = colors;
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR_AT_INDEX: {
+            const colors = [...state.colors];
+            const removeIndex = action.payload;
+            colors.splice(removeIndex, 1);
+            console.log(colors);
+            state.colors = colors;
+            return { ...state };
         }
 
         default: return state;

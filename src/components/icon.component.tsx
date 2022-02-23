@@ -12,7 +12,7 @@ interface ICON_PROPS {
     width?: number;
 };
 
-const Icon: React.FC<ICON_PROPS> = function ({ Icon, onClick, title, style = {}, height = 20, width = 20 }) {
+const Icon: React.FC<ICON_PROPS> = function ({ Icon, onClick, title, style = {}, height = 20, width = 20, ...iconProps }) {
     return (
         <IconContext.Provider value={{ className: 'icon', style: { ...style, height: `${height}px`, width: `${width}px` } }}>
             <Icon
@@ -24,6 +24,7 @@ const Icon: React.FC<ICON_PROPS> = function ({ Icon, onClick, title, style = {},
                 title={title}
                 onClick={onClick}
                 data-title={title}
+                {...iconProps}
             />
         </IconContext.Provider>
     );
