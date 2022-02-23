@@ -8,6 +8,7 @@ import { setActiveTool } from '../../actions/pages/pages.actions';
 import { State } from '../../store/store';
 import { getActiveTool } from '../../selector/selector';
 import ColorPalette from './colorPalette';
+import GradientPalette from './gradientPalette';
 
 
 const EditorHeader: React.FC<{}> = function () {
@@ -20,7 +21,7 @@ const EditorHeader: React.FC<{}> = function () {
         const tool = e.currentTarget.dataset['title'] as SHAPE_TYPES;
         dispatch(setActiveTool(tool))
     }
-    
+
     return (
         <StyledHeader>
             <nav>
@@ -66,8 +67,13 @@ const EditorHeader: React.FC<{}> = function () {
                 }
                 {
                     activeOption === ToolBarOptions.COLORS
-                    ?<ColorPalette />
-                    :null
+                        ? <ColorPalette />
+                        : null
+                }
+                {
+                    activeOption === ToolBarOptions.Gradients
+                        ? <GradientPalette />
+                        : null
                 }
             </div>
         </StyledHeader>
