@@ -15,6 +15,16 @@ export type SHAPE_COLLECTION = {
     };
 };
 
+export interface GRADIENT {
+    type: 'linear' | 'radial';
+    stops: {
+        stopColor: string;
+        offset: number;
+        stopOpacity: number;
+    }[];
+    spreadMethod: 'reflect' | 'repeat' | 'pad';
+    rotate:number;
+}
 export interface PAGES {
     activePageIndex: number;
     activeTool: SHAPE_TYPES;
@@ -23,7 +33,7 @@ export interface PAGES {
     clipboard: Array<AVAILABLE_SHAPES>;
     pages: Array<SHAPE_COLLECTION>;
     colors: string[],
-    gradients: string[],
+    gradients: GRADIENT[],
     images: string[]
 };
 

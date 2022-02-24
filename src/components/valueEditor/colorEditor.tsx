@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { THEME } from '../../theme/theme';
 
 interface props {
-    value: string;
+    value: string | number;
     onChange: (value: string) => void;
     label: string | JSX.Element;
     disabled?: boolean;

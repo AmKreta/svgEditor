@@ -5,7 +5,7 @@ import generateId from "../utils/idGenerator";
 interface Props {
     overlayStyle?: any,
     modalStyle?: any,
-    children: JSX.Element,
+    children: JSX.Element
 }
 
 const Modal: React.FC<Props> = function ({ overlayStyle = {}, modalStyle = {}, children }) {
@@ -22,7 +22,7 @@ const Modal: React.FC<Props> = function ({ overlayStyle = {}, modalStyle = {}, c
         setContainer(newContainer);
 
         return ()=>{
-            container?.remove();
+            newContainer?.remove();
         }
     }, []);
 
