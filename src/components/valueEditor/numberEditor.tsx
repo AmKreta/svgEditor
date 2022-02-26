@@ -18,6 +18,7 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
 
     const cancelTimerRef = function () {
         timerRef.current && clearInterval(timerRef.current);
+        timerRef.current = null;
     }
 
     const minusPressedHandler = function () {

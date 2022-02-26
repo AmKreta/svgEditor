@@ -8,6 +8,7 @@ import NumberEditor from '../valueEditor/numberEditor';
 import OptionEditor from '../valueEditor/optionEditor';
 import { useDispatch } from 'react-redux';
 import { addGradientInPalette, editPaletteGradient } from '../../actions/pages/pages.actions';
+import generateId from '../../utils/idGenerator';
 
 interface props {
     closeGradientCreater: Function;
@@ -205,7 +206,7 @@ const CreateGradient: React.FC<props> = function ({ closeGradientCreater, select
                 <Button title='Add Stops' onClick={addStopColor} />
                 {
                     gradient.stops.map((stop, index) => (
-                        <div key={index + stop.offset}>
+                        <div key={generateId()}>
                             <ColorEditor value={stop.stopColor} onChange={val => stopEditor({ stopColor: val }, index)} label='Stop Color' />
                             <NumberEditor value={stop.offset} onChange={val => val >= 0 && val <= 100 && stopEditor({ offset: val }, index)} label='offset' step={5} />
                             <NumberEditor value={stop.stopOpacity} onChange={val => val >= 0 && val <= 1 && stopEditor({ stopOpacity: val }, index)} label='opacity' step={.1} />
