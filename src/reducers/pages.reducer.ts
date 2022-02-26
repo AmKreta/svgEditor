@@ -21,8 +21,8 @@ const initialState: PAGES = {
         { id: id, activeShapes: [], shapes: [], filters: {} }
     ],
     colors: {},
-    gradients: [],
-    images: []
+    gradients: {},
+    images: {}
 }
 
 const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initialState, action: PAGE_ACTION): PAGES {
@@ -325,6 +325,27 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             delete colors[action.payload];
             console.log(colors, action.payload);
             state.colors = colors;
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.ADD_GRADIENT_IN_PALETTE: {
+            const gradients = { ...state.gradients };
+            gradients[generateId()] = action.payload;
+            state.gradients = gradients;
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.EDIT_PALETTE_GRADIENT: {
+            const gradients = { ...state.gradients };
+            gradients[action.payload.id] = action.payload.newGradient;
+            state.gradients = gradients;
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.REMOVE_PALETTE_GRADIENT: {
+            const gradients = { ...state.gradients };
+            delete gradients[action.payload];
+            state.gradients = gradients;
             return { ...state };
         }
 

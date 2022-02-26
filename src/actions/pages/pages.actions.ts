@@ -39,7 +39,13 @@ import {
     EDIT_PALETTE_COLOR_ACTION,
     EDIT_PALETTE_COLOR_PAYLOAD,
     REMOVE_PALETTE_COLOR_ACTION,
-    REMOVE_PALETTE_COLOR_PAYlOAD
+    REMOVE_PALETTE_COLOR_PAYlOAD,
+    ADD_GRADIENT_IN_PALATTE_ACTION,
+    ADD_GRADIENT_IN_PALETTE_PAYLOAD,
+    EDIT_PALETTE_GRADIENT_ACTION,
+    EDIT_PALETTE_GRADIENT_PAYLOAD,
+    REMOVE_PALETTE_GRADIENT_ACTION,
+    REMOVE_PALETTE_GRADIENT_PAYLOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -168,4 +174,16 @@ export const editColorPalette = function (props: EDIT_PALETTE_COLOR_PAYLOAD): ED
 
 export const removePaletteColor = function (id: REMOVE_PALETTE_COLOR_PAYlOAD): REMOVE_PALETTE_COLOR_ACTION {
     return { type: PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR, payload: id };
+}
+
+export const addGradientInPalette = function (gradient: ADD_GRADIENT_IN_PALETTE_PAYLOAD): ADD_GRADIENT_IN_PALATTE_ACTION {
+    return { type: PAGES_ACTION_TYPES.ADD_GRADIENT_IN_PALETTE, payload: gradient };
+}
+
+export const editPaletteGradient = function (props: EDIT_PALETTE_GRADIENT_PAYLOAD): EDIT_PALETTE_GRADIENT_ACTION {
+    return { type: PAGES_ACTION_TYPES.EDIT_PALETTE_GRADIENT, payload: props };
+}
+
+export const removePaletteGradient = function (id: REMOVE_PALETTE_GRADIENT_PAYLOAD): REMOVE_PALETTE_GRADIENT_ACTION {
+    return { type: PAGES_ACTION_TYPES.REMOVE_PALETTE_GRADIENT, payload: id };
 }

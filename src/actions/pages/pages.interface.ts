@@ -22,8 +22,15 @@ export interface GRADIENT {
         offset: number;
         stopOpacity: number;
     }[];
-    spreadMethod: 'reflect' | 'repeat' | 'pad';
-    rotate: number;
+    spreadMethod?: 'reflect' | 'repeat' | 'pad';
+    rotate?: number;
+    skewX?: number;
+    skewY?: number;
+    cx?: number;
+    cy?: number;
+    fx?: number;
+    fy?: number;
+    fr?: number;
 }
 export interface PAGES {
     activePageIndex: number;
@@ -33,8 +40,8 @@ export interface PAGES {
     clipboard: Array<AVAILABLE_SHAPES>;
     pages: Array<SHAPE_COLLECTION>;
     colors: { [key: string]: string },
-    gradients: GRADIENT[],
-    images: string[]
+    gradients: { [key: string]: GRADIENT },
+    images: { [key: string]: string }
 };
 
 interface ACTION<Type, Payload> {
@@ -130,6 +137,8 @@ export type FORMAT_ACTIVE_SHAPE_PAYLOAD = {
 };
 export type FORMAT_ACTIVE_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.FORMAT_ACTIVE_SHAPE, FORMAT_ACTIVE_SHAPE_PAYLOAD>;
 
+
+// color palette actions
 export type ADD_COLOR_IN_PALETTE_PAYLOAD = string;
 export type ADD_COLOR_IN_PALETTE_ACTION = ACTION<PAGES_ACTION_TYPES.ADD_COLOR_IN_PALETTE, ADD_COLOR_IN_PALETTE_PAYLOAD>;
 
@@ -137,7 +146,17 @@ export type EDIT_PALETTE_COLOR_PAYLOAD = { id: string, color: string };
 export type EDIT_PALETTE_COLOR_ACTION = ACTION<PAGES_ACTION_TYPES.EDIT_PALETTE_COLOR, EDIT_PALETTE_COLOR_PAYLOAD>;
 
 export type REMOVE_PALETTE_COLOR_PAYlOAD = string;// id
-export type REMOVE_PALETTE_COLOR_ACTION = ACTION<PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR, REMOVE_PALETTE_COLOR_PAYlOAD>
+export type REMOVE_PALETTE_COLOR_ACTION = ACTION<PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR, REMOVE_PALETTE_COLOR_PAYlOAD>;
+
+// gradient palette actions
+export type ADD_GRADIENT_IN_PALETTE_PAYLOAD = GRADIENT;
+export type ADD_GRADIENT_IN_PALATTE_ACTION = ACTION<PAGES_ACTION_TYPES.ADD_GRADIENT_IN_PALETTE, ADD_GRADIENT_IN_PALETTE_PAYLOAD>;
+
+export type EDIT_PALETTE_GRADIENT_PAYLOAD = { id: string, newGradient: GRADIENT };
+export type EDIT_PALETTE_GRADIENT_ACTION = ACTION<PAGES_ACTION_TYPES.EDIT_PALETTE_GRADIENT, EDIT_PALETTE_GRADIENT_PAYLOAD>;
+
+export type REMOVE_PALETTE_GRADIENT_PAYLOAD = string;// id
+export type REMOVE_PALETTE_GRADIENT_ACTION = ACTION<PAGES_ACTION_TYPES.REMOVE_PALETTE_GRADIENT, REMOVE_PALETTE_GRADIENT_PAYLOAD>;
 
 
 export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
@@ -159,6 +178,9 @@ export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | REMOVE_SVG_FILTER_ACTION
     | ADD_COLOR_IN_PALETTE_ACTION
     | EDIT_PALETTE_COLOR_ACTION
-    | REMOVE_PALETTE_COLOR_ACTION;
+    | REMOVE_PALETTE_COLOR_ACTION
+    | ADD_GRADIENT_IN_PALATTE_ACTION
+    | EDIT_PALETTE_GRADIENT_ACTION
+    | REMOVE_PALETTE_GRADIENT_ACTION;
 
 

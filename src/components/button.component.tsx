@@ -12,11 +12,12 @@ interface props {
     style?: React.CSSProperties;
     onMouseDown?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     onMouseUp?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    disabled?: boolean;
 };
 
-const Button: React.FC<props> = function ({ onClick, title, startIcon, endIcon, style, onMouseDown, onMouseUp }) {
+const Button: React.FC<props> = function ({ onClick, title, startIcon, endIcon, style, onMouseDown, onMouseUp, disabled = false }) {
     return (
-        <StyledButton onClick={onClick} style={style} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+        <StyledButton onClick={onClick} style={style} onMouseDown={onMouseDown} onMouseUp={onMouseUp} disabled={disabled}>
             {startIcon ? <Icon Icon={startIcon} height={12} width={12} /> : null}
             {title ? title : null}
             {endIcon ? <Icon Icon={endIcon} height={12} width={12} /> : null}
