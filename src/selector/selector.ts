@@ -71,6 +71,6 @@ export function getFiltersOfCurrentPage(state: State): { [key: string]: AVAILABL
     return activePage.filters;
 }
 
-export function getCurrentProjectColors(state: State):string[] {
+export function getCurrentProjectColors(state: State):{ [key: string]: string; } {
     return state.page.colors;
 }

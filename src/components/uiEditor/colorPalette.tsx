@@ -7,18 +7,18 @@ import Button from '../button.component';
 import { SiAddthis } from 'react-icons/si';
 import styled, { css } from 'styled-components';
 import { THEME } from '../../theme/theme';
-import { editColorPaletteAtIndex, removePaletteColorAtIndex } from '../../actions/pages/pages.actions';
+import { editColorPalette, removePaletteColor } from '../../actions/pages/pages.actions';
 import Icon from '../icon.component';
 import { AiOutlineClose } from 'react-icons/ai';
 
 const ColorPalette: React.FC = function () {
-    const colors = useSelector<State, string[]>(getCurrentProjectColors);
+    const colors = useSelector<State, { [key: string]: string; }>(getCurrentProjectColors);
     const [pickerColor, setPickerColor] = useState<string>('rgba(0,0,0,1)');
     const [showEditorAt, setshowEditorAt] = useState<number>(-1);
     const dispatch = useDispatch();
 
     const addHandler = function (e: React.MouseEvent<HTMLButtonElement>) {
-        if (!colors.includes(pickerColor)) {
+        if (!Object.values(colors).includes(pickerColor)) {
             dispatch(addColorInPalette(pickerColor));
         }
     }
@@ -26,7 +26,7 @@ const ColorPalette: React.FC = function () {
     const onEdit = function (e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
         e.stopPropagation();
-        e.cancelable=true;
+        e.cancelable = true;
         const index = parseInt(e.currentTarget.dataset['index']!);
         setshowEditorAt(index);
     }
@@ -38,33 +38,32 @@ const ColorPalette: React.FC = function () {
     const editPredefinedPaletteColor = function (e: React.ChangeEvent<HTMLInputElement>) {
         e.preventDefault();
         e.stopPropagation();
-        const index = parseInt(e.currentTarget.dataset['index']!);
-        dispatch(editColorPaletteAtIndex({ index, color: e.target.value }));
+        const id = e.currentTarget.dataset['id']!;
+        dispatch(editColorPalette({ id, color: e.target.value }));
     }
 
     const deleteColor = function (e: React.MouseEvent<SVGElement, MouseEvent>) {
-        const index = parseInt(e.currentTarget.dataset['index']!);
-        console.log(index)
-        dispatch(removePaletteColorAtIndex(index));
+        const id = e.currentTarget.dataset['id']!;
+        dispatch(removePaletteColor(id));
     }
 
     return (
         <>
             <div style={{ display: 'flex', flexGrow: 1 }}>
                 {
-                    colors.map((color, index) => (
+                    Object.keys(colors).map((colorId, index) => (
                         <ColorContainer
-                            key={index + color}
+                            key={index + colorId}
                             onMouseUp={onEdit}
                             data-index={index}
-                            color={color}
+                            color={colors[colorId]}
                         >
                             {
                                 showEditorAt === index
-                                    ? <input type='color' onBlur={removeEditor} value={color} onChange={editPredefinedPaletteColor} data-index={index} />
+                                    ? <input type='color' onBlur={removeEditor} value={colors[colorId]} onChange={editPredefinedPaletteColor} data-id={colorId} />
                                     : null
                             }
-                            <Icon Icon={AiOutlineClose} onClick={deleteColor} data-index={index} />
+                            <Icon Icon={AiOutlineClose} onClick={deleteColor} data-id={colorId} />
                         </ColorContainer>
                     ))
                 }

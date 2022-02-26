@@ -36,10 +36,10 @@ import {
     REMOVE_SVG_FILTER_PAYLOAD,
     ADD_COLOR_IN_PALETTE_ACTION,
     ADD_COLOR_IN_PALETTE_PAYLOAD,
-    EDIT_PALETTE_COLOR_AT_INDEX_ACTION,
-    EDIT_PALETTE_COLOR_AT_INDEX_PAYLOAD,
-    REMOVE_PALETTE_COLOR_AT_INDEX_ACTION,
-    REMOVE_PALETTE_COLOR_AT_INDEX_PAYlOAD
+    EDIT_PALETTE_COLOR_ACTION,
+    EDIT_PALETTE_COLOR_PAYLOAD,
+    REMOVE_PALETTE_COLOR_ACTION,
+    REMOVE_PALETTE_COLOR_PAYlOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -162,10 +162,10 @@ export const addColorInPalette: (color: ADD_COLOR_IN_PALETTE_PAYLOAD) => ADD_COL
     return { type: PAGES_ACTION_TYPES.ADD_COLOR_IN_PALETTE, payload: color };
 }
 
-export const editColorPaletteAtIndex = function (props: EDIT_PALETTE_COLOR_AT_INDEX_PAYLOAD): EDIT_PALETTE_COLOR_AT_INDEX_ACTION {
-    return { type: PAGES_ACTION_TYPES.EDIT_PALETTE_COLOR_AT_INDEX, payload: props };
+export const editColorPalette = function (props: EDIT_PALETTE_COLOR_PAYLOAD): EDIT_PALETTE_COLOR_ACTION {
+    return { type: PAGES_ACTION_TYPES.EDIT_PALETTE_COLOR, payload: props };
 }
 
-export const removePaletteColorAtIndex = function (index: REMOVE_PALETTE_COLOR_AT_INDEX_PAYlOAD): REMOVE_PALETTE_COLOR_AT_INDEX_ACTION {
-    return { type: PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR_AT_INDEX, payload: index };
+export const removePaletteColor = function (id: REMOVE_PALETTE_COLOR_PAYlOAD): REMOVE_PALETTE_COLOR_ACTION {
+    return { type: PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR, payload: id };
 }
