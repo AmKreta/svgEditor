@@ -16,22 +16,38 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
 
     const timerRef = useRef<any>(null);
 
+    const cancelTimerRef = function () {
+        timerRef.current && clearInterval(timerRef.current);
+    }
+
     const minusPressedHandler = function () {
         const val = value;
         let times = step;
-        timerRef.current = setInterval(function () {
-            onChange(val - times);
-            times += step;
-        }, 200);
+        if (!timerRef.current) {
+            timerRef.current = setInterval(function () {
+                onChange(val - times);
+                times += step;
+            }, 200);
+            window.onmouseup = function () {
+                cancelTimerRef();
+                window.onmouseup = null;
+            }
+        }
     }
 
     const plusPressedHandler = function (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const val = value;
         let times = step;
-        timerRef.current = setInterval(function () {
-            onChange(val + times);
-            times += step;
-        }, 200);
+        if (!timerRef.current) {
+            timerRef.current = setInterval(function () {
+                onChange(val + times);
+                times += step;
+            }, 200);
+            window.onmouseup = function () {
+                cancelTimerRef();
+                window.onmouseup = null;
+            }
+        }
     }
 
     const plusHandler = function () {
@@ -49,10 +65,6 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
         val !== value && onChange(val);
     }
 
-    const cancelTimerRef = function () {
-        timerRef.current && clearInterval(timerRef.current);
-    }
-
     return (
         <Editor disabled={disabled}>
             {
@@ -61,9 +73,9 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
                     : null
             }
             <div className='editorContainer'>
-                <Button startIcon={FaMinus} onMouseDown={minusPressedHandler} onMouseUp={cancelTimerRef} onClick={minusHandler} />
+                <Button startIcon={FaMinus} onMouseDown={minusPressedHandler} onClick={minusHandler} />
                 <input type='text' value={value} onChange={changeHandler} />
-                <Button startIcon={FaPlus} onMouseDown={plusPressedHandler} onMouseUp={cancelTimerRef} onClick={plusHandler} />
+                <Button startIcon={FaPlus} onMouseDown={plusPressedHandler} onClick={plusHandler} />
             </div>
         </Editor>
     );
@@ -97,7 +109,7 @@ const Editor = styled.div<styleProps>`
                 align-items: stretch;
                 justify-content: center;
                 
-                ${()=>props.disabled&& css`
+                ${() => props.disabled && css`
                     pointer-events: none;
                     opacity:.5;
                 `}
