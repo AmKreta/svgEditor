@@ -1,25 +1,77 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { THEME } from '../../theme/theme';
+import { useSelector } from 'react-redux';
+import { getCurrentProjectColors, getCurrentProjectGradients } from '../../selector/selector';
+import { State } from '../../store/store';
+import { GRADIENT } from '../../actions/pages/pages.interface';
+import DropDown from '../dropDown';
+import GradientRenderer from '../uiEditor/gradientRenderer';
 
 interface props {
     value: string | number;
     onChange: (value: string) => void;
     label: string | JSX.Element;
     disabled?: boolean;
+    showPalette?: boolean;
 };
 
-const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabled = false }) {
+const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabled = false, showPalette = false }) {
+
+    const colors = useSelector<State, { [key: string]: string }>(getCurrentProjectColors);
+    const gradients = useSelector<State, { [key: string]: GRADIENT; }>(getCurrentProjectGradients);
 
     const changeHandler = function (e: React.ChangeEvent<HTMLInputElement>) {
         const val = e.target.value;
         val !== value && onChange(val)
     }
 
+    const onDropDownValueChange = function (details: any) {
+        // details is id
+        if (details) {
+            if (colors[details]) {
+                onChange(colors[details]);
+            }
+            else {
+                onChange(`url(#${details})`);
+            }
+        }
+    }
+
+    function getDropDownChildren() {
+        const colorsArray = Object.keys(colors).map(colorId => ({
+            renderItem: <div className='dropDownOptions' style={{ background: colors[colorId] }} key={colorId} data-id={colorId} />,
+            details: colorId
+        }))
+
+        const gradientsArray = Object.keys(gradients).map(gradientId => ({
+            renderItem: <div className='dropDownOptions' data-id={gradientId}>
+                <GradientRenderer gradientId={gradientId} gradient={gradients[gradientId]} />
+            </div>,
+            details: gradientId
+        }))
+
+        return [...colorsArray, ...gradientsArray];
+    }
+
     return (
         <Editor disabled={disabled}>
             <div className='label'>{label}</div>
-            <input type='color' value={value} onChange={changeHandler} />
+            {
+                showPalette
+                    ? (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ width: '60px' }}>
+                                <DropDown placeholder='select' style={{ width: '60px' }} onChange={onDropDownValueChange}>
+                                    {getDropDownChildren() as any}
+                                </DropDown>
+                            </div>
+                            <input type='color' value={value} onChange={changeHandler} />
+                        </div>
+                    )
+                    : <input type='color' value={value} onChange={changeHandler} />
+
+            }
         </Editor>
     );
 }
@@ -63,8 +115,18 @@ const Editor = styled.div<styleProps>`
                 position:relative;
                 transform: translate(2px,-2px);
             }
+
+            & .dropDownOptions{
+                height:25px;
+                &>svg{
+                    height:100%;
+                    width:100%
+                }
+            }
         `;
     }}
 `;
+
+
 
 export default NumberEditor;

@@ -58,6 +58,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         onChange={val => {
                             dispatch(formatActiveShape({ index, style: { stroke: val } }));
                         }}
+                        showPalette
                     />
                     <OptionEditor
                         value={shape.style.strokeLinecap}
@@ -108,6 +109,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         onChange={val => {
                             dispatch(formatActiveShape({ index, style: { fill: val } }));
                         }}
+                        showPalette
                     />
                 </div>
                 <div className='EditorCaegoryContainer'>
@@ -161,7 +163,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         step={5}
                     />
                 </div>
-                <CssFiltersEditor shape={shape} index={index}/>
+                <CssFiltersEditor shape={shape} index={index} />
                 <SvgFilterEditor shape={shape} index={index} />
                 <WRAPPED_EDITOR shape={shape} index={index} />
             </EditorContainer>

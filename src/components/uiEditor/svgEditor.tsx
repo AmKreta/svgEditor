@@ -14,6 +14,7 @@ import ContextMenu from './contextMenu';
 import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO } from '../../actions/pages/pages.interface';
 import PointsArrayFigureViewer from './pointsArrayFigureViewer';
 import Filters from './filters';
+import Gradients from './gradients';
 
 const SvgEditor: React.FC<{}> = function () {
     const shapesOfCurrentPage = useSelector<State, Array<AVAILABLE_SHAPES>>(getShapesOfCurrentPage);
@@ -133,6 +134,7 @@ const SvgEditor: React.FC<{}> = function () {
             <StyledSvg height='100%' width='100%' onMouseDown={mouseDownHandler} onMouseUp={mouseUpHandler} id='svgEditor' ref={svgEditorRef}>
                 <defs>
                    <Filters />
+                   <Gradients />
                 </defs>
                 {
                     (
