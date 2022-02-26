@@ -76,13 +76,15 @@ const CreateGradient: React.FC<props> = function ({ closeGradientCreater, select
         gradient.rotate && (newGradient.rotate = gradient.rotate);
         gradient.skewX && (newGradient.skewX = gradient.skewX);
         gradient.skewY && (newGradient.skewY = gradient.skewY);
-        if (gradient.type === 'linear') {
+        if (gradient.type === 'radial') {
             gradient.cx === 50 || (newGradient.cx = gradient.cx);
             gradient.cy === 50 || (newGradient.cy = gradient.cy);
             gradient.fx === 50 || (newGradient.fx = gradient.fx);
             gradient.fy === 50 || (newGradient.fy = gradient.fy);
-            gradient.fr || (newGradient.fr = gradient.fr);
+            gradient.fr && (newGradient.fr = gradient.fr);
         }
+
+        console.log(newGradient)
 
         if (gradientId) {
             dispatch(editPaletteGradient({ id: gradientId, newGradient }))
