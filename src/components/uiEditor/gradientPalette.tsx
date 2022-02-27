@@ -52,7 +52,7 @@ const GradientPalette = function () {
                         const gradient = gradients[gradientId];
                         return (
                             <div onClick={selectGradient} key={gradientId} data-id={gradientId}>
-                                <GradientRenderer gradient={gradient} gradientId={gradientId}/>
+                                <GradientRenderer gradientId={gradientId}/>
                                 <Icon Icon={AiOutlineClose} onClick={removeGradient} data-id={gradientId} />
                             </div>
                         );

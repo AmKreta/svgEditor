@@ -13,7 +13,7 @@ const Gradients: React.FC = function () {
                 return (
                     gradient.type === 'linear'
                         ? (
-                            <linearGradient id={gradientId} spreadMethod={gradient.spreadMethod} gradientTransform={`rotate(${gradient.rotate}) skewX(${gradient.skewX}) skewY(${gradient.skewY})`} gradientUnits="userSpaceOnUse">
+                            <linearGradient id={gradientId} spreadMethod={gradient.spreadMethod} gradientTransform={`rotate(${gradient.rotate}) skewX(${gradient.skewX}) skewY(${gradient.skewY})`}>
                                 {
                                     gradient.stops.map((stop, index) => (
                                         <stop offset={`${stop.offset}%`} style={{ stopColor: stop.stopColor, stopOpacity: stop.stopOpacity }} key={index} />
@@ -26,7 +26,6 @@ const Gradients: React.FC = function () {
                                 id={gradientId}
                                 spreadMethod={gradient.spreadMethod}
                                 gradientTransform={`rotate(${gradient.rotate}) skewX(${gradient.skewX}) skewY(${gradient.skewY})`}
-                                gradientUnits="userSpaceOnUse"
                                 transform-origin='center center'
                                 cx={gradient.cx + '%'}
                                 cy={gradient.cy + '%'}

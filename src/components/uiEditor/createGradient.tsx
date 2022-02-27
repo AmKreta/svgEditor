@@ -208,7 +208,7 @@ const CreateGradient: React.FC<props> = function ({ closeGradientCreater, select
                 <Button title='Add Stops' onClick={addStopColor} />
                 {
                     gradient.stops.map((stop, index) => (
-                        <div key={generateId()}>
+                        <div key={index}>
                             <ColorEditor value={stop.stopColor} onChange={val => stopEditor({ stopColor: val }, index)} label='Stop Color' />
                             <NumberEditor value={stop.offset} onChange={val => val >= 0 && val <= 100 && stopEditor({ offset: val }, index)} label='offset' step={5} />
                             <NumberEditor value={stop.stopOpacity} onChange={val => val >= 0 && val <= 1 && stopEditor({ stopOpacity: val }, index)} label='opacity' step={.1} />

@@ -10,6 +10,7 @@ import { THEME } from '../../theme/theme';
 import { editColorPalette, removePaletteColor } from '../../actions/pages/pages.actions';
 import Icon from '../icon.component';
 import { AiOutlineClose } from 'react-icons/ai';
+import FillColorRenderer from './fillColorRenderer';
 
 const ColorPalette: React.FC = function () {
     const colors = useSelector<State, { [key: string]: string; }>(getCurrentProjectColors);
@@ -56,8 +57,8 @@ const ColorPalette: React.FC = function () {
                             key={index + colorId}
                             onMouseUp={onEdit}
                             data-index={index}
-                            color={colors[colorId]}
                         >
+                            <FillColorRenderer colorId={colorId} />
                             {
                                 showEditorAt === index
                                     ? <input type='color' onBlur={removeEditor} value={colors[colorId]} onChange={editPredefinedPaletteColor} data-id={colorId} />
@@ -74,15 +75,19 @@ const ColorPalette: React.FC = function () {
     );
 }
 
-const ColorContainer = styled.div<{ color: string }>`
+const ColorContainer = styled.div`
     ${props => {
         const theme = props.theme as THEME;
         return css`
             height: 25px;
             width: 25px;
-            background-color: ${props.color}; 
-            border-radius: 4px;
             position: relative;
+            
+            &>svg{
+                height:100%;
+                width:100%;
+                border-radius: 4px;
+            }
 
             &:not(:first-child){
                 margin-left: ${theme.spacing(1)}px;

@@ -7,6 +7,7 @@ import { State } from '../../store/store';
 import { GRADIENT } from '../../actions/pages/pages.interface';
 import DropDown from '../dropDown';
 import GradientRenderer from '../uiEditor/gradientRenderer';
+import FillColorRenderer from '../uiEditor/fillColorRenderer';
 
 interface props {
     value: string | number;
@@ -28,25 +29,20 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabl
 
     const onDropDownValueChange = function (details: any) {
         // details is id
-        if (details) {
-            if (colors[details]) {
-                onChange(colors[details]);
-            }
-            else {
-                onChange(`url(#${details})`);
-            }
-        }
+        onChange(`url(#${details})`);
     }
 
     function getDropDownChildren() {
         const colorsArray = Object.keys(colors).map(colorId => ({
-            renderItem: <div className='dropDownOptions' style={{ background: colors[colorId] }} key={colorId} data-id={colorId} />,
+            renderItem: <div className='dropDownOptions' key={colorId} data-id={colorId} >
+                <FillColorRenderer colorId={colorId} />
+            </div>,
             details: colorId
         }))
 
         const gradientsArray = Object.keys(gradients).map(gradientId => ({
             renderItem: <div className='dropDownOptions' data-id={gradientId}>
-                <GradientRenderer gradientId={gradientId} gradient={gradients[gradientId]} />
+                <GradientRenderer gradientId={gradientId} />
             </div>,
             details: gradientId
         }))
