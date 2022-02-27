@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { SHAPE_TYPES, ToolBarOptions, TOOLS } from '../../utils/constant';
 import Icon from '../icon.component';
@@ -9,6 +9,8 @@ import { State } from '../../store/store';
 import { getActiveTool } from '../../selector/selector';
 import ColorPalette from './colorPalette';
 import GradientPalette from './gradientPalette';
+import AddClipArtModal from './addClipArtModal';
+import { addShape } from '../../actions/pages/pages.actions';
 
 
 const EditorHeader: React.FC<{}> = function () {
@@ -16,10 +18,26 @@ const EditorHeader: React.FC<{}> = function () {
     const [activeOption, setActiveOption] = useState('Tools');
     const dispatch = useDispatch();
     const activeTool = useSelector<State, SHAPE_TYPES>((state: State) => getActiveTool(state));
+    const prevSelectedTab = useRef<string | null>(null);
 
     const toolsClickHandler = (e: React.MouseEvent<SVGElement>) => {
         const tool = e.currentTarget.dataset['title'] as SHAPE_TYPES;
         dispatch(setActiveTool(tool))
+    }
+
+    const onTabOptionClick = function (e: React.MouseEvent<HTMLSpanElement>) {
+        prevSelectedTab.current = activeOption;
+        setActiveOption(e.currentTarget.innerText)
+    }
+
+    function addClipArt(e: React.ChangeEvent<HTMLImageElement>) {
+        const src = (e.target as HTMLImageElement).src;
+        dispatch(addShape({ shape: SHAPE_TYPES.IMAGE, x: 100, y: 100, src }))
+        closeAddClipArtModal();
+    }
+
+    function closeAddClipArtModal() {
+        setActiveOption(prevSelectedTab.current!);
     }
 
     return (
@@ -31,7 +49,7 @@ const EditorHeader: React.FC<{}> = function () {
                         return (
                             <span
                                 key={option + index}
-                                onClick={e => setActiveOption(e.currentTarget.innerText)}
+                                onClick={onTabOptionClick}
                                 style={{ textDecoration: activeOption === text ? 'underline' : 'none' }}
                             >
                                 {text}
@@ -73,6 +91,11 @@ const EditorHeader: React.FC<{}> = function () {
                 {
                     activeOption === ToolBarOptions.Gradients
                         ? <GradientPalette />
+                        : null
+                }
+                {
+                    activeOption === ToolBarOptions.ClipArts
+                        ? <AddClipArtModal onClose={closeAddClipArtModal} addClipArt={addClipArt} />
                         : null
                 }
             </div>

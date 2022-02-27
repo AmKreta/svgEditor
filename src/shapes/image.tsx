@@ -14,14 +14,14 @@ interface IMAGE {
 
 export interface IMAGE_SHAPE extends BASE_SHAPE, IMAGE { };
 
-export const getImageDefaultProps: (x: number, y: number) => IMAGE_SHAPE = (x: number, y: number) => {
+export const getImageDefaultProps: (x: number, y: number, src: string) => IMAGE_SHAPE = (x: number, y: number, src: string) => {
     const defaultImageProps: IMAGE_SHAPE = {
         ...getBaseToolDefaultProps({ x, y, type: SHAPE_TYPES.IMAGE }),
         height: 200,
         height_unit: 'px',
         width: 200,
         width_unit: 'px',
-        base64Url: defaultImage,
+        base64Url: src || defaultImage,
     };
     return defaultImageProps;
 }

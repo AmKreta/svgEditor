@@ -55,7 +55,7 @@ export type SET_ACTIVE_PAGE_PAYLOAD = number;
 export type SET_ACTIVE_PAGE_ACTION = ACTION<PAGES_ACTION_TYPES.SET_ACTIVE_PAGE, SET_ACTIVE_PAGE_PAYLOAD>;
 
 // add shape
-export interface ADD_SHAPE_PAYLOAD { shape: SHAPE_TYPES, x: number, y: number, pointsArray?: Array<[number, number]> };
+export interface ADD_SHAPE_PAYLOAD { shape: SHAPE_TYPES, x: number, y: number, pointsArray?: Array<[number, number]>, src?: string };
 export type ADD_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.ADD_SHAPE, AVAILABLE_SHAPES>;
 
 // moving the shape

@@ -23,7 +23,9 @@ export const ToolBarOptions = {
     TOOLS: 'Tools',
     COLORS: 'Colors',
     Gradients: 'Gradients',
-    images: 'Images'
+    Images: 'Images',
+    ClipArts: 'Clip Arts',
+    Icons: 'Icons'
 }
 
 export const multiPointShpes = [

@@ -56,7 +56,7 @@ export const setActivePage: (index: SET_ACTIVE_PAGE_PAYLOAD) => SET_ACTIVE_PAGE_
     return { type: PAGES_ACTION_TYPES.SET_ACTIVE_PAGE, payload: index };
 }
 
-export const addShape: (shape: ADD_SHAPE_PAYLOAD) => ADD_SHAPE_ACTION | undefined = ({ shape, x, y, pointsArray = [] }: ADD_SHAPE_PAYLOAD) => {
+export const addShape: (shape: ADD_SHAPE_PAYLOAD) => ADD_SHAPE_ACTION | undefined = ({ shape, x, y, pointsArray = [], src = '' }: ADD_SHAPE_PAYLOAD) => {
     let newShapeDefaultProps;
     switch (shape) {
         case SHAPE_TYPES.CIRCLE: {
@@ -78,7 +78,7 @@ export const addShape: (shape: ADD_SHAPE_PAYLOAD) => ADD_SHAPE_ACTION | undefine
         }
 
         case SHAPE_TYPES.IMAGE: {
-            newShapeDefaultProps = getImageDefaultProps(x, y);
+            newShapeDefaultProps = getImageDefaultProps(x, y, src);
             break;
         }
 
