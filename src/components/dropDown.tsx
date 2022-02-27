@@ -7,11 +7,12 @@ interface props {
     label?: string;
     placeholder?: string;
     onChange: Function;
-    children: { renderItem: any, details: any }[];
+    children: { renderItem: JSX.Element, details: any }[];
     style?: any;
+    initialValue?: { renderItem: JSX.Element, details: any }
 }
 
-const DropDown: React.FC<props> = function ({ label, placeholder, onChange, children, style }) {
+const DropDown: React.FC<props> = function ({ label, placeholder, onChange, children, style, initialValue }) {
 
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [showOptions, setShowOptions] = useState(false);
@@ -38,9 +39,11 @@ const DropDown: React.FC<props> = function ({ label, placeholder, onChange, chil
             {
                 selectedIndex > -1
                     ? <div className='selectedItem'>{children[selectedIndex].renderItem}</div>
-                    : placeholder
-                        ? <div className='placeholder' title='no value selected'>{placeholder}</div>
-                        : null
+                    : initialValue
+                        ? initialValue.renderItem
+                        : placeholder
+                            ? <div className='placeholder' title='no value selected'>{placeholder}</div>
+                            : null
             }
             <div className='optionsContainer'>
                 {

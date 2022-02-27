@@ -17,7 +17,7 @@ interface props {
     showPalette?: boolean;
 };
 
-const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabled = false, showPalette = false }) {
+const ColorEditor: React.FC<props> = function ({ value, onChange, label, disabled = false, showPalette = false }) {
 
     const colors = useSelector<State, { [key: string]: string }>(getCurrentProjectColors);
     const gradients = useSelector<State, { [key: string]: GRADIENT; }>(getCurrentProjectGradients);
@@ -29,7 +29,8 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabl
 
     const onDropDownValueChange = function (details: any) {
         // details is id
-        onChange(`url(#${details})`);
+        value !== `url(#${details})` && onChange(`url(#${details})`);
+        console.log(details);
     }
 
     function getDropDownChildren() {
@@ -41,7 +42,7 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabl
         }))
 
         const gradientsArray = Object.keys(gradients).map(gradientId => ({
-            renderItem: <div className='dropDownOptions' data-id={gradientId}>
+            renderItem: <div className='dropDownOptions' data-id={gradientId} key={gradientId}>
                 <GradientRenderer gradientId={gradientId} />
             </div>,
             details: gradientId
@@ -56,16 +57,27 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, disabl
             {
                 showPalette
                     ? (
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }} title='choose from palette'>
                             <div style={{ width: '60px' }}>
-                                <DropDown placeholder='select' style={{ width: '60px' }} onChange={onDropDownValueChange}>
+                                {console.log(value)}
+                                <DropDown
+                                    placeholder='select'
+                                    style={{ width: '60px' }}
+                                    onChange={onDropDownValueChange}
+                                    initialValue={(value as string).includes('url') ? {
+                                        renderItem: <div className='dropDownOptions' >
+                                            <FillColorRenderer colorId={(value as string).slice(5, -1)} />
+                                        </div>,
+                                        details: ''
+                                    } : undefined}
+                                >
                                     {getDropDownChildren() as any}
                                 </DropDown>
                             </div>
-                            <input type='color' value={value} onChange={changeHandler} />
+                            <input type='color' value={value} onChange={changeHandler} title='choose from color picker'/>
                         </div>
                     )
-                    : <input type='color' value={value} onChange={changeHandler} />
+                    : <input type='color' value={value} onChange={changeHandler} title='choose from color picker'/>
 
             }
         </Editor>
@@ -87,18 +99,19 @@ const Editor = styled.div<styleProps>`
             text-align: center;
             
             &>input{
-                    height: 25px;
-                    width:35px;
-                    margin:0 ${theme.spacing(.5)}px;
-                    text-align: center;
-                    border: none;
-                    outline: none;
-                    border-radius: ${theme.spacing(.5)}px;
-                    ${() => props.disabled && css`
-                        pointer-events: none;
-                        opacity:.5;
+                height: 25px;
+                width:35px;
+                margin:0 ${theme.spacing(.5)}px;
+                text-align: center;
+                border: none;
+                outline: none;
+                border-radius: ${theme.spacing(.5)}px;
+                ${() => props.disabled && css`
+                    pointer-events: none;
+                    opacity:.5;
                 `}
-                }
+            }
+
             &>input:hover{
                 cursor:pointer;
             }    
@@ -125,4 +138,4 @@ const Editor = styled.div<styleProps>`
 
 
 
-export default NumberEditor;
+export default ColorEditor;
