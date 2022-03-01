@@ -1,6 +1,5 @@
 import { FILTER_TYPES } from '../filters/availableFilters';
 import { CSS_FILTERS, STYLE, SVG_FILTERS } from '../shapes/style';
-import store from '../store/store';
 
 export function getCssFilterString(cssFilters: CSS_FILTERS) {
     let res = '';

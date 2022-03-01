@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from '../modal.component';
 import styled, { css, keyframes } from 'styled-components';
 import { THEME } from '../../theme/theme';
@@ -6,35 +6,50 @@ import Input from '../input.component';
 import { AiOutlineSearch } from 'react-icons/ai';
 import Button from '../button.component';
 import axios from 'axios';
-
+import Loader from '../loader';
 interface props {
     onClose: Function;
     addClipArt: Function;
 }
 
 const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
+
     const [searchInput, setSearchInput] = useState<string>('');
-    const [clipArtList, setClipArtList] = useState([]);
+    const [clipArtList, setClipArtList] = useState<any[]>([]);
     const [loader, setLoader] = useState(false);
+    const [loadCount, setLoadCount] = useState(0);
+    const prevRequestCompleted = useRef<boolean>(true);
 
     const changeHandler = function (e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value
         setSearchInput(value);
     }
 
-    function fetchClipArt() {
-        setLoader(true);
-        searchInput.length > 2 && axios
-            .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20`)
+    function fetchClipArt(callback: Function) {
+        axios
+            .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20&page=${loadCount + 1}`)
             .then(res => {
-                res.data.status !== 404 && setClipArtList(res.data.items);
+                if (res.data.status !== 404) {
+                    setClipArtList(prevState => [...prevState, ...res.data.items]);
+                    setLoadCount(prevState => prevState + 1);
+                }
             })
-            .catch(err => {
-                console.log(err);
-            })
-            .finally(() => {
-                setLoader(false);
-            })
+            .catch(err => { console.log(err) })
+            .finally(() => { callback() });
+    }
+
+    function fetchOnCLick() {
+        setLoader(true);
+        if (searchInput.length > 2) {
+            fetchClipArt(() => setLoader(false));
+        }
+    }
+
+    async function action() {
+        if (prevRequestCompleted.current) {
+            prevRequestCompleted.current = false;
+            fetchClipArt(() => { prevRequestCompleted.current = true; });
+        }
     }
 
     return (
@@ -48,17 +63,22 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
                         placeholder='search clip art'
                         endIcon={AiOutlineSearch}
                     />
-                    <Button title='search' onClick={fetchClipArt} />
+                    <Button title='search' onClick={fetchOnCLick} />
                     <Button title='cancel' onClick={onClose as any} />
                 </div>
                 <div id='resultContainer'>
                     {
                         loader
-                            ? <div className='loader' />
+                            ? <Loader />
                             : clipArtList.length
-                                ? clipArtList.map((art: any) => (
-                                    <img key={art.fscid} src={art.svgurl} alt={art.title} onClick={addClipArt as any} />
-                                ))
+                                ? <>
+                                    {
+                                        clipArtList.map((art: any) => (
+                                            <img key={art.fscid} src={art.svgurl} alt={art.title} onClick={addClipArt as any} loading='lazy' />
+                                        ))
+                                    }
+                                    <Loader size={30} action={action} />
+                                </>
                                 : <div className='emptyMessage'>Search to get clip arts</div>
                     }
                 </div>
@@ -110,22 +130,6 @@ const ModalContainer = styled.div`
                     left:50%;
                     transform:translate(-50%,-50%);
                     color:#999;
-                }
-
-                &>div.loader{
-                    position:absolute;
-                    top:50%;
-                    left:50%;
-                    transform:translate(-50%,-50%);
-                    height:50px;
-                    width:50px;
-                    border:4px solid #999;
-                    border-bottom-color: #5353d4;
-                    border-radius:50px;
-                    animation-name: ${rotateAnimation};
-                    animation-duration: 1s;
-                    animation-timing-function: linear;
-                    animation-iteration-count: infinite;
                 }
 
                 &>img{
