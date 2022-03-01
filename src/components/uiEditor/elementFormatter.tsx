@@ -14,6 +14,7 @@ import PolylineEditor from '../../shapeEditor/polylineEditor';
 import EllipseEditor from '../../shapeEditor/ellipseEditor';
 import SvgTextEditor from '../../shapeEditor/SvgTextEditor';
 import ImageEditor from '../../shapeEditor/imageEditor';
+import GroupEditor from '../../shapeEditor/groupEditor';
 
 const ElementFormatter: React.FC<{}> = function () {
 
@@ -88,6 +89,13 @@ const ElementFormatter: React.FC<{}> = function () {
                                                 <ImageEditor shape={shape} index={index} />
                                             </details>
                                         );
+
+                                        case SHAPE_TYPES.GROUP:return(
+                                            <details key={index} open={idx === 0}>
+                                                <summary>{shape.name}</summary>
+                                                <GroupEditor shape={shape} index={index} />
+                                            </details>
+                                        )
 
                                         default: return null;
                                     }

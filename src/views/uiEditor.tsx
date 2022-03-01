@@ -11,11 +11,8 @@ const NftEditor: React.FC<{}> = function () {
     return (
         <EditorContainer>
             <EditorHeader />
-            <ElementTree />
             <SvgEditor />
             <ElementFormatter />
-            <EditorFooter />
-
         </EditorContainer>
     );
 };
@@ -29,9 +26,9 @@ const EditorContainer = styled.div`
         grid-template-rows:10fr 70fr 20fr;
         grid-template-columns:10fr 70fr 20fr;
         grid-template-areas:
-            "header      header    header" 
-            "elementTree svgEditor elementformatter"
-            "footer      footer    footer";
+            "header    header    elementformatter" 
+            "svgEditor svgEditor elementformatter"
+            "svgEditor svgEditor elementformatter";
         grid-gap:${theme.spacing(1)}px;    
         padding:${theme.spacing(1)}px;
         min-width: 0;
