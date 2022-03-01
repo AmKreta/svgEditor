@@ -30,19 +30,21 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
     const [searchInput, setSearchInput] = useState<string>('');
     const [clipArtList, setClipArtList] = useState<IMAGE_DATA[]>([]);
     const [loader, setLoader] = useState(false);
-    const [loadCount, setLoadCount] = useState(0);
+    //const [loadCount, setLoadCount] = useState<number>(0);
     const [artType, setArtType] = useState<'clipArt' | 'vector' | 'illustration' | 'photo'>('clipArt')
     const prevRequestCompleted = useRef<boolean>(true);
+    const loadCount=useRef<number>(0);
 
     const changeHandler = function (e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value
         setSearchInput(value);
     }
 
-    function fetchClipArt(callback: Function, clear?: boolean) {
+    const fetchClipArt = (callback: Function, clear?: boolean) => {
+        console.log(clear, loadCount);
         if (artType === 'clipArt') {
             axios
-                .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20&page=${loadCount + 1}`)
+                .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20&page=${loadCount.current + 1}`)
                 .then(res => {
                     if (res.data.status !== 404) {
                         const items: IMAGE_DATA[] = res.data.items.map((imageData: any) => ({
@@ -52,11 +54,11 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
                         }))
                         if (clear) {
                             setClipArtList(items);
-                            setLoadCount(1);
+                            loadCount.current=0;
                         }
                         else {
                             setClipArtList(prevState => [...prevState, ...items]);
-                            setLoadCount(prevState => prevState + 1);
+                            loadCount.current++;
                         }
                     }
                 })
@@ -65,7 +67,7 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
         }
         else {
             axios
-                .get(`https://pixabay.com/api/?key=25933777-5b40e007583d087896e3c5fea&q=${searchInput}&image_type=${artType}&page=${loadCount + 1}`)
+                .get(`https://pixabay.com/api/?key=25933777-5b40e007583d087896e3c5fea&q=${searchInput}&image_type=${artType}&page=${loadCount.current + 1}`)
                 .then(res => {
                     const items: IMAGE_DATA[] = res.data?.hits?.map((imageData: any) => ({
                         id: imageData.id,
@@ -75,11 +77,11 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
                     })) || [];
                     if (clear) {
                         setClipArtList(items);
-                        setLoadCount(1);
+                        loadCount.current=0;
                     }
                     else {
                         setClipArtList(prevState => [...prevState, ...items]);
-                        setLoadCount(prevState => prevState + 1);
+                        loadCount.current++;
                     }
                 })
                 .catch(err => { console.log(err) })
@@ -112,8 +114,8 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
                     <Input
                         value={searchInput}
                         onChange={changeHandler}
-                        label='search clip Art'
-                        placeholder='search clip art'
+                        label='search'
+                        placeholder={`search ${artType}`}
                         endIcon={AiOutlineSearch}
                     />
                     <select value={artType} onChange={onArtTypeChange}>
@@ -159,7 +161,8 @@ const ModalContainer = styled.div`
             
             &>#searchBar{
                 display:flex;
-                width:80%;
+                align-items: center;
+                width:90%;
                 margin:auto;
                 &>*:first-child{
                     //search input
@@ -171,7 +174,7 @@ const ModalContainer = styled.div`
 
                 &>select{
                     margin-left:${theme.spacing(2)}px;
-                    padding:0 ${theme.spacing(1)}px;
+                    padding:${theme.spacing(.8)}px; ${theme.spacing(1)}px;
                 }
             }
 
