@@ -31,7 +31,7 @@ const EditorHeader: React.FC<{}> = function () {
     }
 
     function addClipArt(e: React.ChangeEvent<HTMLImageElement>) {
-        const src = (e.target as HTMLImageElement).src;
+        const src = (e.target as HTMLImageElement).dataset['src'];
         dispatch(addShape({ shape: SHAPE_TYPES.IMAGE, x: 100, y: 100, src }))
         closeAddClipArtModal();
     }

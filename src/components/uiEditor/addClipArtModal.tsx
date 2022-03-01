@@ -12,12 +12,26 @@ interface props {
     addClipArt: Function;
 }
 
+enum ART_TYPES {
+    CLIP_ART = 'clipArt',
+    VECTOR = 'vector',
+    ILLUSTRATION = 'illustration',
+    PHOTO = 'photo'
+}
+interface IMAGE_DATA {
+    id: string;
+    alt: string;
+    src: string;
+    previewSrc: string;
+}
+
 const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
 
     const [searchInput, setSearchInput] = useState<string>('');
-    const [clipArtList, setClipArtList] = useState<any[]>([]);
+    const [clipArtList, setClipArtList] = useState<IMAGE_DATA[]>([]);
     const [loader, setLoader] = useState(false);
     const [loadCount, setLoadCount] = useState(0);
+    const [artType, setArtType] = useState<'clipArt' | 'vector' | 'illustration' | 'photo'>('clipArt')
     const prevRequestCompleted = useRef<boolean>(true);
 
     const changeHandler = function (e: React.ChangeEvent<HTMLInputElement>) {
@@ -25,23 +39,58 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
         setSearchInput(value);
     }
 
-    function fetchClipArt(callback: Function) {
-        axios
-            .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20&page=${loadCount + 1}`)
-            .then(res => {
-                if (res.data.status !== 404) {
-                    setClipArtList(prevState => [...prevState, ...res.data.items]);
-                    setLoadCount(prevState => prevState + 1);
-                }
-            })
-            .catch(err => { console.log(err) })
-            .finally(() => { callback() });
+    function fetchClipArt(callback: Function, clear?: boolean) {
+        if (artType === 'clipArt') {
+            axios
+                .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20&page=${loadCount + 1}`)
+                .then(res => {
+                    if (res.data.status !== 404) {
+                        const items: IMAGE_DATA[] = res.data.items.map((imageData: any) => ({
+                            id: imageData.fscid,
+                            src: imageData.svgurl,
+                            alt: imageData.title
+                        }))
+                        if (clear) {
+                            setClipArtList(items);
+                            setLoadCount(1);
+                        }
+                        else {
+                            setClipArtList(prevState => [...prevState, ...items]);
+                            setLoadCount(prevState => prevState + 1);
+                        }
+                    }
+                })
+                .catch(err => { console.log(err) })
+                .finally(() => { callback() });
+        }
+        else {
+            axios
+                .get(`https://pixabay.com/api/?key=25933777-5b40e007583d087896e3c5fea&q=${searchInput}&image_type=${artType}&page=${loadCount + 1}`)
+                .then(res => {
+                    const items: IMAGE_DATA[] = res.data?.hits?.map((imageData: any) => ({
+                        id: imageData.id,
+                        src: imageData.largeImageURL,
+                        alt: imageData.tags,
+                        previewSrc: imageData.previewURL
+                    })) || [];
+                    if (clear) {
+                        setClipArtList(items);
+                        setLoadCount(1);
+                    }
+                    else {
+                        setClipArtList(prevState => [...prevState, ...items]);
+                        setLoadCount(prevState => prevState + 1);
+                    }
+                })
+                .catch(err => { console.log(err) })
+                .finally(() => { callback() });
+        }
     }
 
     function fetchOnCLick() {
         setLoader(true);
         if (searchInput.length > 2) {
-            fetchClipArt(() => setLoader(false));
+            fetchClipArt(() => setLoader(false), true);
         }
     }
 
@@ -50,6 +99,10 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
             prevRequestCompleted.current = false;
             fetchClipArt(() => { prevRequestCompleted.current = true; });
         }
+    }
+
+    function onArtTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setArtType(e.target.value as ART_TYPES);
     }
 
     return (
@@ -63,6 +116,11 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
                         placeholder='search clip art'
                         endIcon={AiOutlineSearch}
                     />
+                    <select value={artType} onChange={onArtTypeChange}>
+                        {
+                            ([ART_TYPES.CLIP_ART, ART_TYPES.ILLUSTRATION, ART_TYPES.PHOTO, ART_TYPES.VECTOR] as ART_TYPES[]).map(type => <option key={type}>{type}</option>)
+                        }
+                    </select>
                     <Button title='search' onClick={fetchOnCLick} />
                     <Button title='cancel' onClick={onClose as any} />
                 </div>
@@ -73,8 +131,8 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
                             : clipArtList.length
                                 ? <>
                                     {
-                                        clipArtList.map((art: any) => (
-                                            <img key={art.fscid} src={art.svgurl} alt={art.title} onClick={addClipArt as any} loading='lazy' />
+                                        clipArtList.map((art: IMAGE_DATA) => (
+                                            <img key={art.id} src={art.previewSrc || art.src} alt={art.alt} onClick={addClipArt as any} loading='lazy' data-src={art.src} />
                                         ))
                                     }
                                     <Loader size={30} action={action} />
@@ -107,8 +165,13 @@ const ModalContainer = styled.div`
                     //search input
                     flex-grow: 1;
                 }
-                &>*:nth-child(2){
+                &>*:nth-child(3){
                     margin:0 ${theme.spacing(2)}px;
+                }
+
+                &>select{
+                    margin-left:${theme.spacing(2)}px;
+                    padding:0 ${theme.spacing(1)}px;
                 }
             }
 

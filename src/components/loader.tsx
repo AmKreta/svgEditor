@@ -12,6 +12,7 @@ const Loader: React.FC<props> = function ({ size = 50, action }) {
     const spinnerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(function () {
+        let observer: IntersectionObserver;
         if (action && spinnerRef.current) {
             let callback: IntersectionObserverCallback = (entries, observer) => {
                 entries.forEach(entry => {
@@ -20,16 +21,21 @@ const Loader: React.FC<props> = function ({ size = 50, action }) {
                     }
                 });
             };
-
             let options = {
                 root: spinnerRef.current.parentElement?.parentElement,
                 rootMargin: '0px',
                 threshold: 1.0
             }
-
-            let observer = new IntersectionObserver(callback, options);
+            observer = new IntersectionObserver(callback, options);
             observer.observe(spinnerRef.current);
         }
+
+        return function () {
+            if (spinnerRef.current && observer) {
+                observer.unobserve(spinnerRef.current);
+            }
+        }
+
     }, []);
 
     return (
