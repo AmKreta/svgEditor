@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { getActiveShapesInfo, getActiveTool, getHoveredShapeId, getShapesOfCurrentPage, getContextMenuState } from '../../selector/selector';
+import { getActiveShapesInfo, getActiveTool, getHoveredShapeId, getShapesOfCurrentPage, getContextMenuState, getHelpers } from '../../selector/selector';
 import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
 import { multiPointShpes, SHAPE_TYPES } from '../../utils/constant';
@@ -16,17 +16,23 @@ import PointsArrayFigureViewer from './pointsArrayFigureViewer';
 import Filters from './filters';
 import Gradients from './gradients';
 import FillColors from './fillColors';
+import { isEqual } from 'lodash';
+import { HELPERS } from '../../actions/helpers/helpers.interface';
+import PointerHelper from './pointerHelper';
 
 const SvgEditor: React.FC<{}> = function () {
     const shapesOfCurrentPage = useSelector<State, Array<AVAILABLE_SHAPES>>(getShapesOfCurrentPage);
-    const activeTool = useSelector<State, SHAPE_TYPES>(getActiveTool);
-    const activeShapes = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo);
+    const activeTool = useSelector<State, SHAPE_TYPES>(getActiveTool, isEqual);
+    const activeShapes = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo, isEqual);
     const hoveredShapeId = useSelector<State, string | null>(getHoveredShapeId);
-    const dispatch = useDispatch();
+    const helpers = useSelector<State, HELPERS>(getHelpers, isEqual);
+
     const [shapeSelectorProps, setShapeSelectorProps] = useState<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
     const [pointsArray, setPointsArray] = useState<Array<[number, number]>>([]);
     const contextMenu = useSelector<State, CONTEXT_MENU_INTERFACE>(getContextMenuState);
-    const svgEditorRef = useRef(null);
+    const svgEditorRef = useRef<SVGSVGElement>(null);
+
+    const dispatch = useDispatch();
 
 
     function mouseDownHandler(e: React.MouseEvent<SVGSVGElement>) {
@@ -138,6 +144,11 @@ const SvgEditor: React.FC<{}> = function () {
                     <Gradients />
                     <FillColors />
                 </defs>
+                {
+                    helpers.pointerHelpers
+                        ? <PointerHelper svgEditorRef={svgEditorRef}/>
+                        : null
+                }
                 {
                     (
                         function () {
