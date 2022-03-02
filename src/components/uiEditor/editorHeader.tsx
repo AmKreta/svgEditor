@@ -11,6 +11,7 @@ import ColorPalette from './colorPalette';
 import GradientPalette from './gradientPalette';
 import AddClipArtModal from './addClipArtModal';
 import { addShape } from '../../actions/pages/pages.actions';
+import Helpers from './helpers';
 
 
 const EditorHeader: React.FC<{}> = function () {
@@ -94,8 +95,13 @@ const EditorHeader: React.FC<{}> = function () {
                         : null
                 }
                 {
-                    activeOption === ToolBarOptions.ClipArts
+                    activeOption === ToolBarOptions.INSERT
                         ? <AddClipArtModal onClose={closeAddClipArtModal} addClipArt={addClipArt} />
+                        : null
+                }
+                {
+                    activeOption === ToolBarOptions.HELPERS
+                        ? <Helpers />
                         : null
                 }
             </div>

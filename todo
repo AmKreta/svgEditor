@@ -1,0 +1,19 @@
+- contextMenu coordinates
+- path tool
+- group children editor
+- group merge transforms preservation
+- fix gradient trnsforms 
+- import file
+- export as pdf, svg, file
+- pages
+- undo-redo
+- z-indexes
+- hide some editing options for image and group parent
+- add more filters
+- move shape reducer calcuations in web-workers and wasm
+- save prevShapes in indexedDB
+- Add hyperlinks to element , and use scrollIntoView for element it is linked to 
+- Add helpers lines while moving element
+- Add Grid
+- Add Icons Api
+- resize drawing Area

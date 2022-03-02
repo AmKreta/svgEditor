@@ -18,12 +18,19 @@ export enum SHAPE_TYPES {
     IMAGE = 'FaImage'
 };
 
+export enum HELPERS {
+    GRID = 'Grid',
+    POINTER = 'Pointer',
+    SHAPE = 'SHAPE'
+}
+
 export const ToolBarOptions = {
     FILE: 'File',
     TOOLS: 'Tools',
     COLORS: 'Colors',
     Gradients: 'Gradients',
-    ClipArts: 'Clip Arts',
+    INSERT: 'Insert',
+    HELPERS: 'Helpers'
 }
 
 export const multiPointShpes = [

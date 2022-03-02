@@ -3,6 +3,7 @@ import { AVAILABLE_SHAPES } from "../shapes/availableShapes";
 import { SHAPE_TYPES } from "../utils/constant";
 import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO, GRADIENT } from "../actions/pages/pages.interface";
 import { AVAILABLE_FILTERS } from "../filters/availableFilters";
+import { HELPERS } from "../actions/helpers/helpers.interface";
 
 // used in base shape , gets info about current shape being rendered in base shape
 export function getCurrentShape(state: State, shapeIndex: number): AVAILABLE_SHAPES {
@@ -77,4 +78,8 @@ export function getCurrentProjectColors(state: State): { [key: string]: string; 
 
 export function getCurrentProjectGradients(state: State): { [key: string]: GRADIENT; } {
     return state.page.gradients;
+}
+
+export function getHelpers(state: State): HELPERS {
+    return state.helpers;
 }

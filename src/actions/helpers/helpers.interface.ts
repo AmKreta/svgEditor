@@ -1,0 +1,18 @@
+import { HEPLERS_ACTIONS_TYPES } from './helpers.actionTypes';
+
+export interface HELPERS {
+    gridHelpers: boolean;
+    pointerHelpers: boolean;
+    shapeHelpers: boolean;
+};
+
+export type TOGGLE_GRID_HELPERS_ACTION = { type: HEPLERS_ACTIONS_TYPES.TOGGLE_GRID_HEPLER };
+export type TOGGLE_POINTER_HELPERS_ACTION = { type: HEPLERS_ACTIONS_TYPES.TOGGLE_POINTER_HELPER };
+export type TOGGLE_SHAPE_HELPERS_ACTION = { type: HEPLERS_ACTIONS_TYPES.TOGGLE_SHAPE_HELPER };
+
+export type HELPERS_ACTIONS = TOGGLE_GRID_HELPERS_ACTION
+    | TOGGLE_POINTER_HELPERS_ACTION
+    | TOGGLE_SHAPE_HELPERS_ACTION;
+
+
+
