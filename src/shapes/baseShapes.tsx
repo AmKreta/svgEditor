@@ -67,7 +67,7 @@ export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: 
             skewY: 0,
             scale: [1, 1],
             cssFilters: {},
-            svgFilters:{}
+            svgFilters: {}
         }
     }
 };
@@ -88,7 +88,16 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
 
             if (e.buttons === 2) {
                 //right click
-                dispatch(toggleContextMenu({ x: currentShape.x, y: currentShape.y }))
+                if (currentShape.type !== SHAPE_TYPES.GROUP) {
+                    dispatch(toggleContextMenu({ x: currentShape.x, y: currentShape.y }))
+                }
+                else {
+                    let x = 0, y = 0;
+                    (currentShape as GROUP_SHAPE).children.forEach(child => { x += child.x; y += child.y; });
+                    x /= (currentShape as GROUP_SHAPE).children.length;
+                    y /= (currentShape as GROUP_SHAPE).children.length;
+                    dispatch(toggleContextMenu({ x, y }))
+                }
             }
 
             if (activeShapes.findIndex(shape => shape.id === currentShape.id) === -1) {
@@ -96,8 +105,10 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 // ie element is not currently selected
                 dispatch(setActiveShape([{ id: currentShape.id, index: props.index }]));
             }
+
             let x = e.clientX;
             let y = e.clientY;
+
             e.currentTarget.onmousemove = (ev) => {
                 e.preventDefault();
                 e.stopPropagation();

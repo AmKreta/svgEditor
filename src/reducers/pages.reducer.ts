@@ -155,8 +155,18 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             // avg of x and y coordinates of all active shapes
             let avgX = 0, avgY = 0;
             state.clipboard.forEach(item => {
-                avgX += item.x;
-                avgY += item.y;
+                if (item.type === SHAPE_TYPES.GROUP) {
+                    let x=0,y=0;
+                    (item as GROUP_SHAPE).children.forEach(child=>{x+=child.x;y+=child.y;});
+                    x/=(item as GROUP_SHAPE).children.length;
+                    y/=(item as GROUP_SHAPE).children.length;
+                    avgX+=x;
+                    avgY+=y;
+                }
+                else {
+                    avgX += item.x;
+                    avgY += item.y;
+                }
             });
             avgX /= state.clipboard.length;
             avgY /= state.clipboard.length;
@@ -188,7 +198,6 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
                 else if (multiPointShpes.includes(newShape.type)) {
                     (newShape as POLYGON_SHAPE).points = (newShape as POLYGON_SHAPE).points.map(point => [point[0] + dx, point[1] + dy]);
                 }
-                console.log(newShape)
                 return newShape;
             });
             const currentPage = state.pages[state.activePageIndex];

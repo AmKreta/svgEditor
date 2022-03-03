@@ -59,7 +59,6 @@ const ColorEditor: React.FC<props> = function ({ value, onChange, label, disable
                     ? (
                         <div style={{ display: 'flex', alignItems: 'center' }} title='choose from palette'>
                             <div style={{ width: '60px' }}>
-                                {console.log(value)}
                                 <DropDown
                                     placeholder='select'
                                     style={{ width: '60px' }}

@@ -16,7 +16,6 @@ const PointerHelper: React.FC<props> = function ({ svgEditorRef }) {
             let y = e.clientY - boundingRect.y;
             setHorizontalLine(y);
             setVerticleLine(x);
-            console.log(e.clientX, e.clientY, svgEditorRef.current);
         }
         svgEditorRef.current!.addEventListener('mousemove', mouseMoveHandler, false);
         return () => svgEditorRef.current!.removeEventListener('mousemove', mouseMoveHandler, false);
@@ -24,8 +23,8 @@ const PointerHelper: React.FC<props> = function ({ svgEditorRef }) {
 
     return (
         <>
-            <line x1={0} y1={horizontalLine} x2='100%' y2={horizontalLine} stroke='black' strokeWidth={1} />
-            <line x1={verticleLine} y1={0} x2={verticleLine} y2='100%' stroke='black' strokeWidth={1} />
+            <line x1={0} y1={horizontalLine} x2='100%' y2={horizontalLine} stroke='black' strokeWidth={1} strokeOpacity={.2}/>
+            <line x1={verticleLine} y1={0} x2={verticleLine} y2='100%' stroke='black' strokeWidth={1} strokeOpacity={.2}/>
         </>
     );
 }
