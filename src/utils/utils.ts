@@ -88,3 +88,8 @@ export function getBoundingRectMidPoint(box: DOMRect | undefined) {
     }
     return { x: 0, y: 0 };
 }
+
+export function getNewCoordinatesAfterRotate(x: number, y: number, a: number) {
+    let newY = y * Math.cos(a) - x * Math.sin(a)
+    let newx = y * Math.sin(a) + x * Math.cos(a)
+}

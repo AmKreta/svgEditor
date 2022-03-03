@@ -156,12 +156,12 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             let avgX = 0, avgY = 0;
             state.clipboard.forEach(item => {
                 if (item.type === SHAPE_TYPES.GROUP) {
-                    let x=0,y=0;
-                    (item as GROUP_SHAPE).children.forEach(child=>{x+=child.x;y+=child.y;});
-                    x/=(item as GROUP_SHAPE).children.length;
-                    y/=(item as GROUP_SHAPE).children.length;
-                    avgX+=x;
-                    avgY+=y;
+                    let x = 0, y = 0;
+                    (item as GROUP_SHAPE).children.forEach(child => { x += child.x; y += child.y; });
+                    x /= (item as GROUP_SHAPE).children.length;
+                    y /= (item as GROUP_SHAPE).children.length;
+                    avgX += x;
+                    avgY += y;
                 }
                 else {
                     avgX += item.x;
@@ -293,8 +293,6 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
         }
 
         case PAGES_ACTION_TYPES.REMOVE_SVG_FILTER: {
-
-            console.log(action.payload);
 
             //deleting from filters array
             let currentPage = state.pages[state.activePageIndex];
