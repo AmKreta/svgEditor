@@ -64,4 +64,5 @@ svg#svgEditor>*.active{
   width:70%;
   background:white;
   border-radius: 8px;
+  z-index: 2;
 }
