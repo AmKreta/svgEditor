@@ -102,6 +102,7 @@ const ContextMenuContainer = styled.div`
             text-align: left;
             text-transform: capitalize;
             background-color: white;
+            z-index: 2;
             &>.contextMenuItem{
                 padding:${theme.spacing(1)}px;
                 border:1px solid #ccc;

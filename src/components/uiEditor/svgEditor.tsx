@@ -19,6 +19,7 @@ import FillColors from './fillColors';
 import { isEqual } from 'lodash';
 import { HELPERS } from '../../actions/helpers/helpers.interface';
 import PointerHelper from './pointerHelper';
+import GridHelper from './gridHelper';
 
 const SvgEditor: React.FC<{}> = function () {
     const shapesOfCurrentPage = useSelector<State, Array<AVAILABLE_SHAPES>>(getShapesOfCurrentPage);
@@ -138,6 +139,11 @@ const SvgEditor: React.FC<{}> = function () {
 
     return (
         <SvgContainer onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}>
+            {
+                helpers.gridHelpers
+                    ? <GridHelper />
+                    : null
+            }
             <StyledSvg height='100%' width='100%' onMouseDown={mouseDownHandler} onMouseUp={mouseUpHandler} id='svgEditor' ref={svgEditorRef}>
                 <defs>
                     <Filters />
@@ -146,7 +152,7 @@ const SvgEditor: React.FC<{}> = function () {
                 </defs>
                 {
                     helpers.pointerHelpers
-                        ? <PointerHelper svgEditorRef={svgEditorRef}/>
+                        ? <PointerHelper svgEditorRef={svgEditorRef} />
                         : null
                 }
                 {
@@ -206,6 +212,11 @@ const SvgEditor: React.FC<{}> = function () {
 
 const StyledSvg = styled.svg`
     min-width: 0;
+    z-index: 2;
+    background-color: transparent;
+    position: absolute;
+    top:0;
+    left: 0;
 `;
 
 const SvgContainer = styled.div`
@@ -214,6 +225,7 @@ const SvgContainer = styled.div`
     height:100%;
     width:100%;
     position:relative;
+    overflow: scroll;
 `;
 
 export default SvgEditor;
