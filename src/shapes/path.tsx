@@ -16,12 +16,12 @@ export const getPathDefaultProps: (points: Array<[number, number]>) => PATH_SHAP
     return defaultPathProps;
 }
 
-const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
+const Path: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const shape = props.shape as PATH_SHAPE;
     const transformOrigin = getTransformOrigin(shape.points);
 
     return (
-        <polygon
+        <path
             id={shape.id}
             data-index={props.index}
             onMouseDown={props.mouseDownHandler}
@@ -30,9 +30,15 @@ const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             onMouseLeave={props.mouseLeaveHandler}
             className={props.hovered || props.isActive ? 'active' : 'inactive'}
             {...getStyleObj(shape.style)}
-            points={shape.points.toString()}
+            d={(function () {
+                let [p1, ...p] = shape.points || [[0, 0], [0, 0]];
+                if (p1 && p) {
+                    return `M ${p1[0]} ${p1[1]} C ${p.toString()}`;
+                }
+                return '';
+            })()}
             transform-origin={transformOrigin}
         />
     );
 }
-export default BaseTool(Polygon);
+export default BaseTool(Path);

@@ -51,6 +51,7 @@ import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
 import { getEllipseDefaultProps } from "../../shapes/ellipse";
 import { getTextDefaultProps } from "../../shapes/text";
+import { getPathDefaultProps } from "../../shapes/path";
 
 export const setActivePage: (index: SET_ACTIVE_PAGE_PAYLOAD) => SET_ACTIVE_PAGE_ACTION = (index: SET_ACTIVE_PAGE_PAYLOAD) => {
     return { type: PAGES_ACTION_TYPES.SET_ACTIVE_PAGE, payload: index };
@@ -94,6 +95,11 @@ export const addShape: (shape: ADD_SHAPE_PAYLOAD) => ADD_SHAPE_ACTION | undefine
 
         case SHAPE_TYPES.TEXT: {
             newShapeDefaultProps = getTextDefaultProps(x, y);
+            break;
+        }
+
+        case SHAPE_TYPES.PATH:{
+            newShapeDefaultProps=getPathDefaultProps(pointsArray);
             break;
         }
 

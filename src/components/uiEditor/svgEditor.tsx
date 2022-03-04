@@ -50,14 +50,13 @@ const SvgEditor: React.FC<{}> = function () {
                 // if active tool is polygon, polyline
                 dispatch(addShape({ shape: activeTool, x, y, pointsArray }));
                 setPointsArray([]);
-                return;
             }
             else {
                 // right click
                 // show context menu
                 dispatch(toggleContextMenu({ x, y }));
-                return;
             }
+            return;
         }
 
         if (contextMenu.show) {
@@ -85,10 +84,22 @@ const SvgEditor: React.FC<{}> = function () {
                 dispatch(addShape({ shape: activeTool, x, y, pointsArray: [...pointsArray, [x, y]] }));
                 setPointsArray([]);
             }
+            else if (activeTool === SHAPE_TYPES.PATH) {
+                let timeout: any = null;
+                element.onmousemove = function (ev) {
+                    if (!timeout) {
+                        timeout = setTimeout(function () {
+                            const x1 = ev.clientX - boundingRect.x, y1 = ev.clientY - boundingRect.y;
+                            setPointsArray(prevState => [...prevState, [x1, y1]]);
+                            clearTimeout(timeout);
+                            timeout = null;
+                        }, 20);
+                    }
+                }
+            }
             else {
                 setPointsArray(prevState => ([...prevState, [x, y]]));
             }
-            return;
         }
 
         else if (activeTool !== SHAPE_TYPES.PAN) {
@@ -117,6 +128,13 @@ const SvgEditor: React.FC<{}> = function () {
 
     const mouseUpHandler = (e: React.MouseEvent<SVGElement>) => {
         e.currentTarget.onmousemove = null;
+
+        if (activeTool === SHAPE_TYPES.PATH && pointsArray.length) {
+            dispatch(addShape({ shape: activeTool, pointsArray, x: 0, y: 0 }));
+            setPointsArray([]);
+            return;
+        }
+
         if (shapeSelectorProps.show) {
             const selectedShapes: { id: string, index: number }[] = [];
             const selector = (document.querySelector('#Shape-Selector') as SVGPolygonElement).getBoundingClientRect();

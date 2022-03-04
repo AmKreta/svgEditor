@@ -9,17 +9,13 @@ interface Props {
 const PointsArrayFigureViewer: React.FC<Props> = function ({ pointsArray, type }) {
     const [tempPoints, setTempPoints] = useState<[number, number]>(pointsArray[0]);
     const svgEditorRef = useRef(document.querySelector('svg#svgEditor'));
-    const [t, setT] = useState<[number, number][]>([]);
 
     const mouseMoveHandler = function (e: MouseEvent) {
         const element = svgEditorRef.current as SVGElement;
         const boundingRect = element.getBoundingClientRect();
         let x = e.clientX - boundingRect.x;
         let y = e.clientY - boundingRect.y;
-        if (type === SHAPE_TYPES.PATH) {
-            setT(prevState => [...prevState, [x, y]])
-        }
-        else {
+        if (type !== SHAPE_TYPES.PATH) {
             setTempPoints([x, y]);
         }
     };
@@ -36,15 +32,17 @@ const PointsArrayFigureViewer: React.FC<Props> = function ({ pointsArray, type }
     return (
         <>
             {
-                pointsArray.map((points, index) => (
-                    <circle
-                        cx={points[0]}
-                        cy={points[1]}
-                        r={4}
-                        fill='black'
-                        key={index + points.toString()}
-                    />
-                ))
+                type !== SHAPE_TYPES.PATH
+                    ? pointsArray.map((points, index) => (
+                        <circle
+                            cx={points[0]}
+                            cy={points[1]}
+                            r={4}
+                            fill='black'
+                            key={index + points.toString()}
+                        />
+                    ))
+                    : null
             }
             {
                 type === SHAPE_TYPES.POLYGON
@@ -77,7 +75,11 @@ const PointsArrayFigureViewer: React.FC<Props> = function ({ pointsArray, type }
                         <path
                             fill='transparent'
                             stroke='black'
-                            d={`M ${pointsArray[0][0]} ${pointsArray[0][1]} C ${t.toString()}`}
+                            //d={`M ${pointsArray[0][0]} ${pointsArray[0][1]} C ${.toString()}`}
+                            d={(function () {
+                                const [p1, ...p] = pointsArray;
+                                return `M ${p1[0]} ${p1[1]} C ${p.toString()}`;
+                            })()}
                         />
                     )
                     : null

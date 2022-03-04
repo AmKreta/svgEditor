@@ -11,6 +11,7 @@ import { IMAGE_SHAPE } from "./image";
 import { LINE_SHAPE } from "./line";
 import { ELLIPSE_SHAPE } from "./ellipse";
 import { TEXT_SHAPE } from "./text";
+import Path, { PATH_SHAPE } from './path';
 
 export interface GROUP_SHAPE extends BASE_SHAPE {
     children: AVAILABLE_SHAPES[];
@@ -164,6 +165,25 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                 >
                                     {shape.text}
                                 </text>
+                            );
+                        }
+
+                        case SHAPE_TYPES.PATH: {
+                            const shape = childShape as PATH_SHAPE;
+                            const transformOrigin = getTransformOrigin(shape.points);
+                            return (
+                                <path
+                                    id={shape.id}
+                                    {...getStyleObj(shape.style)}
+                                    d={(function () {
+                                        let [p1, ...p] = shape.points || [[0, 0], [0, 0]];
+                                        if (p1 && p) {
+                                            return `M ${p1[0]} ${p1[1]} C ${p.toString()} Z`;
+                                        }
+                                        return '';
+                                    })()}
+                                    transform-origin={transformOrigin}
+                                />
                             );
                         }
 

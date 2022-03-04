@@ -10,6 +10,7 @@ import generateId from '../utils/idGenerator';
 import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions';
 import { ACTIVE_SHAPE_INFO } from '../actions/pages/pages.interface';
 import { GROUP_SHAPE } from './group';
+import { PATH_SHAPE } from './path';
 
 export interface BASE_SHAPE {
     type: SHAPE_TYPES,
@@ -88,15 +89,24 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
 
             if (e.buttons === 2) {
                 //right click
-                if (currentShape.type !== SHAPE_TYPES.GROUP) {
-                    dispatch(toggleContextMenu({ x: currentShape.x, y: currentShape.y }))
-                }
-                else {
+                if (currentShape.type === SHAPE_TYPES.GROUP) {
                     let x = 0, y = 0;
                     (currentShape as GROUP_SHAPE).children.forEach(child => { x += child.x; y += child.y; });
                     x /= (currentShape as GROUP_SHAPE).children.length;
                     y /= (currentShape as GROUP_SHAPE).children.length;
                     dispatch(toggleContextMenu({ x, y }))
+                }
+                else if (currentShape.type === SHAPE_TYPES.PATH) {
+                    let x = 0, y = 0;
+                    (currentShape as PATH_SHAPE).points.forEach(points => {
+                        x += points[0]; y += points[1];
+                    });
+                    x /= (currentShape as PATH_SHAPE).points.length;
+                    y /= (currentShape as PATH_SHAPE).points.length;
+                    dispatch(toggleContextMenu({ x, y }));
+                }
+                else {
+                    dispatch(toggleContextMenu({ x: currentShape.x, y: currentShape.y }))
                 }
             }
 

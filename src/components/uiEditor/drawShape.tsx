@@ -11,6 +11,7 @@ import Line from '../../shapes/line';
 import Ellipse from '../../shapes/ellipse';
 import Text from '../../shapes/text';
 import { BASE_SHAPE_PROPS } from '../../shapes/baseShapes';
+import Path from '../../shapes/path';
 
 interface DRAW_SHAPES_PROPS extends BASE_SHAPE_PROPS {
     shape: AVAILABLE_SHAPES;
@@ -90,6 +91,14 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
                 hovered={hovered}
             />
         );
+
+        case SHAPE_TYPES.PATH: {
+            return <Path
+                isActive={isActive}
+                index={index}
+                hovered={hovered}
+            />
+        }
 
         default: return null;
     }
