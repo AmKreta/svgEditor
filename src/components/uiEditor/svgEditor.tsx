@@ -85,15 +85,16 @@ const SvgEditor: React.FC<{}> = function () {
                 setPointsArray([]);
             }
             else if (activeTool === SHAPE_TYPES.PATH) {
-                let timeout: any = null;
+                let draw = true;
                 element.onmousemove = function (ev) {
-                    if (!timeout) {
-                        timeout = setTimeout(function () {
-                            const x1 = ev.clientX - boundingRect.x, y1 = ev.clientY - boundingRect.y;
-                            setPointsArray(prevState => [...prevState, [x1, y1]]);
+                    if (draw) {
+                        const x1 = ev.clientX - boundingRect.x, y1 = ev.clientY - boundingRect.y;
+                        setPointsArray(prevState => [...prevState, [x1, y1]]);
+                        draw = false;
+                        let timeout = setTimeout(function () {
+                            draw = true;
                             clearTimeout(timeout);
-                            timeout = null;
-                        }, 20);
+                        }, 15);
                     }
                 }
             }
