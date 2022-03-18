@@ -238,13 +238,13 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             const shapes = currentPage.shapes.filter(shape => {
                 const isShapeActive = currentPage.activeShapes.find(shapeInfo => shapeInfo.id === shape.id);
                 if (isShapeActive) {
-                    if (shape.type === SHAPE_TYPES.GROUP) {
-                        // if shape type is group merge all items in a newly formed array
-                        (shape as GROUP_SHAPE).children.forEach(child => {
-                            groupChildren.push(child);
-                        });
-                        return false;
-                    }
+                    // if (shape.type === SHAPE_TYPES.GROUP) {
+                    //     // if shape type is group merge all items in a newly formed array
+                    //     (shape as GROUP_SHAPE).children.forEach(child => {
+                    //         groupChildren.push(child);
+                    //     });
+                    //     return false;
+                    // }
                     groupChildren.push(shape);
                     return false;
                 }
