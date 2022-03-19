@@ -90,13 +90,21 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
             if (e.buttons === 2) {
                 //right click
                 if (currentShape.type === SHAPE_TYPES.GROUP) {
-                    let x = 0, y = 0;
-                    (currentShape as GROUP_SHAPE).children.forEach(child => { x += child.x; y += child.y; });
-                    x /= (currentShape as GROUP_SHAPE).children.length;
-                    y /= (currentShape as GROUP_SHAPE).children.length;
+                    let x = 0, y = 0, translate = [0, 0];
+                    const groupShape = currentShape as GROUP_SHAPE;
+                    groupShape.children.forEach(child => {
+                        x += child.x;
+                        y += child.y;
+                        translate[0] += child.style.translate[0];
+                        translate[1] += child.style.translate[1];
+                    });
+                    x /= groupShape.children.length;
+                    y /= groupShape.children.length;
+                    translate[0] /= groupShape.children.length;
+                    translate[1] /= groupShape.children.length;
                     dispatch(toggleContextMenu({
-                        x: x + currentShape.style.translate[0],
-                        y: y + currentShape.style.translate[1]
+                        x: x + translate[0] + currentShape.style.translate[0],
+                        y: y + translate[1] + currentShape.style.translate[1]
                     }));
                 }
                 else if (multiPointShpes.includes(currentShape.type)) {
