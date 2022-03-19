@@ -18,3 +18,13 @@
 - Add Grid
 - Add Icons Api
 - resize drawing Area
+
+# transforms
+- ✅ change setActiveShapeCoordinates to change translate property instead of coordinates
+- fix paste for transformed shapes
+- fix context menu coordinates
+
+# renderTree
+- change shapes container from array to {id->shapeInfo}
+- change filters, edit active shapes etc
+- add renderTree

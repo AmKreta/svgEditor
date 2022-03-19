@@ -43,39 +43,13 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             return state;
         }
 
-        case PAGES_ACTION_TYPES.SET_ACTIVE_SHAPE_COORDINATES: {
+        case PAGES_ACTION_TYPES.TRANSLATE_ACTIVE_SHAPE: {
             const currentPage = state.pages[state.activePageIndex];
             if (currentPage) {
                 currentPage.activeShapes.forEach((shapeInfo) => {
                     const shape = currentPage.shapes[shapeInfo.index];
-                    if (shape.type === SHAPE_TYPES.GROUP) {
-                        let children = (shape as GROUP_SHAPE).children;
-                        children.forEach(child => {
-                            if (multiPointShpes.includes(child.type)) {
-                                (child as POLYGON_SHAPE).points.forEach(points => {
-                                    points[0] += action.payload.x;
-                                    points[1] += action.payload.y;
-                                });
-                            }
-                            else {
-                                child.x += action.payload.x;
-                                child.y += action.payload.y;
-                            }
-                        });
-                        children = [...children];
-                    }
-
-                    else if (multiPointShpes.includes(shape.type)) {
-                        (shape as POLYGON_SHAPE).points.forEach((point) => {
-                            point[0] += action.payload.x;
-                            point[1] += action.payload.y;
-                        });
-                    }
-
-                    else {
-                        shape.x += action.payload.x;
-                        shape.y += action.payload.y;
-                    }
+                    shape.style.translate[0] += action.payload.x;
+                    shape.style.translate[1] += action.payload.y;
                     currentPage.shapes[shapeInfo.index] = { ...shape };
                 });
                 return { ...state };
@@ -153,51 +127,25 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             // the coodrinate where context menu is being displayed
             const { x, y } = state.contextMenu;
             // avg of x and y coordinates of all active shapes
-            let avgX = 0, avgY = 0;
+            let avgX = 0, avgY = 0, avgTranslate: [number, number] = [0, 0];
             state.clipboard.forEach(item => {
-                if (item.type === SHAPE_TYPES.GROUP) {
-                    let x = 0, y = 0;
-                    (item as GROUP_SHAPE).children.forEach(child => { x += child.x; y += child.y; });
-                    x /= (item as GROUP_SHAPE).children.length;
-                    y /= (item as GROUP_SHAPE).children.length;
-                    avgX += x;
-                    avgY += y;
-                }
-                else {
-                    avgX += item.x;
-                    avgY += item.y;
-                }
+                avgX += item.x;
+                avgY += item.y;
+                avgTranslate[0] += item.style.translate[0];
+                avgTranslate[1] += item.style.translate[1];
             });
             avgX /= state.clipboard.length;
             avgY /= state.clipboard.length;
-            let dx = x - avgX;
-            let dy = y - avgY;
+            avgTranslate[0] /= state.clipboard.length;
+            avgTranslate[1] /= state.clipboard.length;
+            let dx = x - avgX - avgTranslate[0];
+            let dy = y - avgY - avgTranslate[1];
             // adding new coordinates and id's to shapes on clipboard
             const shapesToPaste: AVAILABLE_SHAPES[] = state.clipboard.map(item => {
                 let newShape: AVAILABLE_SHAPES;
                 newShape = cloneDeep(item);
                 newShape.id = generateId();
-                newShape.x = item.x + dx;
-                newShape.y = item.y + dy;
-                if (newShape.type === SHAPE_TYPES.GROUP) {
-                    // iterating over all children to give em new id's and coordinates
-                    (newShape as GROUP_SHAPE).children = (newShape as GROUP_SHAPE).children.map(child => {
-                        if (multiPointShpes.includes(child.type)) {
-                            const newChild = cloneDeep(child);
-                            newChild.id = generateId();
-                            (newChild as POLYGON_SHAPE).points = (child as POLYGON_SHAPE).points.map(points => [points[0] + dx, points[1] + dy]);
-                            return newChild;
-                        }
-                        const newChild = cloneDeep(child);
-                        newChild.id = generateId();
-                        newChild.x = child.x + dx;
-                        newChild.y = child.y + dy;
-                        return newChild;
-                    });
-                }
-                else if (multiPointShpes.includes(newShape.type)) {
-                    (newShape as POLYGON_SHAPE).points = (newShape as POLYGON_SHAPE).points.map(point => [point[0] + dx, point[1] + dy]);
-                }
+                newShape.style.translate = [item.style.translate[0] + dx, item.style.translate[1] + dy];
                 return newShape;
             });
             const currentPage = state.pages[state.activePageIndex];
@@ -238,13 +186,13 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             const shapes = currentPage.shapes.filter(shape => {
                 const isShapeActive = currentPage.activeShapes.find(shapeInfo => shapeInfo.id === shape.id);
                 if (isShapeActive) {
-                    // if (shape.type === SHAPE_TYPES.GROUP) {
-                    //     // if shape type is group merge all items in a newly formed array
-                    //     (shape as GROUP_SHAPE).children.forEach(child => {
-                    //         groupChildren.push(child);
-                    //     });
-                    //     return false;
-                    // }
+                    if (shape.type === SHAPE_TYPES.GROUP) {
+                        // if shape type is group merge all items in a newly formed array
+                        (shape as GROUP_SHAPE).children.forEach(child => {
+                            groupChildren.push(child);
+                        });
+                        return false;
+                    }
                     groupChildren.push(shape);
                     return false;
                 }
@@ -330,7 +278,6 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
         case PAGES_ACTION_TYPES.REMOVE_PALETTE_COLOR: {
             const colors = { ...state.colors };
             delete colors[action.payload];
-            console.log(colors, action.payload);
             state.colors = colors;
             return { ...state };
         }

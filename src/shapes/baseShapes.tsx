@@ -3,8 +3,8 @@ import { State } from '../store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveShapesInfo, getCurrentShape } from '../selector/selector';
 import { AVAILABLE_SHAPES } from './availableShapes';
-import { setActiveShapeCoordinates, toggleContextMenu } from '../actions/pages/pages.actions';
-import { SHAPE_TYPES } from '../utils/constant';
+import { translateActiveShape, toggleContextMenu } from '../actions/pages/pages.actions';
+import { multiPointShpes, SHAPE_TYPES } from '../utils/constant';
 import { MEASUREMENT, STYLE } from './style';
 import generateId from '../utils/idGenerator';
 import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions';
@@ -94,19 +94,28 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                     (currentShape as GROUP_SHAPE).children.forEach(child => { x += child.x; y += child.y; });
                     x /= (currentShape as GROUP_SHAPE).children.length;
                     y /= (currentShape as GROUP_SHAPE).children.length;
-                    dispatch(toggleContextMenu({ x, y }))
+                    dispatch(toggleContextMenu({
+                        x: x + currentShape.style.translate[0],
+                        y: y + currentShape.style.translate[1]
+                    }));
                 }
-                else if (currentShape.type === SHAPE_TYPES.PATH) {
+                else if (multiPointShpes.includes(currentShape.type)) {
                     let x = 0, y = 0;
                     (currentShape as PATH_SHAPE).points.forEach(points => {
                         x += points[0]; y += points[1];
                     });
                     x /= (currentShape as PATH_SHAPE).points.length;
                     y /= (currentShape as PATH_SHAPE).points.length;
-                    dispatch(toggleContextMenu({ x, y }));
+                    dispatch(toggleContextMenu({
+                        x: x + currentShape.style.translate[0],
+                        y: y + currentShape.style.translate[1]
+                    }));
                 }
                 else {
-                    dispatch(toggleContextMenu({ x: currentShape.x, y: currentShape.y }))
+                    dispatch(toggleContextMenu({
+                        x: currentShape.x + currentShape.style.translate[0],
+                        y: currentShape.y + currentShape.style.translate[1]
+                    }));
                 }
             }
 
@@ -128,7 +137,7 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 let dy = y1 - y;
                 x = x1;
                 y = y1;
-                dispatch(setActiveShapeCoordinates({ x: dx, y: dy }));
+                dispatch(translateActiveShape({ x: dx, y: dy }));
             }
             return false;
         }
