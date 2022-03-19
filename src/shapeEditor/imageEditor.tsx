@@ -10,7 +10,6 @@ import { THEME } from '../theme/theme';
 import { toBase64 } from '../utils/utils';
 
 const ImageEditor: React.FC<EditorProps> = function ({ shape, index }) {
-    console.log(shape, index);
     const dispatch = useDispatch();
     const s = shape as IMAGE_SHAPE;
     const fileInputRef = useRef<HTMLInputElement>(null);

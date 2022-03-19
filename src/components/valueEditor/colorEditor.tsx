@@ -30,7 +30,6 @@ const ColorEditor: React.FC<props> = function ({ value, onChange, label, disable
     const onDropDownValueChange = function (details: any) {
         // details is id
         value !== `url(#${details})` && onChange(`url(#${details})`);
-        console.log(details);
     }
 
     function getDropDownChildren() {

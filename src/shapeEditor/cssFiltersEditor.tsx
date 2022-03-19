@@ -298,7 +298,6 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                             value={shadow?.color || 'rgb(0,0,0)'}
                             onChange={val => {
                                 const newFilterObj = { ...shape.style.cssFilters };
-                                console.log(newFilterObj);
                                 newFilterObj.dropShadow![idx] = { ...defaultDropShadow, ...newFilterObj.dropShadow![idx], color: val };
                                 dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
                             }}

@@ -84,8 +84,6 @@ const CreateGradient: React.FC<props> = function ({ closeGradientCreater, select
             gradient.fr && (newGradient.fr = gradient.fr);
         }
 
-        console.log(newGradient)
-
         if (gradientId) {
             dispatch(editPaletteGradient({ id: gradientId, newGradient }))
         }

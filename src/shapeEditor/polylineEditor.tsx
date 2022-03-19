@@ -6,7 +6,6 @@ import BaseShapeEditor, { EditorProps } from './baseShapeEditor';
 import { POLYLINE_SHAPE } from '../shapes/polyline';
 
 const PolylineEditor: React.FC<EditorProps> = function ({ shape, index }) {
-    console.log(shape, index);
     const dispatch = useDispatch();
     const s = shape as POLYLINE_SHAPE;
     return (
@@ -35,7 +34,6 @@ const PolylineEditor: React.FC<EditorProps> = function ({ shape, index }) {
                                     if(val){
                                         const newPointsArray=[...s.points];
                                         newPointsArray[idx][1]=val;
-                                        console.log(newPointsArray)
                                         dispatch(formatActiveShape({ index, properties: { points: newPointsArray } }));
                                     }
                                 }}

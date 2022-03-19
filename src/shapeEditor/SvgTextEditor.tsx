@@ -9,7 +9,6 @@ import OptionEditor from '../components/valueEditor/optionEditor';
 import { availableFonts } from '../utils/constant';
 
 const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
-    console.log(shape, index);
     const dispatch = useDispatch();
     const s = shape as TEXT_SHAPE;
     return (
