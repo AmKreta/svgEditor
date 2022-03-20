@@ -41,7 +41,6 @@ const AddClipArtModal: React.FC<props> = function ({ onClose, addClipArt }) {
     }
 
     const fetchClipArt = (callback: Function, clear?: boolean) => {
-        console.log(clear, loadCount);
         if (artType === 'clipArt') {
             axios
                 .get(`https://permaclipart.org/wp-json/clipart/api?query=${searchInput}&num=20&page=${loadCount.current + 1}`)

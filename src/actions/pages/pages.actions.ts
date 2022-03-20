@@ -9,8 +9,8 @@ import {
     SET_ACTIVE_PAGE_ACTION,
     ADD_SHAPE_PAYLOAD,
     ADD_SHAPE_ACTION,
-    SET_ACTIVE_SHAPE_COORDINATES_ACTION,
-    SET_ACTIVE_SHAPE_COORDINATES_PAYLOAD,
+    TRANSLATE_ACTIVE_SHAPE_ACTION,
+    TRANSLATE_ACTIVE_SHAPE_PAYLOAD,
     SET_ACTIVE_TOOL_PAYLOAD,
     SET_ACTIVE_TOOL_ACTION,
     SET_HOVERED_SHAPE_ACTION,
@@ -98,8 +98,8 @@ export const addShape: (shape: ADD_SHAPE_PAYLOAD) => ADD_SHAPE_ACTION | undefine
             break;
         }
 
-        case SHAPE_TYPES.PATH:{
-            newShapeDefaultProps=getPathDefaultProps(pointsArray);
+        case SHAPE_TYPES.PATH: {
+            newShapeDefaultProps = getPathDefaultProps(pointsArray);
             break;
         }
 
@@ -110,8 +110,8 @@ export const addShape: (shape: ADD_SHAPE_PAYLOAD) => ADD_SHAPE_ACTION | undefine
     }
 }
 
-export const setActiveShapeCoordinates: (coordinates: SET_ACTIVE_SHAPE_COORDINATES_PAYLOAD) => SET_ACTIVE_SHAPE_COORDINATES_ACTION = (coordinates: SET_ACTIVE_SHAPE_COORDINATES_PAYLOAD) => {
-    return { type: PAGES_ACTION_TYPES.SET_ACTIVE_SHAPE_COORDINATES, payload: coordinates };
+export const translateActiveShape: (coordinates: TRANSLATE_ACTIVE_SHAPE_PAYLOAD) => TRANSLATE_ACTIVE_SHAPE_ACTION = (coordinates: TRANSLATE_ACTIVE_SHAPE_PAYLOAD) => {
+    return { type: PAGES_ACTION_TYPES.TRANSLATE_ACTIVE_SHAPE, payload: coordinates };
 }
 
 export const setActiveTool: (tool: SET_ACTIVE_TOOL_PAYLOAD) => SET_ACTIVE_TOOL_ACTION = (tool: SET_ACTIVE_TOOL_PAYLOAD) => {

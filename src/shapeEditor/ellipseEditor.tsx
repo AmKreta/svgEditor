@@ -6,7 +6,6 @@ import BaseShapeEditor, { EditorProps } from './baseShapeEditor';
 import { ELLIPSE_SHAPE } from '../shapes/ellipse';
 
 const EllipseEditor: React.FC<EditorProps> = function ({ shape, index }) {
-    console.log(shape, index);
     const dispatch = useDispatch();
     const s = shape as ELLIPSE_SHAPE;
     return (

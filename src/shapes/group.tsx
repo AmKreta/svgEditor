@@ -187,6 +187,22 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                             );
                         }
 
+                        case SHAPE_TYPES.GROUP: {
+                            return (
+                                <Group
+                                    shape={childShape}
+                                    mouseDownHandler={props.mouseDownHandler}
+                                    mouseUpHandler={props.mouseUpHandler}
+                                    mouseEnterHandler={props.mouseEnterHandler}
+                                    mouseLeaveHandler={props.mouseLeaveHandler}
+                                    isActive={props.isActive}
+                                    hovered={props.hovered}
+                                    index={props.index}
+                                    children={(childShape as GROUP_SHAPE).children}
+                                />
+                            );
+                        }
+
                         default: return null;
                     }
                 })

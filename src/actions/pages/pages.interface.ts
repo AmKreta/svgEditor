@@ -4,7 +4,7 @@ import { SHAPE_TYPES } from "../../utils/constant";
 import { STYLE } from "../../shapes/style";
 import { AVAILABLE_FILTERS, FILTER_TYPES } from "../../filters/availableFilters";
 
-export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; };
+export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; clipboard: { x: number, y: number } };
 export type ACTIVE_SHAPE_INFO = Array<{ index: number, id: string }>;
 export type SHAPE_COLLECTION = {
     id: string;
@@ -59,8 +59,8 @@ export interface ADD_SHAPE_PAYLOAD { shape: SHAPE_TYPES, x: number, y: number, p
 export type ADD_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.ADD_SHAPE, AVAILABLE_SHAPES>;
 
 // moving the shape
-export interface SET_ACTIVE_SHAPE_COORDINATES_PAYLOAD { x: number, y: number };
-export type SET_ACTIVE_SHAPE_COORDINATES_ACTION = ACTION<PAGES_ACTION_TYPES.SET_ACTIVE_SHAPE_COORDINATES, SET_ACTIVE_SHAPE_COORDINATES_PAYLOAD>;
+export interface TRANSLATE_ACTIVE_SHAPE_PAYLOAD { x: number, y: number };
+export type TRANSLATE_ACTIVE_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.TRANSLATE_ACTIVE_SHAPE, TRANSLATE_ACTIVE_SHAPE_PAYLOAD>;
 
 // setting active tools
 export type SET_ACTIVE_TOOL_PAYLOAD = SHAPE_TYPES;
@@ -161,7 +161,7 @@ export type REMOVE_PALETTE_GRADIENT_ACTION = ACTION<PAGES_ACTION_TYPES.REMOVE_PA
 
 export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | ADD_SHAPE_ACTION
-    | SET_ACTIVE_SHAPE_COORDINATES_ACTION
+    | TRANSLATE_ACTIVE_SHAPE_ACTION
     | SET_ACTIVE_TOOL_ACTION
     | SET_HOVERED_SHAPE_ACTION
     | SET_ACTIVE_SHAPE_ACTION
