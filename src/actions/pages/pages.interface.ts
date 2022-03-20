@@ -4,7 +4,7 @@ import { SHAPE_TYPES } from "../../utils/constant";
 import { STYLE } from "../../shapes/style";
 import { AVAILABLE_FILTERS, FILTER_TYPES } from "../../filters/availableFilters";
 
-export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; };
+export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; clipboard: { x: number, y: number } };
 export type ACTIVE_SHAPE_INFO = Array<{ index: number, id: string }>;
 export type SHAPE_COLLECTION = {
     id: string;

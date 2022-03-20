@@ -16,7 +16,7 @@ const initialState: PAGES = {
     activeTool: SHAPE_TYPES.PAN,
     hoveredShapeId: null,
     clipboard: [],
-    contextMenu: { show: false, x: 0, y: 0 },
+    contextMenu: { show: false, x: 0, y: 0, clipboard: { x: 0, y: 0 } },
     pages: [
         { id: id, activeShapes: [], shapes: [], filters: {} }
     ],
@@ -76,8 +76,8 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
 
         case PAGES_ACTION_TYPES.TOGGLE_CONTEXT_MENU: {
             state.contextMenu = action.payload
-                ? { show: true, ...action.payload }
-                : { show: false, x: 0, y: 0 }
+                ? { show: true, clipboard: { ...state.contextMenu.clipboard }, ...action.payload }
+                : { show: false, x: 0, y: 0, clipboard: { ...state.contextMenu.clipboard } }
             return { ...state };
         }
 
@@ -99,6 +99,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
                 return shape;
             })
             currentPage.shapes = [...shapes];
+            state.contextMenu = { ...state.contextMenu, clipboard: { x: state.contextMenu.x, y: state.contextMenu.y } };
             // clearing activeshapes array
             currentPage.activeShapes = [];
             return { ...state, clipboard };
@@ -119,6 +120,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
                     clipboard.push(shape);
                 }
             })
+            state.contextMenu = { ...state.contextMenu, clipboard: { x: state.contextMenu.x, y: state.contextMenu.y } };
             currentPage.shapes = [...shapes];
             return { ...state, clipboard };
         }
@@ -126,20 +128,8 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
         case PAGES_ACTION_TYPES.PASTE_SELECTED_SHAPES: {
             // the coodrinate where context menu is being displayed
             const { x, y } = state.contextMenu;
-            // avg of x and y coordinates of all active shapes
-            let avgX = 0, avgY = 0, avgTranslate: [number, number] = [0, 0];
-            state.clipboard.forEach(item => {
-                avgX += item.x;
-                avgY += item.y;
-                avgTranslate[0] += item.style.translate[0];
-                avgTranslate[1] += item.style.translate[1];
-            });
-            avgX /= state.clipboard.length;
-            avgY /= state.clipboard.length;
-            avgTranslate[0] /= state.clipboard.length;
-            avgTranslate[1] /= state.clipboard.length;
-            let dx = x - avgX - avgTranslate[0];
-            let dy = y - avgY - avgTranslate[1];
+            let dx = x - state.contextMenu.clipboard.x;
+            let dy = y - state.contextMenu.clipboard.y;
             // adding new coordinates and id's to shapes on clipboard
             const shapesToPaste: AVAILABLE_SHAPES[] = state.clipboard.map(item => {
                 let newShape: AVAILABLE_SHAPES;
