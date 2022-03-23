@@ -29,7 +29,6 @@ const Circle: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             cy={`${shape.y}${shape.y_unit}`}
             r={`${shape.radius}${shape.radius_unit}`}
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}

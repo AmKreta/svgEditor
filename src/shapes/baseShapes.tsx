@@ -20,13 +20,14 @@ export interface BASE_SHAPE {
     x_unit: MEASUREMENT;
     y: number;
     y_unit: MEASUREMENT;
-    style: STYLE
+    style: STYLE;
+    render: boolean;
 };
 
 export interface BASE_SHAPE_PROPS {
-    isActive: boolean,
-    index: number,
-    hovered: boolean
+    isActive: boolean;
+    id: string;
+    hovered: boolean;
 };
 
 export interface WRAPPED_SHAPE_PROPS {
@@ -36,8 +37,7 @@ export interface WRAPPED_SHAPE_PROPS {
     mouseUpHandler: (e: React.MouseEvent<SVGElement>) => void;
     hovered: boolean;
     isActive: boolean;
-    index: number;
-    shape: AVAILABLE_SHAPES
+    shape: AVAILABLE_SHAPES;
 };
 
 export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: number, y: number }): BASE_SHAPE {
@@ -69,15 +69,21 @@ export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: 
             scale: [1, 1],
             cssFilters: {},
             svgFilters: {}
-        }
+        },
+        render: true
     }
 };
 
 const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) => {
     return function BaseTool(props: BASE_SHAPE_PROPS) {
-        const currentShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getCurrentShape(state, props.index));
-        const activeShapes = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo);
+        const currentShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getCurrentShape(state, props.id));
+        const activeShapes = useSelector<State, string[]>(getActiveShapesInfo);
         const dispatch = useDispatch();
+
+        if (!currentShape) {
+            console.log(currentShape)
+            return null;
+        }
 
         const mouseDownHandler = (e: React.MouseEvent<SVGElement>) => {
             // todo
@@ -92,12 +98,12 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 if (currentShape.type === SHAPE_TYPES.GROUP) {
                     let x = 0, y = 0, translate = [0, 0];
                     const groupShape = currentShape as GROUP_SHAPE;
-                    groupShape.children.forEach(child => {
-                        x += child.x;
-                        y += child.y;
-                        translate[0] += child.style.translate[0];
-                        translate[1] += child.style.translate[1];
-                    });
+                    // groupShape.children.forEach(child => {
+                    //     x += child.x;
+                    //     y += child.y;
+                    //     translate[0] += child.style.translate[0];
+                    //     translate[1] += child.style.translate[1];
+                    // });
                     x /= groupShape.children.length;
                     y /= groupShape.children.length;
                     translate[0] /= groupShape.children.length;
@@ -127,10 +133,10 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 }
             }
 
-            if (activeShapes.findIndex(shape => shape.id === currentShape.id) === -1) {
+            if (activeShapes.findIndex(shapeId => shapeId === currentShape.id) === -1) {
                 // if element not found in active element list
                 // ie element is not currently selected
-                dispatch(setActiveShape([{ id: currentShape.id, index: props.index }]));
+                dispatch(setActiveShape([currentShape.id]));
             }
 
             let x = e.clientX;
@@ -174,8 +180,6 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 isActive={props.isActive}
                 hovered={props.hovered}
                 mouseUpHandler={mouseUpHandler}
-                index={props.index}
-                children={(currentShape as GROUP_SHAPE).children}
             />
         );
     }

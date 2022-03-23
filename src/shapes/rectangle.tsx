@@ -36,7 +36,6 @@ const Rectangle: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             height={`${shape.height}${shape.height_unit}`}
             width={`${shape.width}${shape.width_unit}`}
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}

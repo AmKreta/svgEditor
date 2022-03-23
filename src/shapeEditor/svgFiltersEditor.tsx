@@ -15,7 +15,7 @@ import styled, { css } from 'styled-components';
 import { THEME } from '../theme/theme';
 import { getOutlineDefaultProps, OUTLINE_FILTER } from '../filters/outline.filter';
 
-const SvgFilterEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
     const filtersOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_FILTERS }>(getFiltersOfCurrentPage);
     const dispatch = useDispatch();
 
@@ -29,7 +29,7 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape, index }) {
         else {
             svgFilters[filter.type] = [id];
         }
-        dispatch(formatActiveShape({ index, style: { svgFilters } }));
+        dispatch(formatActiveShape({ id:shape.id, style: { svgFilters } }));
         dispatch(addSvgFilters(filter));
     }
 
@@ -43,14 +43,14 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape, index }) {
         else {
             svgFilters[filter.type] = [id];
         }
-        dispatch(formatActiveShape({ index, style: { svgFilters } }));
+        dispatch(formatActiveShape({ id:shape.id, style: { svgFilters } }));
         dispatch(addSvgFilters(filter));
     }
 
     const deleteFilter = function (e: React.MouseEvent<HTMLSpanElement>) {
         const filterId = e.currentTarget.dataset['filterid']!;
         const filterType = e.currentTarget.dataset['filtertype']! as FILTER_TYPES;
-        dispatch(removeSvgFilter({ filterId, filterType, shapeIndex: index }))
+        dispatch(removeSvgFilter({ filterId, filterType, shapeId:shape.id }))
     }
 
     return (

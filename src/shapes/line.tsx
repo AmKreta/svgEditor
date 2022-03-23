@@ -24,7 +24,6 @@ const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     return (
         <line
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}

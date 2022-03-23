@@ -18,7 +18,7 @@ const defaultDropShadow = {
     color: 'rgb(0,0,0)'
 }
 
-const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
 
     const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
     const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
             // deleting from objects style
             const newFilterObj = { ...shape.style.cssFilters };
             delete newFilterObj[filter as keyof CSS_FILTERS];
-            dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+            dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
         }
         else {
             setCheckedItems((prevState) => ({ ...prevState, [filter]: true }));
@@ -59,7 +59,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
             oldFilters.dropShadow = [];
         }
         oldFilters.dropShadow.push(defaultDropShadow);
-        dispatch(formatActiveShape({ index, style: { cssFilters: oldFilters } }))
+        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: oldFilters } }))
     }
 
     const removeDropShadowAtIndex = function (e: React.MouseEvent<HTMLSpanElement>) {
@@ -70,7 +70,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                 oldFilters.dropShadow?.splice(index, 1);
                 oldFilters.dropShadow = cloneDeep(oldFilters.dropShadow);
                 const style = { ...shape.style };
-                dispatch(formatActiveShape({ index, properties: { style } }))
+                dispatch(formatActiveShape({ id: shape.id, properties: { style } }))
             }
         }
     }
@@ -84,7 +84,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.blur = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['blur']}
@@ -101,7 +101,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 200) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.contrast = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['contrast']}
@@ -119,7 +119,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.brightness = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['brightness']}
@@ -137,7 +137,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 100) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.grayscale = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['grayscale']}
@@ -155,7 +155,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 360) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.hueRotate = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['hueRotate']}
@@ -173,7 +173,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 100) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.invert = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['invert']}
@@ -191,7 +191,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 100) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.opacity = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['opacity']}
@@ -209,7 +209,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 200) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.saturate = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['saturate']}
@@ -227,7 +227,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     if (val >= 0 && val <= 100) {
                         const newFilterObj = { ...shape.style.cssFilters };
                         newFilterObj.sepia = val;
-                        dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                        dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                     }
                 }}
                 disabled={!checkedItems['sepia']}
@@ -249,7 +249,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                                 if (val || val === 0) {
                                     const newFilterObj = { ...shape.style.cssFilters };
                                     newFilterObj.dropShadow![idx] = { ...defaultDropShadow, ...newFilterObj.dropShadow![idx], xOffset: val };
-                                    dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                                    dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                                 }
                             }}
                             label={
@@ -266,7 +266,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                                 if (val || val === 0) {
                                     const newFilterObj = { ...shape.style.cssFilters };
                                     newFilterObj.dropShadow![idx] = { ...defaultDropShadow, ...newFilterObj.dropShadow![idx], yOffset: val };
-                                    dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                                    dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                                 }
                             }}
                             label={
@@ -283,7 +283,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                                 if (val >= 0 && val <= 200) {
                                     const newFilterObj = { ...shape.style.cssFilters };
                                     newFilterObj.dropShadow![idx] = { ...defaultDropShadow, ...newFilterObj.dropShadow![idx], blur: val };
-                                    dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                                    dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                                 }
                             }}
                             label={
@@ -299,7 +299,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape, index }) {
                             onChange={val => {
                                 const newFilterObj = { ...shape.style.cssFilters };
                                 newFilterObj.dropShadow![idx] = { ...defaultDropShadow, ...newFilterObj.dropShadow![idx], color: val };
-                                dispatch(formatActiveShape({ index, style: { cssFilters: newFilterObj } }));
+                                dispatch(formatActiveShape({ id: shape.id, style: { cssFilters: newFilterObj } }));
                             }}
                             label={
                                 <>

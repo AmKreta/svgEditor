@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { getShapeAtIndex, getActiveShapesInfo } from '../../selector/selector';
+import { getShapeWithId, getActiveShapesInfo } from '../../selector/selector';
 import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
 import { ACTIVE_SHAPE_INFO } from '../../actions/pages/pages.interface';
@@ -20,8 +20,8 @@ import PathEditor from '../../shapeEditor/pathEditor';
 const ElementFormatter: React.FC<{}> = function () {
 
     // edits dimensions, add filters and edit styles, add masks, add pattern fills,
-    const activeShapesInfo = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo);
-    const shapeAtIndex = useSelector<State, (index: number) => AVAILABLE_SHAPES>(getShapeAtIndex);
+    const activeShapesInfo = useSelector<State, string[]>(getActiveShapesInfo);
+    const shapeWithId = useSelector<State, (id: string) => AVAILABLE_SHAPES>(getShapeWithId);
 
     return (
         <StyledDiv>
@@ -31,77 +31,76 @@ const ElementFormatter: React.FC<{}> = function () {
                     ? (
                         <div className='formatterList'>
                             {
-                                activeShapesInfo.map((shapeInfo, idx) => {
-                                    const index = shapeInfo.index;
-                                    const shape = shapeAtIndex(index);
+                                activeShapesInfo.map((shapeId, idx) => {
+                                    const shape = shapeWithId(shapeId);
                                     switch (shape.type) {
                                         case SHAPE_TYPES.CIRCLE: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <CircleEditor shape={shape} index={index} />
+                                                <CircleEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.RECTANGLE: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <RectangleEditor shape={shape} index={index} />
+                                                <RectangleEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.LINE: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <LineEditor shape={shape} index={index} />
+                                                <LineEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.POLYGON: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <PolygonEditor shape={shape} index={index} />
+                                                <PolygonEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.POLYLINE: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <PolylineEditor shape={shape} index={index} />
+                                                <PolylineEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.ELLIPSE: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <EllipseEditor shape={shape} index={index} />
+                                                <EllipseEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.TEXT: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <SvgTextEditor shape={shape} index={index} />
+                                                <SvgTextEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.IMAGE: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <ImageEditor shape={shape} index={index} />
+                                                <ImageEditor shape={shape} />
                                             </details>
                                         );
 
                                         case SHAPE_TYPES.GROUP: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <GroupEditor shape={shape} index={index} />
+                                                <GroupEditor shape={shape} />
                                             </details>
                                         )
 
                                         case SHAPE_TYPES.PATH: return (
-                                            <details key={index} open={idx === 0}>
+                                            <details key={shape.id} open={idx === 0}>
                                                 <summary>{shape.name}</summary>
-                                                <PathEditor shape={shape} index={index} />
+                                                <PathEditor shape={shape} />
                                             </details>
                                         )
 
