@@ -96,40 +96,22 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
 
             if (e.buttons === 2) {
                 //right click
-                if (currentShape.type === SHAPE_TYPES.GROUP) {
-                    const svgEditor = document.getElementById('svgEditor')!;
-                    const editorBBox = svgEditor.getBoundingClientRect();
-                    const el = document.getElementById(currentShape.id)!;
-                    const c = getBoundingRectMidPoint(el.getBoundingClientRect());
-                    dispatch(toggleContextMenu({
-                        x: c.x - editorBBox.x,
-                        y: c.y - editorBBox.y
-                    }));
-                }
-                else if (multiPointShpes.includes(currentShape.type)) {
-                    let x = 0, y = 0;
-                    (currentShape as PATH_SHAPE).points.forEach(points => {
-                        x += points[0]; y += points[1];
-                    });
-                    x /= (currentShape as PATH_SHAPE).points.length;
-                    y /= (currentShape as PATH_SHAPE).points.length;
-                    dispatch(toggleContextMenu({
-                        x: x + currentShape.style.translate[0],
-                        y: y + currentShape.style.translate[1]
-                    }));
-                }
-                else {
-                    dispatch(toggleContextMenu({
-                        x: currentShape.x + currentShape.style.translate[0],
-                        y: currentShape.y + currentShape.style.translate[1]
-                    }));
-                }
+                const svgEditor = document.getElementById('svgEditor')!;
+                const editorBBox = svgEditor.getBoundingClientRect();
+                const el = document.getElementById(currentShape.id)!;
+                const c = getBoundingRectMidPoint(el.getBoundingClientRect());
+                dispatch(toggleContextMenu({
+                    x: c.x - editorBBox.x,
+                    y: c.y - editorBBox.y
+                }));
+                return;
             }
 
             if (activeShapes.findIndex(shapeId => shapeId === currentShape.id) === -1) {
                 // if element not found in active element list
                 // ie element is not currently selected
                 dispatch(setActiveShape([currentShape.id]));
+                return ;
             }
 
             let x = e.clientX;
