@@ -4,13 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getActiveShapesInfo, getCurrentShape } from '../selector/selector';
 import { AVAILABLE_SHAPES } from './availableShapes';
 import { translateActiveShape, toggleContextMenu } from '../actions/pages/pages.actions';
-import { multiPointShpes, SHAPE_TYPES } from '../utils/constant';
+import { SHAPE_TYPES } from '../utils/constant';
 import { MEASUREMENT, STYLE } from './style';
 import generateId from '../utils/idGenerator';
 import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions';
-import { ACTIVE_SHAPE_INFO } from '../actions/pages/pages.interface';
-import { GROUP_SHAPE } from './group';
-import { PATH_SHAPE } from './path';
 import { getBoundingRectMidPoint } from '../utils/utils';
 
 export interface BASE_SHAPE {

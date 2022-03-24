@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import EditorHeader from '../components/uiEditor/editorHeader';
-import ElementTree from '../components/uiEditor/elementTree';
+//import ElementTree from '../components/uiEditor/elementTree';
 import SvgEditor from '../components/uiEditor/svgEditor';
 import ElementFormatter from '../components/uiEditor/elementFormatter';
-import EditorFooter from '../components/uiEditor/editorFooter';
+//import EditorFooter from '../components/uiEditor/editorFooter';
 import { THEME } from '../theme/theme';
 
 const NftEditor: React.FC<{}> = function () {

@@ -10,7 +10,6 @@ import Image from '../../shapes/image';
 import Line from '../../shapes/line';
 import Ellipse from '../../shapes/ellipse';
 import Text from '../../shapes/text';
-import { BASE_SHAPE_PROPS } from '../../shapes/baseShapes';
 import Path from '../../shapes/path';
 
 interface DRAW_SHAPES_PROPS {

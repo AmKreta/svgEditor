@@ -11,7 +11,7 @@ import DrawShapes from './drawShape';
 import ShapeSelector, { SHAPE_SELECTOR_PROPS, initialShapeSelectorProps } from './shapeSelector';
 import { areColliding } from '../../utils/utils';
 import ContextMenu from './contextMenu';
-import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO } from '../../actions/pages/pages.interface';
+import { CONTEXT_MENU_INTERFACE } from '../../actions/pages/pages.interface';
 import PointsArrayFigureViewer from './pointsArrayFigureViewer';
 import Filters from './filters';
 import Gradients from './gradients';

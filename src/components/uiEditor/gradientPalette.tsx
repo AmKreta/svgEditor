@@ -49,7 +49,6 @@ const GradientPalette = function () {
             <GradientContainer>
                 {
                     Object.keys(gradients).map(gradientId => {
-                        const gradient = gradients[gradientId];
                         return (
                             <div onClick={selectGradient} key={gradientId} data-id={gradientId}>
                                 <GradientRenderer gradientId={gradientId}/>

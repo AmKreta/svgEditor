@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { getShapeWithId, getActiveShapesInfo } from '../../selector/selector';
 import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
-import { ACTIVE_SHAPE_INFO } from '../../actions/pages/pages.interface';
 import RectangleEditor from '../../shapeEditor/rectangleEditor';
 import { SHAPE_TYPES } from '../../utils/constant';
 import CircleEditor from '../../shapeEditor/circleEditor';
