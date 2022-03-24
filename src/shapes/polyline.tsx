@@ -22,7 +22,6 @@ const Polyline: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     return (
         <polyline
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}

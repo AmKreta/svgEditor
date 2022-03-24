@@ -11,9 +11,9 @@ import { ACTIVE_SHAPE_INFO } from '../../actions/pages/pages.interface';
 
 
 const ElementTree: React.FC<{}> = function () {
-    const elements = useSelector<State, Array<AVAILABLE_SHAPES>>(getShapesOfCurrentPage);
+    const elements = useSelector<State, {[key: string]: AVAILABLE_SHAPES;}>(getShapesOfCurrentPage);
     const hoveredElementId = useSelector<State, string | null>(getHoveredShapeId);
-    const activeShapeInfo = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo);
+    const activeShapeInfo = useSelector<State, string[]>(getActiveShapesInfo);
     const dispatch = useDispatch();
 
     const mouseEnterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -28,7 +28,7 @@ const ElementTree: React.FC<{}> = function () {
     const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         const id = e.currentTarget.dataset['id']!;
         const index = parseInt(e.currentTarget.dataset['index']!);
-        dispatch(setActiveShape([{ id, index }]));
+        dispatch(setActiveShape([id]));
     }
 
     return (
@@ -36,17 +36,17 @@ const ElementTree: React.FC<{}> = function () {
             <h4>ElementTree</h4>
             <div>
                 {
-                    elements.map((item, index) => (
-                        <div key={item.id}>
+                    Object.keys(elements).map((shapeId, index) => (
+                        <div key={shapeId}>
                             <div
-                                style={{ border: hoveredElementId === item.id || activeShapeInfo.find(shapeInfo => shapeInfo.id === item.id) ? '1px solid red' : 'none' }}
+                                style={{ border: hoveredElementId === shapeId || activeShapeInfo.includes(shapeId) ? '1px solid red' : 'none' }}
                                 onMouseEnter={mouseEnterHandler}
                                 onMouseLeave={mouseLeaveHandler}
                                 onClick={clickHandler}
-                                data-id={item.id}
+                                data-id={shapeId}
                                 data-index={index}
                             >
-                                {item.name}
+                                {elements[shapeId].name}
                             </div>
                         </div>
                     ))
@@ -56,11 +56,11 @@ const ElementTree: React.FC<{}> = function () {
     );
 }
 
- const StyledDiv = styled.div``;
+const StyledDiv = styled.div``;
 //     ${(props) => {
 //         const theme = props.theme as THEME;
 //         return css`
-            
+
 //         `;
 //     }}
 // `;

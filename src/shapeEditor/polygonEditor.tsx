@@ -5,7 +5,7 @@ import { formatActiveShape } from '../actions/pages/pages.actions';
 import BaseShapeEditor, { EditorProps } from './baseShapeEditor';
 import { POLYGON_SHAPE } from '../shapes/polygon';
 
-const PolygonEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const PolygonEditor: React.FC<EditorProps> = function ({ shape }) {
     const dispatch = useDispatch();
     const s = shape as POLYGON_SHAPE;
     return (
@@ -22,7 +22,7 @@ const PolygonEditor: React.FC<EditorProps> = function ({ shape, index }) {
                                     if(val){
                                         const newPointsArray=[...s.points];
                                         newPointsArray[idx][0]=val;
-                                        dispatch(formatActiveShape({ index, properties: { points: newPointsArray } }));
+                                        dispatch(formatActiveShape({ id:s.id, properties: { points: newPointsArray } }));
                                     }
                                 }}
                                 step={5}
@@ -34,7 +34,7 @@ const PolygonEditor: React.FC<EditorProps> = function ({ shape, index }) {
                                     if(val){
                                         const newPointsArray=[...s.points];
                                         newPointsArray[idx][1]=val;
-                                        dispatch(formatActiveShape({ index, properties: { points: newPointsArray } }));
+                                        dispatch(formatActiveShape({ id:s.id, properties: { points: newPointsArray } }));
                                     }
                                 }}
                                 step={5}

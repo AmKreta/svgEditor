@@ -18,7 +18,7 @@ const initialState: PAGES = {
     clipboard: [],
     contextMenu: { show: false, x: 0, y: 0, clipboard: { x: 0, y: 0 } },
     pages: [
-        { id: id, activeShapes: [], shapes: [], filters: {} }
+        { id: id, activeShapes: [], shapes: {}, filters: {}, renderTree: [] }
     ],
     colors: {},
     gradients: {},
@@ -35,9 +35,9 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
         case PAGES_ACTION_TYPES.ADD_SHAPE: {
             const currentPage = state.pages[state.activePageIndex];
             if (currentPage) {
-                let shapes = currentPage.shapes;
-                currentPage.shapes = [...shapes, action.payload];
-                currentPage.activeShapes = [{ index: currentPage.shapes.length - 1, id: action.payload.id }];
+                currentPage.shapes = { ...currentPage.shapes, [action.payload.id]: action.payload };
+                currentPage.activeShapes = [action.payload.id];
+                currentPage.renderTree = [...currentPage.renderTree, { id: action.payload.id }];
                 return { ...state, pages: [...state.pages] }
             }
             return state;
@@ -46,11 +46,11 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
         case PAGES_ACTION_TYPES.TRANSLATE_ACTIVE_SHAPE: {
             const currentPage = state.pages[state.activePageIndex];
             if (currentPage) {
-                currentPage.activeShapes.forEach((shapeInfo) => {
-                    const shape = currentPage.shapes[shapeInfo.index];
+                currentPage.activeShapes.forEach((shapeId) => {
+                    const shape = currentPage.shapes[shapeId];
                     shape.style.translate[0] += action.payload.x;
                     shape.style.translate[1] += action.payload.y;
-                    currentPage.shapes[shapeInfo.index] = { ...shape };
+                    currentPage.shapes[shapeId] = { ...shape };
                 });
                 return { ...state };
             }
@@ -90,15 +90,11 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             const clipboard: AVAILABLE_SHAPES[] = [];
             // adding active shapes to clipboard
             // keeping inactive shapes as it it
-            shapes = shapes.filter(shape => {
-                const isShapeActive = activeShapes.find(shapeInfo => shapeInfo.id === shape.id);
-                if (isShapeActive) {
-                    clipboard.push(shape);
-                    return false;
-                }
-                return shape;
-            })
-            currentPage.shapes = [...shapes];
+            activeShapes.forEach((shapeId) => {
+                clipboard.push(shapes[shapeId]);
+                delete shapes[shapeId];
+            });
+            currentPage.shapes = { ...shapes };
             state.contextMenu = { ...state.contextMenu, clipboard: { x: state.contextMenu.x, y: state.contextMenu.y } };
             // clearing activeshapes array
             currentPage.activeShapes = [];
@@ -114,14 +110,11 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             const clipboard: AVAILABLE_SHAPES[] = [];
             // adding active shapes to clipboard
             // keeping inactive shapes as it it
-            shapes.forEach(shape => {
-                const isShapeActive = activeShapes.find(shapeInfo => shapeInfo.id === shape.id);
-                if (isShapeActive) {
-                    clipboard.push(shape);
-                }
+            activeShapes.forEach(shapeId => {
+                clipboard.push(shapes[shapeId]);
             })
             state.contextMenu = { ...state.contextMenu, clipboard: { x: state.contextMenu.x, y: state.contextMenu.y } };
-            currentPage.shapes = [...shapes];
+            currentPage.shapes = { ...shapes };
             return { ...state, clipboard };
         }
 
@@ -131,24 +124,39 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             let dx = x - state.contextMenu.clipboard.x;
             let dy = y - state.contextMenu.clipboard.y;
             // adding new coordinates and id's to shapes on clipboard
-            const shapesToPaste: AVAILABLE_SHAPES[] = state.clipboard.map(item => {
+            const shapesToPaste: { [key: string]: AVAILABLE_SHAPES } = {};
+            const currentPage = state.pages[state.activePageIndex];
+
+            // deep cloning a group element
+            const deepCloneGroup = function (shape: GROUP_SHAPE) {
+                for (let i = 0; i < shape.children.length; i++) {
+                    const childShapeId = shape.children[i];
+                    const newChildShape = cloneDeep(currentPage.shapes[childShapeId]);
+                    newChildShape.id = generateId();
+                    shape.children[i] = newChildShape.id;
+                    currentPage.shapes[newChildShape.id] = newChildShape;
+                    if (newChildShape.type === SHAPE_TYPES.GROUP) {
+                        deepCloneGroup(newChildShape as GROUP_SHAPE);
+                    }
+                }
+                shape.children = [...shape.children];
+            }
+
+            state.clipboard.forEach(item => {
                 let newShape: AVAILABLE_SHAPES;
                 newShape = cloneDeep(item);
                 newShape.id = generateId();
                 newShape.style.translate = [item.style.translate[0] + dx, item.style.translate[1] + dy];
-                return newShape;
+                shapesToPaste[newShape.id] = newShape;
+                if (newShape.type === SHAPE_TYPES.GROUP) {
+                    deepCloneGroup(newShape as GROUP_SHAPE)
+                }
             });
-            const currentPage = state.pages[state.activePageIndex];
+
             // concatining newly shapes with existing shapes
-            currentPage.shapes = [...currentPage.shapes, ...shapesToPaste];
+            currentPage.shapes = { ...currentPage.shapes, ...shapesToPaste };
             // setting these shapes as active shapes
-            currentPage.activeShapes = [];
-            for (let i = currentPage.shapes.length - shapesToPaste.length; i < currentPage.shapes.length; i++) {
-                currentPage.activeShapes.push({
-                    id: currentPage.shapes[i].id,
-                    index: i
-                });
-            }
+            currentPage.activeShapes = Object.keys(shapesToPaste);
             return { ...state };
         }
 
@@ -158,11 +166,10 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             // activeShapes only contaibn id and index of activeShapes
             let shapes = currentPage.shapes;
             const activeShapes = currentPage.activeShapes;
-            shapes = shapes.filter(shape => {
-                const isShapeActive = activeShapes.find(shapeInfo => shapeInfo.id === shape.id);
-                return !isShapeActive;
-            });
-            currentPage.shapes = [...shapes];
+            activeShapes.forEach(shapeId => {
+                delete shapes[shapeId]
+            })
+            currentPage.shapes = { ...shapes };
             // clearing active shapes array
             currentPage.activeShapes = [];
             return { ...state };
@@ -170,45 +177,33 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
 
         case PAGES_ACTION_TYPES.SAVE_SELECTED_SHAPES_AS_GROUP: {
             const currentPage = state.pages[state.activePageIndex];
-            const groupChildren: AVAILABLE_SHAPES[] = [];
-            // removing active shapes from shapes array
+            const groupChildren: string[] = [];
+            // hiding active shapes from shapes array
             // adding active shapes to groupChildren array
-            const shapes = currentPage.shapes.filter(shape => {
-                const isShapeActive = currentPage.activeShapes.find(shapeInfo => shapeInfo.id === shape.id);
-                if (isShapeActive) {
-                    if (shape.type === SHAPE_TYPES.GROUP) {
-                        // if shape type is group merge all items in a newly formed array
-                        (shape as GROUP_SHAPE).children.forEach(child => {
-                            groupChildren.push(child);
-                        });
-                        return false;
-                    }
-                    groupChildren.push(shape);
-                    return false;
-                }
-                return shape;
-            });
+            currentPage.activeShapes.forEach(shapeId => {
+                const s = currentPage.shapes[shapeId];
+                s.render = false;
+                currentPage.shapes[shapeId] = { ...s };
+                groupChildren.push(shapeId);
+            })
             // creating new group shape
             const newGroup: GROUP_SHAPE = getGroupDefaultProps(groupChildren);
             // assigning new shapes array to currentpage.shapes
-            currentPage.shapes = [...shapes, newGroup];
-            // setting newly created group as active shape
-            currentPage.activeShapes = [{
-                id: newGroup.id,
-                index: currentPage.shapes.length - 1
-            }];
+            currentPage.shapes = { ...currentPage.shapes, [newGroup.id]: newGroup };
+            // // setting newly created group as active shape
+            currentPage.activeShapes = [newGroup.id];
             return { ...state };
         }
 
         case PAGES_ACTION_TYPES.FORMAT_ACTIVE_SHAPE: {
-            const { index, style = {}, properties = {} } = action.payload;
+            const { id, style = {}, properties = {} } = action.payload;
             const currentPage = state.pages[state.activePageIndex];
             // shape is object with full shape description
             // activeShapes only contaibn id and index of activeShapes
-            let shape = currentPage.shapes[index];
+            let shape = currentPage.shapes[id];
             shape.style = { ...shape.style, ...style };
 
-            currentPage.shapes[index] = { ...shape, ...properties as any };
+            currentPage.shapes[id] = { ...shape, ...properties as any };
             return { ...state };
         }
 
@@ -239,7 +234,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             currentPage.filters = filters;
 
             //deleting from shape
-            const currentShape = currentPage.shapes[action.payload.shapeIndex];
+            const currentShape = currentPage.shapes[action.payload.shapeId];
             const svgFilters = currentShape.style.svgFilters;
             svgFilters[action.payload.filterType] = svgFilters[action.payload.filterType]?.filter(filterId => filterId !== action.payload.filterId);
             if (svgFilters[action.payload.filterType]?.length === 0) {

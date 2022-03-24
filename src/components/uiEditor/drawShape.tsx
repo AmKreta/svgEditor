@@ -13,17 +13,19 @@ import Text from '../../shapes/text';
 import { BASE_SHAPE_PROPS } from '../../shapes/baseShapes';
 import Path from '../../shapes/path';
 
-interface DRAW_SHAPES_PROPS extends BASE_SHAPE_PROPS {
+interface DRAW_SHAPES_PROPS {
     shape: AVAILABLE_SHAPES;
+    hovered: boolean;
+    isActive: boolean;
 }
 
-const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActive, hovered }) {
+const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, isActive, hovered }) {
     switch (shape.type) {
 
         case SHAPE_TYPES.CIRCLE: return (
             <Circle
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         );
@@ -31,7 +33,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.RECTANGLE: return (
             <Rectangle
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         )
@@ -39,7 +41,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.GROUP: return (
             <Group
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         );
@@ -47,7 +49,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.POLYGON: return (
             <Polygon
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         )
@@ -55,7 +57,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.POLYLINE: return (
             <Polyline
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         );
@@ -63,7 +65,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.IMAGE: return (
             <Image
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         );
@@ -71,7 +73,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.LINE: return (
             <Line
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         );
@@ -79,7 +81,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.ELLIPSE: return (
             <Ellipse
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         )
@@ -87,7 +89,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.TEXT: return (
             <Text
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         );
@@ -95,7 +97,7 @@ const DrawShapes: React.FC<DRAW_SHAPES_PROPS> = function ({ shape, index, isActi
         case SHAPE_TYPES.PATH: {
             return <Path
                 isActive={isActive}
-                index={index}
+                id={shape.id}
                 hovered={hovered}
             />
         }

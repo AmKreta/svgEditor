@@ -5,11 +5,13 @@ import { STYLE } from "../../shapes/style";
 import { AVAILABLE_FILTERS, FILTER_TYPES } from "../../filters/availableFilters";
 
 export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; clipboard: { x: number, y: number } };
-export type ACTIVE_SHAPE_INFO = Array<{ index: number, id: string }>;
+export type ACTIVE_SHAPE_INFO = Array<{ id: string }>;
+export type RENDER_TREE = { id: string; children?: RENDER_TREE[] }[];
 export type SHAPE_COLLECTION = {
     id: string;
-    activeShapes: ACTIVE_SHAPE_INFO;
-    shapes: Array<AVAILABLE_SHAPES>;
+    activeShapes: string[];
+    shapes: { [key: string]: AVAILABLE_SHAPES };
+    renderTree: RENDER_TREE;
     filters: {
         [key: string]: AVAILABLE_FILTERS
     };
@@ -71,7 +73,7 @@ export type SET_HOVERED_SHAPE_PAYLOAD = string | null;
 export type SET_HOVERED_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.SET_HOVERED_SHAPE, SET_HOVERED_SHAPE_PAYLOAD>;
 
 //e setting active shape
-export type SET_ACTIVE_SHAPE_PAYLOAD = Array<{ id: string, index: number }>;
+export type SET_ACTIVE_SHAPE_PAYLOAD = string[];
 export type SET_ACTIVE_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.SET_ACTIVE_SHAPE, SET_ACTIVE_SHAPE_PAYLOAD>;
 
 // toggeling context menu
@@ -106,13 +108,13 @@ export type EDIT_SVG_FILTER_Payload = { id: string, newFilter: AVAILABLE_FILTERS
 export type EDIT_SVG_FILTER_ACTION = ACTION<PAGES_ACTION_TYPES.EDIT_SVG_FILTER, EDIT_SVG_FILTER_Payload>;
 
 //remove svg filter
-export type REMOVE_SVG_FILTER_PAYLOAD = { filterId: string, filterType: FILTER_TYPES, shapeIndex: number };
+export type REMOVE_SVG_FILTER_PAYLOAD = { filterId: string, filterType: FILTER_TYPES, shapeId: string };
 export type REMOVE_SVG_FILTER_ACTION = ACTION<PAGES_ACTION_TYPES.REMOVE_SVG_FILTER, REMOVE_SVG_FILTER_PAYLOAD>;
 
 // format active shapes
 // might need to extend payload type based on properties of shapes
 export type FORMAT_ACTIVE_SHAPE_PAYLOAD = {
-    index: number,
+    id: string,
     style?: Partial<STYLE>,
     properties?: Partial<{
         x?: number,

@@ -7,7 +7,7 @@ import Icon from '../icon.component';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../store/store';
 import { getContextMenuState, getActiveShapesInfo, getClipBoard } from '../../selector/selector';
-import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO } from '../../actions/pages/pages.interface';
+import { CONTEXT_MENU_INTERFACE } from '../../actions/pages/pages.interface';
 import { toggleContextMenu, cutSelectedShapes, pasteSelectedShape, copySelectedShapes, removeSelectedShapes, saveSelectedShapesAsGroup } from '../../actions/pages/pages.actions';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
 
@@ -15,7 +15,7 @@ import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
 const ContextMenu: React.FC = function () {
 
     const { show, x, y } = useSelector<State, CONTEXT_MENU_INTERFACE>(getContextMenuState);
-    const activeShapes = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo);
+    const activeShapes = useSelector<State, string[]>(getActiveShapesInfo);
     const clipboard = useSelector<State, Array<AVAILABLE_SHAPES>>(getClipBoard);
     const dispatch = useDispatch();
 

@@ -34,7 +34,6 @@ const Ellipse: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             rx={`${shape.radiusX}${shape.radiusX_unit}`}
             ry={`${shape.radiusY}${shape.radiusY_unit}`}
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}

@@ -9,7 +9,7 @@ import styled, { css } from 'styled-components';
 import { THEME } from '../theme/theme';
 import { toBase64 } from '../utils/utils';
 
-const ImageEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const ImageEditor: React.FC<EditorProps> = function ({ shape }) {
     const dispatch = useDispatch();
     const s = shape as IMAGE_SHAPE;
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -22,7 +22,7 @@ const ImageEditor: React.FC<EditorProps> = function ({ shape, index }) {
         const file = e.target.files![0];
         if (file) {
             const base64Url = await toBase64(file);
-            dispatch(formatActiveShape({ index, properties: { base64Url } }));
+            dispatch(formatActiveShape({ id:s.id, properties: { base64Url } }));
         }
     }
 
@@ -34,7 +34,7 @@ const ImageEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.height}
                     label='height'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { height: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id:s.id, properties: { height: val } }));
                     }}
                     step={5}
                 />
@@ -42,7 +42,7 @@ const ImageEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.width}
                     label='width'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { width: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id:s.id, properties: { width: val } }));
                     }}
                     step={5}
                 />

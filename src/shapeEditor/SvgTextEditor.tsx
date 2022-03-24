@@ -8,7 +8,7 @@ import TextEditor from '../components/valueEditor/textEditor';
 import OptionEditor from '../components/valueEditor/optionEditor';
 import { availableFonts } from '../utils/constant';
 
-const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape }) {
     const dispatch = useDispatch();
     const s = shape as TEXT_SHAPE;
     return (
@@ -19,7 +19,7 @@ const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     label='Text'
                     value={s.text}
                     onChange={val => {
-                        dispatch(formatActiveShape({ index, properties: { text: val as string } }))
+                        dispatch(formatActiveShape({ id:s.id, properties: { text: val as string } }))
                     }}
                     fullWidth
                 />
@@ -30,14 +30,14 @@ const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     label='size'
                     value={s.fontSize}
                     onChange={val => {
-                        val >= 10 && dispatch(formatActiveShape({ index, properties: { fontSize: val } }))
+                        val >= 10 && dispatch(formatActiveShape({ id:s.id, properties: { fontSize: val } }))
                     }}
                 />
                 <NumberEditor
                     label='weight'
                     value={s.fontWeight}
                     onChange={val => {
-                        (val >= 100 && val <= 900) && dispatch(formatActiveShape({ index, properties: { fontWeight: val } }))
+                        (val >= 100 && val <= 900) && dispatch(formatActiveShape({ id:s.id, properties: { fontWeight: val } }))
                     }}
                     step={20}
                 />
@@ -45,7 +45,7 @@ const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     label='style'
                     value={s.fontStyle}
                     onChange={val => {
-                        dispatch(formatActiveShape({ index, properties: { fontStyle: val } }))
+                        dispatch(formatActiveShape({ id:s.id, properties: { fontStyle: val } }))
                     }}
                     options={['normal', 'italic', 'oblique']}
                 />
@@ -53,7 +53,7 @@ const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     label='Family'
                     value={s.fontFamily}
                     onChange={val => {
-                        dispatch(formatActiveShape({ index, properties: { fontFamily: val } }))
+                        dispatch(formatActiveShape({ id:s.id, properties: { fontFamily: val } }))
                     }}
                     options={availableFonts}
                 />
@@ -61,7 +61,7 @@ const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     label='Generic'
                     value={s.genericFontFamily}
                     onChange={val => {
-                        dispatch(formatActiveShape({ index, properties: { genericFontFamily: val } }))
+                        dispatch(formatActiveShape({ id:s.id, properties: { genericFontFamily: val } }))
                     }}
                     options={['serif', 'sans-serif', 'cursive', 'fantasy', 'monospace']}
                 />

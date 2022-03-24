@@ -23,7 +23,6 @@ const Path: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     return (
         <path
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}

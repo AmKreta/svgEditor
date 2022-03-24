@@ -5,7 +5,7 @@ import { formatActiveShape } from '../actions/pages/pages.actions';
 import BaseShapeEditor, { EditorProps } from './baseShapeEditor';
 import { RECTANGLE_SHAPE } from '../shapes/rectangle';
 
-const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const RectangleEditor: React.FC<EditorProps> = function ({ shape }) {
     const dispatch = useDispatch();
     const s = shape as RECTANGLE_SHAPE
     return (
@@ -16,7 +16,7 @@ const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.height}
                     label='height'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { height: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { height: val } }));
                     }}
                     step={5}
                 />
@@ -24,7 +24,7 @@ const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.width}
                     label='width'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { width: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { width: val } }));
                     }}
                     step={5}
                 />
@@ -35,7 +35,7 @@ const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.rx}
                     label='rX'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { rx: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { rx: val } }));
                     }}
                     step={5}
                 />
@@ -43,7 +43,7 @@ const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.ry}
                     label='rY'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { ry: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { ry: val } }));
                     }}
                     step={5}
                 />
@@ -54,7 +54,7 @@ const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.x}
                     label='x'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { x: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { x: val } }));
                     }}
                     step={5}
                 />
@@ -62,7 +62,7 @@ const RectangleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.y}
                     label='Y'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { y: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { y: val } }));
                     }}
                     step={5}
                 />

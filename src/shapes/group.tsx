@@ -12,12 +12,15 @@ import { LINE_SHAPE } from "./line";
 import { ELLIPSE_SHAPE } from "./ellipse";
 import { TEXT_SHAPE } from "./text";
 import Path, { PATH_SHAPE } from './path';
+import { useSelector } from 'react-redux';
+import { getShapesOfCurrentPage } from '../selector/selector';
+import { State } from '../store/store';
 
 export interface GROUP_SHAPE extends BASE_SHAPE {
-    children: AVAILABLE_SHAPES[];
+    children: string[];
 };
 
-export const getGroupDefaultProps: (children: Array<AVAILABLE_SHAPES>) => GROUP_SHAPE = (children: Array<AVAILABLE_SHAPES>) => {
+export const getGroupDefaultProps: (children: string[]) => GROUP_SHAPE = (children: string[]) => {
     const defaultGroupProps: GROUP_SHAPE = {
         ...getBaseToolDefaultProps({ x: 0, y: 0, type: SHAPE_TYPES.GROUP }),
         children
@@ -31,10 +34,10 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const groupRef = useRef<SVGGElement>(null);
     const textRef = useRef<SVGTextElement>(null);
     const groupMidPoint = getBoundingRectMidPoint(groupRef.current?.getBBox());
+    const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage, () => false);
     return (
         <g
             id={shape.id}
-            data-index={props.index}
             onMouseDown={props.mouseDownHandler}
             onMouseUp={props.mouseUpHandler}
             onMouseEnter={props.mouseEnterHandler}
@@ -45,7 +48,8 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             transform-origin={`${groupMidPoint.x} ${groupMidPoint.y}`}
         >
             {
-                shape.children?.map(childShape => {
+                shape.children?.map(childShapeId => {
+                    const childShape = shapesOfCurrentPage[childShapeId];
                     switch (childShape.type) {
 
                         case SHAPE_TYPES.CIRCLE: {
@@ -57,6 +61,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     r={shape.radius}
                                     {...getStyleObj(shape.style)}
                                     transform-origin={`${shape.x} ${shape.y}`}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -73,6 +78,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     transform-origin={`${shape.x + shape.width / 2} ${shape.y + shape.height / 2}`}
                                     rx={shape.rx}
                                     ry={shape.ry}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -86,6 +92,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     {...getStyleObj(shape.style)}
                                     points={shape.points.toString()}
                                     transform-origin={transformOrigin}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -99,6 +106,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     {...getStyleObj(shape.style)}
                                     points={shape.points.toString()}
                                     transform-origin={transformOrigin}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -114,6 +122,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     {...getStyleObj(shape.style)}
                                     transform-origin={`${shape.x + shape.width / 2} ${shape.y + shape.height / 2}`}
                                     href={shape.base64Url}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -130,6 +139,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     x2={x2}
                                     y2={y2}
                                     transform-origin={transformOrigin}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -144,6 +154,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     ry={shape.radiusY}
                                     {...getStyleObj(shape.style)}
                                     transform-origin={`${shape.x} ${shape.y}`}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -162,6 +173,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     fontStyle={shape.fontStyle}
                                     font-family={`${shape.fontFamily}, ${shape.genericFontFamily}`}
                                     ref={textRef}
+                                    key={shape.id}
                                 >
                                     {shape.text}
                                 </text>
@@ -183,6 +195,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                         return '';
                                     })()}
                                     transform-origin={transformOrigin}
+                                    key={shape.id}
                                 />
                             );
                         }
@@ -197,8 +210,8 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     mouseLeaveHandler={props.mouseLeaveHandler}
                                     isActive={props.isActive}
                                     hovered={props.hovered}
-                                    index={props.index}
                                     children={(childShape as GROUP_SHAPE).children}
+                                    key={shape.id}
                                 />
                             );
                         }

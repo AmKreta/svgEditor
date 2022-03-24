@@ -6,20 +6,20 @@ import { AVAILABLE_FILTERS } from "../filters/availableFilters";
 import { HELPERS } from "../actions/helpers/helpers.interface";
 
 // used in base shape , gets info about current shape being rendered in base shape
-export function getCurrentShape(state: State, shapeIndex: number): AVAILABLE_SHAPES {
+export function getCurrentShape(state: State, shapeId: string): AVAILABLE_SHAPES {
     const activePageIndex = state.page.activePageIndex;
     const activePage = state.page.pages[activePageIndex];
-    const currentShape = activePage.shapes[shapeIndex];
+    const currentShape = activePage.shapes[shapeId];
     return currentShape;
 }
 
-export function getActiveShapesInfo(state: State): ACTIVE_SHAPE_INFO {
+export function getActiveShapesInfo(state: State): string[] {
     const activePageIndex = state.page.activePageIndex;
     const activeShapes = state.page.pages[activePageIndex].activeShapes;
     return activeShapes;
 }
 
-export function getShapesOfCurrentPage(state: State): Array<AVAILABLE_SHAPES> {
+export function getShapesOfCurrentPage(state: State): { [key: string]: AVAILABLE_SHAPES } {
     const activePageIndex = state.page.activePageIndex;
     const activePage = state.page.pages[activePageIndex];
     return activePage.shapes;
@@ -36,7 +36,7 @@ export function getHoveredShapeId(state: State): string | null {
 export function getTotalShapes(state: State): number {
     const activePageIndex = state.page.activePageIndex;
     const activePage = state.page.pages[activePageIndex];
-    return activePage.shapes.length;
+    return Object.keys(activePage.shapes).length;
 }
 
 export function getActiveShapes(state: State): Array<AVAILABLE_SHAPES> {
@@ -44,8 +44,8 @@ export function getActiveShapes(state: State): Array<AVAILABLE_SHAPES> {
     const activePage = state.page.pages[activePageIndex];
     const shapes = activePage.shapes;
     const activeShapes = state.page.pages[activePageIndex].activeShapes;
-    return activeShapes.map(shapeIndex => {
-        return shapes[shapeIndex.index];
+    return activeShapes.map(shapeId => {
+        return shapes[shapeId];
     });
 }
 
@@ -57,12 +57,12 @@ export function getClipBoard(state: State): Array<AVAILABLE_SHAPES> {
     return state.page.clipboard;
 }
 
-export function getShapeAtIndex(state: State): (index: number) => AVAILABLE_SHAPES {
+export function getShapeWithId(state: State): (id: string) => AVAILABLE_SHAPES {
     const activePageIndex = state.page.activePageIndex;
     const activePage = state.page.pages[activePageIndex];
     const shapes = activePage.shapes;
-    return function (index: number): AVAILABLE_SHAPES {
-        return shapes[index];
+    return function (id: string): AVAILABLE_SHAPES {
+        return shapes[id];
     }
 }
 

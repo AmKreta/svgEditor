@@ -22,9 +22,9 @@ import PointerHelper from './pointerHelper';
 import GridHelper from './gridHelper';
 
 const SvgEditor: React.FC<{}> = function () {
-    const shapesOfCurrentPage = useSelector<State, Array<AVAILABLE_SHAPES>>(getShapesOfCurrentPage);
+    const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES; }>(getShapesOfCurrentPage);
     const activeTool = useSelector<State, SHAPE_TYPES>(getActiveTool, isEqual);
-    const activeShapes = useSelector<State, ACTIVE_SHAPE_INFO>(getActiveShapesInfo, isEqual);
+    const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
     const hoveredShapeId = useSelector<State, string | null>(getHoveredShapeId);
     const helpers = useSelector<State, HELPERS>(getHelpers, isEqual);
 
@@ -137,7 +137,7 @@ const SvgEditor: React.FC<{}> = function () {
         }
 
         if (shapeSelectorProps.show) {
-            const selectedShapes: { id: string, index: number }[] = [];
+            const selectedShapes: string[] = [];
             const selector = (document.querySelector('#Shape-Selector') as SVGPolygonElement).getBoundingClientRect();
             setShapeSelectorProps(initialShapeSelectorProps);
             e.currentTarget.childNodes.forEach((node) => {
@@ -145,10 +145,7 @@ const SvgEditor: React.FC<{}> = function () {
                 if (areColliding(selector, shape)) {
                     const el = node as SVGElement;
                     if (el.id !== 'Shape-Selector') {
-                        selectedShapes.push({
-                            id: el.id,
-                            index: parseInt(el.dataset['index']!)
-                        });
+                        selectedShapes.push(el.id);
                     }
                 }
             });
@@ -177,32 +174,32 @@ const SvgEditor: React.FC<{}> = function () {
                 {
                     (
                         function () {
-                            const shapesToDraw = [];
-                            for (let i = 0; i < shapesOfCurrentPage.length; i++) {
-                                if (!activeShapes.find(shape => i === shape.index)) {
+                            const shapesToDraw: any = [];
+                            for (let id in shapesOfCurrentPage) {
+                                if (shapesOfCurrentPage[id].render && !activeShapes.find(shapeId => shapeId === id)) {
                                     shapesToDraw.push(
                                         <DrawShapes
-                                            shape={shapesOfCurrentPage[i]}
-                                            index={i}
+                                            shape={shapesOfCurrentPage[id]}
                                             isActive={false}
-                                            hovered={hoveredShapeId === shapesOfCurrentPage[i].id}
-                                            key={shapesOfCurrentPage[i].id}
+                                            hovered={hoveredShapeId === id}
+                                            key={id}
                                         />
                                     )
                                 }
                             }
                             // rendering active shape at last so that there is no 
                             // problem in moving active element
-                            activeShapes.forEach((shape, index) => {
-                                shapesToDraw.push(
-                                    <DrawShapes
-                                        shape={shapesOfCurrentPage[shape.index]}
-                                        index={shape.index}
-                                        isActive={true}
-                                        hovered={hoveredShapeId === shape.id}
-                                        key={shape.id}
-                                    />
-                                )
+                            activeShapes.forEach((shapeId) => {
+                                if (shapesOfCurrentPage[shapeId].render) {
+                                    shapesToDraw.push(
+                                        <DrawShapes
+                                            shape={shapesOfCurrentPage[shapeId]}
+                                            isActive={true}
+                                            hovered={hoveredShapeId === shapeId}
+                                            key={shapeId}
+                                        />
+                                    )
+                                }
                             })
                             return shapesToDraw;
                         }

@@ -13,12 +13,11 @@ import SvgFilterEditor from './svgFiltersEditor';
 
 export interface EditorProps {
     shape: AVAILABLE_SHAPES;
-    index: number;
 }
 
 const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
     return function BaseShapeEditor(props: EditorProps) {
-        const { shape, index } = props;
+        const { shape } = props;
         const dispatch = useDispatch();
 
         return (
@@ -29,7 +28,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.name}
                         label='Name'
                         onChange={val => {
-                            val && dispatch(formatActiveShape({ index, properties: { name: val as string } }));
+                            val && dispatch(formatActiveShape({ id:shape.id, properties: { name: val as string } }));
                         }}
                         fullWidth
                     />
@@ -40,7 +39,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.strokeOpacity}
                         label='opacity'
                         onChange={val => {
-                            val >= 0 && dispatch(formatActiveShape({ index, style: { strokeOpacity: val } }));
+                            val >= 0 && dispatch(formatActiveShape({ id:shape.id, style: { strokeOpacity: val } }));
                         }}
                         step={.1}
                     />
@@ -48,7 +47,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.strokeWidth}
                         label='width'
                         onChange={val => {
-                            val >= 0 && dispatch(formatActiveShape({ index, style: { strokeWidth: val } }));
+                            val >= 0 && dispatch(formatActiveShape({ id:shape.id, style: { strokeWidth: val } }));
                         }}
                         step={5}
                     />
@@ -56,7 +55,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.stroke}
                         label='Color'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { stroke: val } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { stroke: val } }));
                         }}
                         showPalette
                     />
@@ -65,7 +64,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         options={['butt', 'square', 'round']}
                         label='Line Cap'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { strokeLinecap: val as any } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { strokeLinecap: val as any } }));
                         }}
                     />
                     <OptionEditor
@@ -73,14 +72,14 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         options={['bevel', 'mitter', 'round']}
                         label='Line Join'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { strokeLinejoin: val as any } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { strokeLinejoin: val as any } }));
                         }}
                     />
                     <InputEditor
                         value={shape.style.strokeDasharray}
                         label='Dash'
                         onChange={val => {
-                            val.length && dispatch(formatActiveShape({ index, style: { strokeDasharray: val as number[] } }));
+                            val.length && dispatch(formatActiveShape({ id:shape.id, style: { strokeDasharray: val as number[] } }));
                         }}
                         placeholder='eg 2,3,4'
                     />
@@ -91,7 +90,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.fillOpacity}
                         label='opacity'
                         onChange={val => {
-                            val >= 0 && dispatch(formatActiveShape({ index, style: { fillOpacity: val } }));
+                            val >= 0 && dispatch(formatActiveShape({ id:shape.id, style: { fillOpacity: val } }));
                         }}
                         step={.1}
                     />
@@ -100,14 +99,14 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.fillRule}
                         options={['nonzero', 'evenodd', 'inherit']}
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { fillRule: val as any } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { fillRule: val as any } }));
                         }}
                     />
                     <ColorEditor
                         value={shape.style.fill}
                         label='Color'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { fill: val } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { fill: val } }));
                         }}
                         showPalette
                     />
@@ -118,7 +117,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.translate[0]}
                         label='TranslateX'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { translate: [val, shape.style.translate[1]] } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { translate: [val, shape.style.translate[1]] } }));
                         }}
                         step={5}
                     />
@@ -126,7 +125,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.translate[1]}
                         label='TranslateY'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { translate: [shape.style.translate[0], val] } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { translate: [shape.style.translate[0], val] } }));
                         }}
                         step={5}
                     />
@@ -134,7 +133,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.scale[0]}
                         label='scale'
                         onChange={val => {
-                            val > 0 && dispatch(formatActiveShape({ index, style: { scale: [val, val] } }));
+                            val > 0 && dispatch(formatActiveShape({ id:shape.id, style: { scale: [val, val] } }));
                         }}
                         step={.2}
                     />
@@ -142,7 +141,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.rotate}
                         label='rotate'
                         onChange={val => {
-                            (val >= -360 && val <= 360) && dispatch(formatActiveShape({ index, style: { rotate: val } }));
+                            (val >= -360 && val <= 360) && dispatch(formatActiveShape({ id:shape.id, style: { rotate: val } }));
                         }}
                         step={5}
                     />
@@ -150,7 +149,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.skewX}
                         label='skewX'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { skewX: val } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { skewX: val } }));
                         }}
                         step={5}
                     />
@@ -158,14 +157,14 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         value={shape.style.skewY}
                         label='skewY'
                         onChange={val => {
-                            dispatch(formatActiveShape({ index, style: { skewY: val } }));
+                            dispatch(formatActiveShape({ id:shape.id, style: { skewY: val } }));
                         }}
                         step={5}
                     />
                 </div>
-                <CssFiltersEditor shape={shape} index={index} />
-                <SvgFilterEditor shape={shape} index={index} />
-                <WRAPPED_EDITOR shape={shape} index={index} />
+                <CssFiltersEditor shape={shape} />
+                <SvgFilterEditor shape={shape} />
+                <WRAPPED_EDITOR shape={shape} />
             </EditorContainer>
         );
     }

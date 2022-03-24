@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { formatActiveShape } from '../actions/pages/pages.actions';
 import BaseShapeEditor, { EditorProps } from './baseShapeEditor';
 
-const CircleEditor: React.FC<EditorProps> = function ({ shape, index }) {
+const CircleEditor: React.FC<EditorProps> = function ({ shape }) {
     const dispatch = useDispatch();
     const s = shape as CIRCLE_SHAPE;
     return (
@@ -16,7 +16,7 @@ const CircleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.radius}
                     label='radius'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { radius: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { radius: val } }));
                     }}
                     step={5}
                 />
@@ -27,7 +27,7 @@ const CircleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.x}
                     label='X'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { x: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { x: val } }));
                     }}
                     step={5}
                 />
@@ -35,7 +35,7 @@ const CircleEditor: React.FC<EditorProps> = function ({ shape, index }) {
                     value={s.y}
                     label='Y'
                     onChange={val => {
-                        val > 0 && dispatch(formatActiveShape({ index, properties: { y: val } }));
+                        val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { y: val } }));
                     }}
                     step={5}
                 />
