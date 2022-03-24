@@ -11,6 +11,7 @@ import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions'
 import { ACTIVE_SHAPE_INFO } from '../actions/pages/pages.interface';
 import { GROUP_SHAPE } from './group';
 import { PATH_SHAPE } from './path';
+import { getBoundingRectMidPoint } from '../utils/utils';
 
 export interface BASE_SHAPE {
     type: SHAPE_TYPES,
@@ -96,21 +97,13 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
             if (e.buttons === 2) {
                 //right click
                 if (currentShape.type === SHAPE_TYPES.GROUP) {
-                    let x = 0, y = 0, translate = [0, 0];
-                    const groupShape = currentShape as GROUP_SHAPE;
-                    // groupShape.children.forEach(child => {
-                    //     x += child.x;
-                    //     y += child.y;
-                    //     translate[0] += child.style.translate[0];
-                    //     translate[1] += child.style.translate[1];
-                    // });
-                    x /= groupShape.children.length;
-                    y /= groupShape.children.length;
-                    translate[0] /= groupShape.children.length;
-                    translate[1] /= groupShape.children.length;
+                    const svgEditor = document.getElementById('svgEditor')!;
+                    const editorBBox = svgEditor.getBoundingClientRect();
+                    const el = document.getElementById(currentShape.id)!;
+                    const c = getBoundingRectMidPoint(el.getBoundingClientRect());
                     dispatch(toggleContextMenu({
-                        x: x + translate[0] + currentShape.style.translate[0],
-                        y: y + translate[1] + currentShape.style.translate[1]
+                        x: c.x - editorBBox.x,
+                        y: c.y - editorBBox.y
                     }));
                 }
                 else if (multiPointShpes.includes(currentShape.type)) {
