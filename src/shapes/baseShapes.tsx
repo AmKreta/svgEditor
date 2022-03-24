@@ -101,14 +101,12 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                     x: c.x - editorBBox.x,
                     y: c.y - editorBBox.y
                 }));
-                return;
             }
 
             if (activeShapes.findIndex(shapeId => shapeId === currentShape.id) === -1) {
                 // if element not found in active element list
                 // ie element is not currently selected
                 dispatch(setActiveShape([currentShape.id]));
-                return ;
             }
 
             let x = e.clientX;
