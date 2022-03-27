@@ -12,6 +12,7 @@ import GradientPalette from './gradientPalette';
 import AddClipArtModal from './addClipArtModal';
 import { addShape } from '../../actions/pages/pages.actions';
 import Helpers from './helpers';
+import Pages from './pages';
 
 
 const EditorHeader: React.FC<{}> = function () {
@@ -20,6 +21,7 @@ const EditorHeader: React.FC<{}> = function () {
     const dispatch = useDispatch();
     const activeTool = useSelector<State, SHAPE_TYPES>((state: State) => getActiveTool(state));
     const prevSelectedTab = useRef<string | null>(null);
+    const [showPages, setShowPages] = useState<boolean>(false);
 
     const toolsClickHandler = (e: React.MouseEvent<SVGElement>) => {
         const tool = e.currentTarget.dataset['title'] as SHAPE_TYPES;
@@ -44,6 +46,14 @@ const EditorHeader: React.FC<{}> = function () {
     return (
         <StyledHeader>
             <nav>
+                <div style={{ position: "relative" }}>
+                    <span onClick={() => setShowPages(prevState => !prevState)} style={{ textDecoration: showPages ? 'underline' : 'none' }}>Pages</span>
+                    {
+                        showPages
+                            ? <Pages closePages={() => setShowPages(prevState => !prevState)}/>
+                            : null
+                    }
+                </div>
                 {
                     Object.keys(ToolBarOptions).map((option, index) => {
                         const text = ToolBarOptions[option as keyof typeof ToolBarOptions];
@@ -115,6 +125,8 @@ ${props => {
         return css`
             grid-area:header;
             padding:${theme.spacing(1)}px;
+            position:relative;
+            overflow:visible !important;
             &>nav{
                 display: flex;
                 align-items: center;
@@ -135,6 +147,21 @@ ${props => {
                     &:hover{
                         cursor:pointer;
                     }
+                }
+            }
+            &>div.pages{
+                background-color: #ccc;
+                padding:${theme.spacing(.5)}px;
+                margin:${theme.spacing(1)}px;
+                display: flex;
+                align-items: center;
+                transition:.25s ease-in-out;
+                &:hover{
+                    cursor: pointer;
+                    opacity:.7;
+                }
+                &:active{
+                    opacity:.5;
                 }
             }
         `;

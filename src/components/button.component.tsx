@@ -14,14 +14,15 @@ interface props {
     onMouseUp?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     disabled?: boolean;
     onMouseLeave?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    iconSize?:number
 };
 
-const Button: React.FC<props> = function ({ onClick, title, startIcon, endIcon, style, onMouseDown, onMouseUp, disabled = false, onMouseLeave }) {
+const Button: React.FC<props> = function ({ onClick, title, startIcon, endIcon, style, onMouseDown, onMouseUp, disabled = false, onMouseLeave,iconSize }) {
     return (
         <StyledButton onClick={onClick} style={style} onMouseDown={onMouseDown} onMouseUp={onMouseUp} disabled={disabled} onMouseLeave={onMouseLeave}>
-            {startIcon ? <Icon Icon={startIcon} height={12} width={12} /> : null}
+            {startIcon ? <Icon Icon={startIcon} height={iconSize || 12} width={iconSize || 12} /> : null}
             {title ? title : null}
-            {endIcon ? <Icon Icon={endIcon} height={12} width={12} /> : null}
+            {endIcon ? <Icon Icon={endIcon} height={iconSize || 12} width={iconSize || 12} /> : null}
         </StyledButton>
     );
 }

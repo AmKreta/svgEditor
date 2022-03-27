@@ -288,6 +288,36 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             return { ...state };
         }
 
+        case PAGES_ACTION_TYPES.ADD_PAGE: {
+            if (action.payload?.index) {
+
+            }
+            else {
+                state.pages.push({
+                    id: generateId(),
+                    activeShapes: [],
+                    shapes: {},
+                    filters: {},
+                    renderTree: []
+                });
+                state.pages = [...state.pages];
+                state.activePageIndex = state.pages.length - 1;
+            }
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.REMOVE_PAGE: {
+            if (action.payload) {
+
+            }
+            else {
+                state.pages = state.pages.slice(0, -1);
+                state.pages = [...state.pages];
+                state.activePageIndex = state.pages.length - 1;
+            }
+            return { ...state };
+        }
+
         default: return state;
     }
 };

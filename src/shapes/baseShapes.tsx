@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { State } from '../store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveShapesInfo, getCurrentShape } from '../selector/selector';
@@ -9,6 +9,7 @@ import { MEASUREMENT, STYLE } from './style';
 import generateId from '../utils/idGenerator';
 import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions';
 import { getBoundingRectMidPoint } from '../utils/utils';
+import { isEqual } from 'lodash';
 
 export interface BASE_SHAPE {
     type: SHAPE_TYPES,
@@ -75,15 +76,10 @@ export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: 
 const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) => {
     return function BaseTool(props: BASE_SHAPE_PROPS) {
         const currentShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getCurrentShape(state, props.id));
-        const activeShapes = useSelector<State, string[]>(getActiveShapesInfo);
+        const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
         const dispatch = useDispatch();
 
-        if (!currentShape) {
-            console.log(currentShape)
-            return null;
-        }
-
-        const mouseDownHandler = (e: React.MouseEvent<SVGElement>) => {
+        const mouseDownHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
             // todo
             // instead of adding previous coordinates to dx and dy , directly assign mouse position
             // this will solve mouse leaving the shaoe sometimes while dragging
@@ -124,21 +120,26 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 dispatch(translateActiveShape({ x: dx, y: dy }));
             }
             return false;
-        }
+        }, [activeShapes, currentShape?.id]);
 
-        const mouseUpHandler = (e: React.MouseEvent<SVGElement>) => {
+        const mouseUpHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
             e.preventDefault();
             e.stopPropagation();
             e.currentTarget.onmousemove = null;
-        }
+        }, []);
 
-        const mouseEnterHandler = (e: React.MouseEvent<SVGElement>) => {
+        const mouseEnterHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
             dispatch(setHoveredShape(currentShape.id));
-        }
+        }, []);
 
-        const mouseLeaveHandler = (e: React.MouseEvent<SVGElement>) => {
+        const mouseLeaveHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
             e.currentTarget.onmousemove = null;
             dispatch(setHoveredShape(null));
+        }, []);
+
+
+        if (!currentShape) {
+            return null;
         }
 
         return (

@@ -4,6 +4,7 @@ import { SHAPE_TYPES } from "../utils/constant";
 import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO, GRADIENT } from "../actions/pages/pages.interface";
 import { AVAILABLE_FILTERS } from "../filters/availableFilters";
 import { HELPERS } from "../actions/helpers/helpers.interface";
+import { SHAPE_COLLECTION } from "../actions/pages/pages.interface";
 
 // used in base shape , gets info about current shape being rendered in base shape
 export function getCurrentShape(state: State, shapeId: string): AVAILABLE_SHAPES {
@@ -83,3 +84,13 @@ export function getCurrentProjectGradients(state: State): { [key: string]: GRADI
 export function getHelpers(state: State): HELPERS {
     return state.helpers;
 }
+
+export function getCurrentPage(state: State):SHAPE_COLLECTION[] {
+    const activePage = state.page.pages;
+    return activePage;
+}
+
+export function getActivePageIndex(state:State):number{
+    return state.page.activePageIndex;
+}
+

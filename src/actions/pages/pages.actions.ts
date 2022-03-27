@@ -45,7 +45,11 @@ import {
     EDIT_PALETTE_GRADIENT_ACTION,
     EDIT_PALETTE_GRADIENT_PAYLOAD,
     REMOVE_PALETTE_GRADIENT_ACTION,
-    REMOVE_PALETTE_GRADIENT_PAYLOAD
+    REMOVE_PALETTE_GRADIENT_PAYLOAD,
+    ADD_PAGE_ACTION,
+    ADD_PAGE_PAYLOAD,
+    REMOVE_PAGE_ACTION,
+    REMOVE_PAGE_PAYLOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -192,4 +196,12 @@ export const editPaletteGradient = function (props: EDIT_PALETTE_GRADIENT_PAYLOA
 
 export const removePaletteGradient = function (id: REMOVE_PALETTE_GRADIENT_PAYLOAD): REMOVE_PALETTE_GRADIENT_ACTION {
     return { type: PAGES_ACTION_TYPES.REMOVE_PALETTE_GRADIENT, payload: id };
+}
+
+export const addPage = function (props?: ADD_PAGE_PAYLOAD): ADD_PAGE_ACTION {
+    return { type: PAGES_ACTION_TYPES.ADD_PAGE, payload: props };
+}
+
+export const removePage = function (index?: REMOVE_PAGE_PAYLOAD): REMOVE_PAGE_ACTION {
+    return { type: PAGES_ACTION_TYPES.REMOVE_PAGE, payload: index };
 }

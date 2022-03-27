@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import { AVAILABLE_SHAPES } from "./availableShapes";
 import BaseShape, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
 import { SHAPE_TYPES } from "../utils/constant";
@@ -31,10 +31,14 @@ export const getGroupDefaultProps: (children: string[]) => GROUP_SHAPE = (childr
 
 const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const shape = props.shape as GROUP_SHAPE;
-    const groupRef = useRef<SVGGElement>(null);
-    const textRef = useRef<SVGTextElement>(null);
-    const groupMidPoint = getBoundingRectMidPoint(groupRef.current?.getBBox());
+    const ref = useRef<any>(null);
+    const [groupMidPoint, setGroupMidPoint] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage, () => false);
+
+    useLayoutEffect(function () {
+        setGroupMidPoint(getBoundingRectMidPoint(ref.current?.getBBox()));
+    }, []);
+
     return (
         <g
             id={shape.id}
@@ -44,7 +48,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             onMouseLeave={props.mouseLeaveHandler}
             className={props.hovered || props.isActive ? 'active' : 'inactive'}
             {...getStyleObj(shape.style)}
-            ref={groupRef}
+            ref={ref}
             transform-origin={`${groupMidPoint.x} ${groupMidPoint.y}`}
         >
             {
@@ -85,28 +89,30 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
 
                         case SHAPE_TYPES.POLYGON: {
                             const shape = childShape as POLYGON_SHAPE;
-                            const transformOrigin = getTransformOrigin(shape.points);
+                            const transformOrigin = getBoundingRectMidPoint(ref.current?.getBBox());
                             return (
                                 <polygon
                                     id={shape.id}
                                     {...getStyleObj(shape.style)}
                                     points={shape.points.toString()}
-                                    transform-origin={transformOrigin}
+                                    transform-origin={`${transformOrigin.x} ${transformOrigin.y}`}
                                     key={shape.id}
+                                    ref={ref}
                                 />
                             );
                         }
 
                         case SHAPE_TYPES.POLYLINE: {
                             const shape = childShape as POLYLINE_SHAPE;
-                            const transformOrigin = getTransformOrigin(shape.points);
+                            const transformOrigin = getBoundingRectMidPoint(ref.current?.getBBox());
                             return (
                                 <polyline
                                     id={shape.id}
                                     {...getStyleObj(shape.style)}
                                     points={shape.points.toString()}
-                                    transform-origin={transformOrigin}
+                                    transform-origin={`${transformOrigin.x} ${transformOrigin.y}`}
                                     key={shape.id}
+                                    ref={ref}
                                 />
                             );
                         }
@@ -161,7 +167,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
 
                         case SHAPE_TYPES.TEXT: {
                             const shape = childShape as TEXT_SHAPE;
-                            const textMidPoint = getBoundingRectMidPoint(textRef.current?.getBBox());
+                            const textMidPoint = getBoundingRectMidPoint(ref.current?.getBBox());
                             return (
                                 <text
                                     x={shape.x}
@@ -172,7 +178,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                     fontWeight={shape.fontWeight}
                                     fontStyle={shape.fontStyle}
                                     font-family={`${shape.fontFamily}, ${shape.genericFontFamily}`}
-                                    ref={textRef}
+                                    ref={ref}
                                     key={shape.id}
                                 >
                                     {shape.text}
@@ -182,7 +188,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
 
                         case SHAPE_TYPES.PATH: {
                             const shape = childShape as PATH_SHAPE;
-                            const transformOrigin = getTransformOrigin(shape.points);
+                            const transformOrigin = getBoundingRectMidPoint(ref.current?.getBBox());
                             return (
                                 <path
                                     id={shape.id}
@@ -194,7 +200,8 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                         }
                                         return '';
                                     })()}
-                                    transform-origin={transformOrigin}
+                                    transform-origin={`${transformOrigin.x} ${transformOrigin.y}`}
+                                    ref={ref}
                                     key={shape.id}
                                 />
                             );
