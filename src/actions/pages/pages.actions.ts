@@ -49,7 +49,11 @@ import {
     ADD_PAGE_ACTION,
     ADD_PAGE_PAYLOAD,
     REMOVE_PAGE_ACTION,
-    REMOVE_PAGE_PAYLOAD
+    REMOVE_PAGE_PAYLOAD,
+    SCALE_ACTIVE_SHAPE_ACTION,
+    SCALE_ACTIVE_SHAPE_PAYLOAD,
+    ROTATE_ACTIVE_SHAPE_ACTION,
+    ROTATE_ACTIVE_SHAPE_PAYLOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -204,4 +208,12 @@ export const addPage = function (props?: ADD_PAGE_PAYLOAD): ADD_PAGE_ACTION {
 
 export const removePage = function (index?: REMOVE_PAGE_PAYLOAD): REMOVE_PAGE_ACTION {
     return { type: PAGES_ACTION_TYPES.REMOVE_PAGE, payload: index };
+}
+
+export const rotateActiveShape = function (delta: ROTATE_ACTIVE_SHAPE_PAYLOAD): ROTATE_ACTIVE_SHAPE_ACTION {
+    return { type: PAGES_ACTION_TYPES.ROTATE_ACTIVE_SHAPE, payload: delta };
+}
+
+export const scaleActiveShape = function (delta: SCALE_ACTIVE_SHAPE_PAYLOAD): SCALE_ACTIVE_SHAPE_ACTION {
+    return { type: PAGES_ACTION_TYPES.SCALE_ACTIVE_SHAPE, payload: delta };
 }

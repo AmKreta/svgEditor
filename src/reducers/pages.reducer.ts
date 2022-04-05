@@ -308,13 +308,48 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
 
         case PAGES_ACTION_TYPES.REMOVE_PAGE: {
             if (action.payload) {
-
+                // todo
             }
             else {
                 state.pages = state.pages.slice(0, -1);
                 state.pages = [...state.pages];
                 state.activePageIndex = state.pages.length - 1;
             }
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.ROTATE_ACTIVE_SHAPE: {
+            const currentPage = state.pages[state.activePageIndex];
+            // shape is object with full shape description
+            // activeShapes only contaibn id and index of activeShapes
+            const shapes = currentPage.shapes;
+            const activeShapes = currentPage.activeShapes;
+
+            activeShapes.forEach(shapeId => {
+                const s = shapes[shapeId];
+                const dTheta = action.payload;
+                s.style.rotate += dTheta < 0 ? -2 : dTheta > 0 ? 2 : 0;
+                shapes[shapeId] = { ...s };
+            });
+
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.SCALE_ACTIVE_SHAPE: {
+            const currentPage = state.pages[state.activePageIndex];
+            // shape is object with full shape description
+            // activeShapes only contaibn id and index of activeShapes
+            const shapes = currentPage.shapes;
+            const activeShapes = currentPage.activeShapes;
+
+            activeShapes.forEach(shapeId => {
+                const s = shapes[shapeId];
+                const [dx, dy] = action.payload;
+                s.style.scale[0] += dx < 0 ? -.15 : dx > 0 ? .15 : 0;
+                s.style.scale[1] += dy < 0 ? -.15 : dy > 0 ? .15 : 0;
+                shapes[shapeId] = { ...s };
+            });
+
             return { ...state };
         }
 
