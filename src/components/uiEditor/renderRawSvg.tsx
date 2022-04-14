@@ -14,6 +14,8 @@ import { ELLIPSE_SHAPE } from '../../shapes/ellipse';
 import { TEXT_SHAPE } from '../../shapes/text';
 import { PATH_SHAPE } from '../../shapes/path';
 import { GROUP_SHAPE } from '../../shapes/group';
+import { useSelector } from 'react-redux';
+import { State } from '../../store/store';
 
 interface props {
     shapes: {
@@ -189,6 +191,34 @@ const RenderRaw: React.FC<{ s: AVAILABLE_SHAPES }> = function ({ s }) {
     }
 }
 
+const RenderRawGroup: React.FC<{ s: GROUP_SHAPE }> = function ({ s }) {
+    const ref = useRef<any>(null);
+    const groupMidPoint = getBoundingRectMidPoint(ref.current?.getBBox());
+
+    const children = useSelector<State, AVAILABLE_SHAPES[]>(state => {
+        const childrenIds = (state.page.pages[state.page.activePageIndex].shapes[s.id] as GROUP_SHAPE).children;
+        return childrenIds.map(id => state.page.pages[state.page.activePageIndex].shapes[id]);
+    });
+
+    return (
+        <g
+            id={s.id}
+            {...getStyleObj(s.style)}
+            transform-origin={`${groupMidPoint.x} ${groupMidPoint.y}`}
+            ref={ref}
+        >
+            {
+                children.map(child => {
+                    if (child.type === SHAPE_TYPES.GROUP) {
+                        return <RenderRawGroup s={child as GROUP_SHAPE} />
+                    }
+                    return <RenderRaw s={child} />
+                })
+            }
+        </g>
+    );
+}
+
 const RenderRawSvg: React.FC<props> = function ({ shapes, isActive = false, clickHandler, index }) {
     return (
         <StyledSvg
@@ -202,11 +232,18 @@ const RenderRawSvg: React.FC<props> = function ({ shapes, isActive = false, clic
                 (function () {
                     const shapesToDraw: any = [];
                     for (let id in shapes) {
-                        console.log(id)
-                        shapesToDraw.push(
-                            <RenderRaw s={shapes[id]} />
-                        )
-
+                        if (shapes[id].render) {
+                            if (shapes[id].type === SHAPE_TYPES.GROUP) {
+                                shapesToDraw.push(
+                                    <RenderRawGroup s={shapes[id] as GROUP_SHAPE} />
+                                )
+                            }
+                            else {
+                                shapesToDraw.push(
+                                    <RenderRaw s={shapes[id]} />
+                                );
+                            }
+                        }
                     }
                     return shapesToDraw;
                 })()
