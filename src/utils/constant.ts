@@ -149,4 +149,10 @@ export const availableFonts = [
     "Webdings",
     "Wingdings",
     "Zapfino"
-]
+];
+
+export enum TRANSFORM_CURSOR_MAPPING {
+    SCALE = 'cell',
+    ROTATE = 'alias',
+    DEFAULT = 'default'
+}

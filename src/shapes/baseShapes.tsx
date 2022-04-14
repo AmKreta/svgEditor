@@ -3,8 +3,8 @@ import { State } from '../store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveShapesInfo, getCurrentShape } from '../selector/selector';
 import { AVAILABLE_SHAPES } from './availableShapes';
-import { translateActiveShape, toggleContextMenu } from '../actions/pages/pages.actions';
-import { SHAPE_TYPES } from '../utils/constant';
+import { translateActiveShape, toggleContextMenu, scaleActiveShape, rotateActiveShape } from '../actions/pages/pages.actions';
+import { SHAPE_TYPES, TRANSFORM_CURSOR_MAPPING } from '../utils/constant';
 import { MEASUREMENT, STYLE } from './style';
 import generateId from '../utils/idGenerator';
 import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions';
@@ -117,7 +117,16 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 let dy = y1 - y;
                 x = x1;
                 y = y1;
-                dispatch(translateActiveShape({ x: dx, y: dy }));
+
+                if (document.body.style.cursor === TRANSFORM_CURSOR_MAPPING.SCALE) {
+                    dispatch(scaleActiveShape([dx, dy]));
+                }
+                else if (document.body.style.cursor === TRANSFORM_CURSOR_MAPPING.ROTATE) {
+                    dispatch(rotateActiveShape(dx));
+                }
+                else {
+                    dispatch(translateActiveShape({ x: dx, y: dy }));
+                }
             }
             return false;
         }, [activeShapes, currentShape?.id]);

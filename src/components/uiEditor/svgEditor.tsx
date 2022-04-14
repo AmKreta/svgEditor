@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { getActiveShapesInfo, getActiveTool, getHoveredShapeId, getShapesOfCurrentPage, getContextMenuState, getHelpers } from '../../selector/selector';
 import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
-import { multiPointShpes, SHAPE_TYPES } from '../../utils/constant';
+import { multiPointShpes, SHAPE_TYPES, TRANSFORM_CURSOR_MAPPING } from '../../utils/constant';
 import { useDispatch } from 'react-redux';
 import { addShape, setActiveShape, toggleContextMenu } from '../../actions/pages/pages.actions';
 import DrawShapes from './drawShape';
@@ -35,6 +35,24 @@ const SvgEditor: React.FC<{}> = function () {
 
     const dispatch = useDispatch();
 
+    useEffect(function () {
+        window.onkeydown = (e) => {
+            if (e.key === 'Control') {
+                document.body.style.cursor = TRANSFORM_CURSOR_MAPPING.SCALE;
+            }
+            else if (e.key === 'Shift') {
+                document.body.style.cursor = TRANSFORM_CURSOR_MAPPING.ROTATE;
+            }
+        }
+        window.onkeyup = () => {
+            document.body.style.cursor = TRANSFORM_CURSOR_MAPPING.DEFAULT;
+        }
+
+        return () => {
+            window.onkeydown = null;
+            window.onkeyup = null;
+        }
+    }, []);
 
     function mouseDownHandler(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
