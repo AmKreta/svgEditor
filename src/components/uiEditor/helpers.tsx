@@ -27,7 +27,7 @@ const Helpers: React.FC = function () {
         <HelpersContainer>
             <Checkbox checked={helpers.gridHelpers} onChange={onGridHelperTOggle} label='Grid Helpers' />
             <Checkbox checked={helpers.pointerHelpers} onChange={onPointerHelperToggle} label='Pointer Helpers' />
-            <Checkbox checked={helpers.shapeHelpers} onChange={onShapeHelperToggle} label='Shape Helpers' />
+            {/* <Checkbox checked={helpers.shapeHelpers} onChange={onShapeHelperToggle} label='Shape Helpers' /> */}
         </HelpersContainer>
     );
 }
@@ -38,7 +38,9 @@ const HelpersContainer = styled.div`
     ${props => {
         const theme = props.theme as THEME;
         return css`
-            
+            &>*{
+                margin:0 4px;
+            }
         `;
     }}
 `;
