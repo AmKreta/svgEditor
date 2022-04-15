@@ -57,9 +57,11 @@ const Projects: React.FC = function () {
                 }
             </div>
             {
-                <div  className='noItems'>
-                    No Project To Show
-                </div>
+                !docs.length
+                    ? <div className='noItems'>
+                        No Project To Show
+                    </div>
+                    : null
             }
         </ProjectsContainer>
     );
