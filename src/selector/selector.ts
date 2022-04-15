@@ -85,12 +85,15 @@ export function getHelpers(state: State): HELPERS {
     return state.helpers;
 }
 
-export function getCurrentPage(state: State):SHAPE_COLLECTION[] {
+export function getCurrentPage(state: State): SHAPE_COLLECTION[] {
     const activePage = state.page.pages;
     return activePage;
 }
 
-export function getActivePageIndex(state:State):number{
+export function getActivePageIndex(state: State): number {
     return state.page.activePageIndex;
 }
 
+export function getCurrentDocName(state: State): string {
+    return state.page.name;
+}

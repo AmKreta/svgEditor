@@ -5,14 +5,16 @@ import { exportAsJson } from '../../utils/fileOptionsCallback';
 import Button from '../button.component';
 import Input from '../input.component';
 import Modal from '../modal.component';
-import { useDispatch } from 'react-redux';
-import { saveFileAS } from '../../actions/pages/pages.actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNewFile, saveFileAS } from '../../actions/pages/pages.actions';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentDocName } from '../../selector/selector';
 
 const HeaderFileOptions: React.FC = function () {
 
     const [showMenu, setShowMenu] = useState(false);
     const [saveAsModal, setShowSaveAsModal] = useState({ show: false, value: '' });
+    const currentDocName = useSelector(getCurrentDocName);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -21,19 +23,18 @@ const HeaderFileOptions: React.FC = function () {
             name: 'New',
             onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                 toggleMenu();
-            }
-        },
-        {
-            name: 'Open',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
-                toggleMenu();
+                const proceed = window.confirm('all your progress will be lost');
+                if (proceed) {
+                    dispatch(createNewFile());
+                }
             }
         },
         {
             name: 'Save',
             onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                 toggleMenu();
-            }
+            },
+            disabled: !currentDocName.length
         },
         {
             name: 'Save as',
@@ -81,7 +82,14 @@ const HeaderFileOptions: React.FC = function () {
                             <div className='options'>
                                 {
                                     options.map((option, index) => (
-                                        <div key={index} className='option' onClick={option.onClick}>{option.name}</div>
+                                        <div
+                                            key={index}
+                                            className='option'
+                                            onClick={option.onClick}
+                                            style={{ pointerEvents: option.disabled ? 'none' : 'initial' }}
+                                        >
+                                            {option.name}
+                                        </div>
                                     ))
                                 }
                             </div>

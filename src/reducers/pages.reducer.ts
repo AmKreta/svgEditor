@@ -27,7 +27,7 @@ const initialState: PAGES = {
     id: ''
 }
 
-const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initialState, action: PAGE_ACTION): PAGES {
+const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = cloneDeep(initialState), action: PAGE_ACTION): PAGES {
     switch (action.type) {
 
         case PAGES_ACTION_TYPES.SET_ACTIVE_PAGE: {
@@ -364,7 +364,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
         }
 
         case PAGES_ACTION_TYPES.CREATE_NEW_FILE: {
-            return action.payload || initialState;
+            return cloneDeep(action.payload) || cloneDeep(initialState);
         }
 
         default: return state;
