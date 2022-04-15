@@ -1,10 +1,10 @@
 import './App.css';
-import NftEditor from './views/uiEditor';
+import Router from './router/index';
 
 function App() {
   return (
     <div className="App">
-      <NftEditor />
+      <Router />
     </div>
   );
 }

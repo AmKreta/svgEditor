@@ -1,12 +1,12 @@
 - ✅ contextMenu coordinates
 - ✅ group paste coordinates
-- path tool
-- group children editor
-- group merge transforms preservation
+- ✅ path tool
+- ✅ group children editor
+- ✅ group merge transforms preservation
 - fix gradient trnsforms 
 - import file
 - export as pdf, svg, file
-- pages
+- ✅ pages
 - undo-redo
 - z-indexes
 - hide some editing options for image and group parent
@@ -15,16 +15,16 @@
 - save prevShapes in indexedDB
 - Add hyperlinks to element , and use scrollIntoView for element it is linked to 
 - Add helpers lines while moving element
-- Add Grid
+- ✅ Add Grid
 - Add Icons Api
 - resize drawing Area
 
 # transforms
 - ✅ change setActiveShapeCoordinates to change translate property instead of coordinates
-- fix paste for transformed shapes
-- fix context menu coordinates
+- ✅ fix paste for transformed shapes
+- ✅ fix context menu coordinates
 
 # renderTree
-- change shapes container from array to {id->shapeInfo}
-- change filters, edit active shapes etc
-- add renderTree
+- ✅ change shapes container from array to {id->shapeInfo}
+- ✅ change filters, edit active shapes etc
+- ✅ add renderTree

@@ -25,7 +25,6 @@ export enum HELPERS {
 }
 
 export const ToolBarOptions = {
-    FILE: 'File',
     TOOLS: 'Tools',
     COLORS: 'Colors',
     Gradients: 'Gradients',

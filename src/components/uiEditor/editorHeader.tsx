@@ -13,6 +13,7 @@ import AddClipArtModal from './addClipArtModal';
 import { addShape } from '../../actions/pages/pages.actions';
 import Helpers from './helpers';
 import Pages from './pages';
+import HeaderFileOptions from './headerFileOptions';
 
 
 const EditorHeader: React.FC<{}> = function () {
@@ -54,6 +55,7 @@ const EditorHeader: React.FC<{}> = function () {
                             : null
                     }
                 </div>
+                <HeaderFileOptions />
                 {
                     Object.keys(ToolBarOptions).map((option, index) => {
                         const text = ToolBarOptions[option as keyof typeof ToolBarOptions];

@@ -21,9 +21,13 @@ interface props {
     shapes: {
         [key: string]: AVAILABLE_SHAPES
     },
-    isActive: boolean,
-    clickHandler: React.MouseEventHandler<SVGSVGElement> | undefined;
-    index: number;
+    isActive?: boolean,
+    clickHandler?: React.MouseEventHandler<SVGSVGElement> | undefined;
+    index?: number;
+    height?: number | string;
+    width?: number | string;
+    viewbox?: string;
+    style?:any;
 }
 
 const RenderRaw: React.FC<{ s: AVAILABLE_SHAPES }> = function ({ s }) {
@@ -219,14 +223,16 @@ const RenderRawGroup: React.FC<{ s: GROUP_SHAPE }> = function ({ s }) {
     );
 }
 
-const RenderRawSvg: React.FC<props> = function ({ shapes, isActive = false, clickHandler, index }) {
+const RenderRawSvg: React.FC<props> = function ({ shapes, isActive = false, clickHandler, index, height, width, viewbox,style }) {
     return (
         <StyledSvg
-            viewBox='0 0 1175 580'
-            width='100%'
+            viewBox={viewbox || '0 0 1175 580'}
+            width={width || '100%'}
+            height={height}
             onClick={clickHandler}
             isActive={isActive}
             data-index={index}
+            style={style}
         >
             {
                 (function () {
@@ -255,7 +261,7 @@ const RenderRawSvg: React.FC<props> = function ({ shapes, isActive = false, clic
 export default RenderRawSvg;
 
 
-const StyledSvg = styled.svg<{ isActive: boolean }>`
+const StyledSvg = styled.svg<{ isActive: boolean, width: number | string |undefined }>`
     ${props => {
         const theme = props.theme as THEME;
         return css`
@@ -263,9 +269,10 @@ const StyledSvg = styled.svg<{ isActive: boolean }>`
             outline:${props.isActive ? '2px solid red' : 'none'};
             margin:${theme.spacing(.5)}px 0;
             transition:.3s ease-in-out;
+            outline:${props.width ? '1px solid #333' : 'none'};
             &:hover{
                 cursor: pointer;
-                outline:2px solid red;
+                outline:${props.width ? '3px solid #000' : '2px solid red'};
             }
         `;
     }}

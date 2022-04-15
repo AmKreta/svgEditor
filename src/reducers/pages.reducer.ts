@@ -3,11 +3,11 @@ import { PAGES_ACTION_TYPES } from "../actions/pages/pages.actionTypes";
 import generateId from "../utils/idGenerator";
 import { PAGES } from "../actions/pages/pages.interface";
 import { Reducer } from "redux";
-import { multiPointShpes, SHAPE_TYPES } from "../utils/constant";
+import { SHAPE_TYPES } from "../utils/constant";
 import { AVAILABLE_SHAPES } from "../shapes/availableShapes";
 import { getGroupDefaultProps, GROUP_SHAPE } from "../shapes/group";
-import { POLYGON_SHAPE } from "../shapes/polygon";
 import { cloneDeep } from 'lodash';
+import { db } from "../db/db";
 
 const id = generateId();
 
@@ -22,7 +22,9 @@ const initialState: PAGES = {
     ],
     colors: {},
     gradients: {},
-    images: {}
+    images: {},
+    name: '',
+    id: ''
 }
 
 const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initialState, action: PAGE_ACTION): PAGES {
@@ -351,6 +353,18 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = initi
             });
 
             return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.SAVE_FILE_AS: {
+            const pages = state;
+            pages.id = generateId();
+            pages.name = action.payload;
+            db.doc.add(pages);
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.CREATE_NEW_FILE: {
+            return action.payload || initialState;
         }
 
         default: return state;

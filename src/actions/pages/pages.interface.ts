@@ -43,7 +43,9 @@ export interface PAGES {
     pages: Array<SHAPE_COLLECTION>;
     colors: { [key: string]: string },
     gradients: { [key: string]: GRADIENT },
-    images: { [key: string]: string }
+    images: { [key: string]: string },
+    name: string,
+    id: string
 };
 
 interface ACTION<Type, Payload> {
@@ -172,6 +174,15 @@ export type SCALE_ACTIVE_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.SCALE_ACTIVE_S
 export type ROTATE_ACTIVE_SHAPE_PAYLOAD = number;
 export type ROTATE_ACTIVE_SHAPE_ACTION = ACTION<PAGES_ACTION_TYPES.ROTATE_ACTIVE_SHAPE, ROTATE_ACTIVE_SHAPE_PAYLOAD>;
 
+export type OPEN_A_FILE_PAYLOAD = string;
+export type OPEN_A_FILE_ACTION = ACTION<PAGES_ACTION_TYPES.OPEN_A_FILE, OPEN_A_FILE_PAYLOAD>;
+
+export type SAVE_FILE_AS_PAYLOAD = string;
+export type SAVE_FILE_AS_ACTION = ACTION<PAGES_ACTION_TYPES.SAVE_FILE_AS, SAVE_FILE_AS_PAYLOAD>;
+
+export type CREATE_NEW_FILE_PAYLOAD = PAGES | undefined;
+export type CREATE_NEW_FILE_ACTION = ACTION<PAGES_ACTION_TYPES.CREATE_NEW_FILE, CREATE_NEW_FILE_PAYLOAD>;
+
 
 
 export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
@@ -200,6 +211,9 @@ export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | ADD_PAGE_ACTION
     | REMOVE_PAGE_ACTION
     | ROTATE_ACTIVE_SHAPE_ACTION
-    | SCALE_ACTIVE_SHAPE_ACTION;
+    | SCALE_ACTIVE_SHAPE_ACTION
+    | OPEN_A_FILE_ACTION
+    | SAVE_FILE_AS_ACTION
+    | CREATE_NEW_FILE_ACTION;
 
 

@@ -53,7 +53,13 @@ import {
     SCALE_ACTIVE_SHAPE_ACTION,
     SCALE_ACTIVE_SHAPE_PAYLOAD,
     ROTATE_ACTIVE_SHAPE_ACTION,
-    ROTATE_ACTIVE_SHAPE_PAYLOAD
+    ROTATE_ACTIVE_SHAPE_PAYLOAD,
+    OPEN_A_FILE_ACTION,
+    OPEN_A_FILE_PAYLOAD,
+    SAVE_FILE_AS_ACTION,
+    SAVE_FILE_AS_PAYLOAD,
+    CREATE_NEW_FILE_ACTION,
+    CREATE_NEW_FILE_PAYLOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -216,4 +222,20 @@ export const rotateActiveShape = function (delta: ROTATE_ACTIVE_SHAPE_PAYLOAD): 
 
 export const scaleActiveShape = function (delta: SCALE_ACTIVE_SHAPE_PAYLOAD): SCALE_ACTIVE_SHAPE_ACTION {
     return { type: PAGES_ACTION_TYPES.SCALE_ACTIVE_SHAPE, payload: delta };
+}
+
+export const saveFile = function () {
+    return { type: PAGES_ACTION_TYPES.SAVE_FILE };
+}
+
+export const saveFileAS = function (name: SAVE_FILE_AS_PAYLOAD): SAVE_FILE_AS_ACTION {
+    return { type: PAGES_ACTION_TYPES.SAVE_FILE_AS, payload: name };
+}
+
+export const openFile = function (id: OPEN_A_FILE_PAYLOAD): OPEN_A_FILE_ACTION {
+    return { type: PAGES_ACTION_TYPES.OPEN_A_FILE, payload: id };
+}
+
+export const createNewFile = function (json?: CREATE_NEW_FILE_PAYLOAD): CREATE_NEW_FILE_ACTION {
+    return { type: PAGES_ACTION_TYPES.CREATE_NEW_FILE, payload: json };
 }
