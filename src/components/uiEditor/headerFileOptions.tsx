@@ -6,7 +6,7 @@ import Button from '../button.component';
 import Input from '../input.component';
 import Modal from '../modal.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { createNewFile, saveFileAS } from '../../actions/pages/pages.actions';
+import { createNewFile, saveFile, saveFileAS } from '../../actions/pages/pages.actions';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDocName } from '../../selector/selector';
 
@@ -33,6 +33,7 @@ const HeaderFileOptions: React.FC = function () {
             name: 'Save',
             onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                 toggleMenu();
+                dispatch(saveFile());
             },
             disabled: !currentDocName.length
         },

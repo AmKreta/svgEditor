@@ -367,6 +367,11 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             return cloneDeep(action.payload) || cloneDeep(initialState);
         }
 
+        case PAGES_ACTION_TYPES.SAVE_FILE as any: {
+            db.doc.put(state);
+            return state;
+        }
+
         default: return state;
     }
 };
