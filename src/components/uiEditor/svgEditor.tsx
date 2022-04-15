@@ -178,7 +178,17 @@ const SvgEditor: React.FC<{}> = function () {
                     ? <GridHelper />
                     : null
             }
-            <StyledSvg height='100%' width='100%' onMouseDown={mouseDownHandler} onMouseUp={mouseUpHandler} id='svgEditor' ref={svgEditorRef}>
+            <StyledSvg
+                height='100%'
+                width='100%'
+                onMouseDown={mouseDownHandler}
+                onMouseUp={mouseUpHandler}
+                id='svgEditor'
+                ref={svgEditorRef}
+                xmlns='http://www.w3.org/2000/svg'
+                xmlnsXlink='http://www.w3.org/1999/xlink'
+                version='1.1'
+            >
                 <defs>
                     <Filters />
                     <Gradients />

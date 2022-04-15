@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { THEME } from '../../theme/theme';
-import { exportAsJson } from '../../utils/fileOptionsCallback';
+import { exportAsJson, exportAsSvg } from '../../utils/fileOptionsCallback';
 import Button from '../button.component';
 import Input from '../input.component';
 import Modal from '../modal.component';
@@ -45,10 +45,17 @@ const HeaderFileOptions: React.FC = function () {
             }
         },
         {
-            name: 'Export',
+            name: 'Export as json',
             onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                 toggleMenu();
                 exportAsJson();
+            }
+        },
+        {
+            name: 'Export as svg',
+            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+                toggleMenu();
+                exportAsSvg();
             }
         },
         {
@@ -135,6 +142,7 @@ const HeaderOptionsContainer = styled.div`
         return css`
             position:relative;
             &>div.options{
+                text-align: left;
                 position: absolute;
                 left:50%;
                 transform:translateX(-50%);
