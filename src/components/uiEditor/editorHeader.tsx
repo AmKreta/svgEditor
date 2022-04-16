@@ -4,7 +4,7 @@ import { SHAPE_TYPES, ToolBarOptions, TOOLS } from '../../utils/constant';
 import Icon from '../icon.component';
 import { THEME } from '../../theme/theme';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveTool } from '../../actions/pages/pages.actions';
+import { setActiveTool, updateCurrentPageSnapshot } from '../../actions/pages/pages.actions';
 import { State } from '../../store/store';
 import { getActiveTool } from '../../selector/selector';
 import ColorPalette from './colorPalette';
@@ -44,14 +44,22 @@ const EditorHeader: React.FC<{}> = function () {
         setActiveOption(prevSelectedTab.current!);
     }
 
+    function togglePages() {
+        if (!showPages) {
+            dispatch(updateCurrentPageSnapshot());
+        }
+
+        setShowPages(prevState => !prevState);
+    }
+
     return (
         <StyledHeader>
             <nav>
                 <div style={{ position: "relative" }}>
-                    <span onClick={() => setShowPages(prevState => !prevState)} style={{ textDecoration: showPages ? 'underline' : 'none' }}>Pages</span>
+                    <span onClick={togglePages} style={{ textDecoration: showPages ? 'underline' : 'none' }}>Pages</span>
                     {
                         showPages
-                            ? <Pages closePages={() => setShowPages(prevState => !prevState)}/>
+                            ? <Pages closePages={togglePages} />
                             : null
                     }
                 </div>

@@ -47,7 +47,8 @@ export interface PAGES {
     gradients: { [key: string]: GRADIENT },
     images: { [key: string]: string },
     name: string,
-    id: string
+    id: string,
+    snapshots: string[]
 };
 
 interface ACTION<Type, Payload> {

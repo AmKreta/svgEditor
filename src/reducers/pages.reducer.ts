@@ -24,10 +24,18 @@ const initialState: PAGES = {
     gradients: {},
     images: {},
     name: '',
-    id: ''
+    id: '',
+    snapshots: []
 }
 
 const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = cloneDeep(initialState), action: PAGE_ACTION): PAGES {
+
+    function updateSnapshotOfCurrentPage() {
+        const currentPageSnapshot = document.getElementById('svgEditor')?.innerHTML!;
+        state.snapshots[state.activePageIndex] = currentPageSnapshot;
+        state.snapshots = [...state.snapshots]
+    }
+
     switch (action.type) {
 
         case PAGES_ACTION_TYPES.SET_ACTIVE_PAGE: {
@@ -304,6 +312,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
                     svgStyle: { backgroundColor: 'white', height: 100, width: 100 }
                 });
                 state.pages = [...state.pages];
+                state.snapshots = [...state.snapshots, ''];
                 state.activePageIndex = state.pages.length - 1;
             }
             return { ...state };
@@ -314,8 +323,8 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
                 // todo
             }
             else {
-                state.pages = state.pages.slice(0, -1);
-                state.pages = [...state.pages];
+                state.pages = [...state.pages.slice(0, -1)];
+                state.snapshots = [...state.snapshots.slice(0, -1)];
                 state.activePageIndex = state.pages.length - 1;
             }
             return { ...state };
@@ -360,6 +369,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             const pages = state;
             pages.id = generateId();
             pages.name = action.payload;
+            updateSnapshotOfCurrentPage();
             db.doc.add(pages);
             return { ...state };
         }
@@ -369,14 +379,20 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
         }
 
         case PAGES_ACTION_TYPES.SAVE_FILE as any: {
+            updateSnapshotOfCurrentPage();
             db.doc.put(state);
-            return state;
+            return { ...state };
         }
 
         case PAGES_ACTION_TYPES.EDIT_SVG_STYLE: {
             const currentPage = state.pages[state.activePageIndex];
             currentPage.svgStyle = { ...currentPage.svgStyle, ...action.payload };
             state.pages[state.activePageIndex] = { ...currentPage };
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT as any: {
+            updateSnapshotOfCurrentPage();
             return { ...state };
         }
 

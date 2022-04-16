@@ -6,10 +6,9 @@ import { MdRemoveCircle, MdAddCircle } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../store/store';
 import { SHAPE_COLLECTION } from '../../actions/pages/pages.interface';
-import { getActivePageIndex, getCurrentPage } from '../../selector/selector';
+import { getActivePageIndex, getCurrentDocumentSnapshots, getCurrentPage } from '../../selector/selector';
 import RenderRawSvg from './renderRawSvg';
 import { addPage, removePage, setActivePage } from '../../actions/pages/pages.actions';
-
 interface props {
     closePages: () => void;
 }
@@ -17,6 +16,7 @@ interface props {
 const Pages: React.FC<props> = function ({ closePages }) {
     const pages = useSelector<State, SHAPE_COLLECTION[]>(getCurrentPage);
     const actiivePageIndex = useSelector<State, number>(getActivePageIndex);
+    const snapShots = useSelector(getCurrentDocumentSnapshots);
     const dispatch = useDispatch();
 
     const handleAdd = function () {
@@ -45,10 +45,10 @@ const Pages: React.FC<props> = function ({ closePages }) {
                 </div>
                 <div className='pageCollection'>
                     {
-                        pages.map((page, index) => (
+                        snapShots.map((snapShot, index) => (
                             <RenderRawSvg
-                                key={page.id}
-                                shapes={page.shapes}
+                                key={index}
+                                innerHtml={snapShot}
                                 isActive={actiivePageIndex === index}
                                 clickHandler={changePage}
                                 index={index}

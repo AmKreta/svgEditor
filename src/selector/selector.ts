@@ -101,3 +101,11 @@ export function getCurrentDocName(state: State): string {
 export function getSvgStyle(state: State): SVG_STYLE {
     return state.page.pages[state.page.activePageIndex].svgStyle;
 }
+
+export function getCurrentDocumentSnapshots(state: State): string[] {
+    return state.page.snapshots;
+}
+
+export function getCurrentDocumentPreview(state: State): string {
+    return state.page.snapshots[0];
+}

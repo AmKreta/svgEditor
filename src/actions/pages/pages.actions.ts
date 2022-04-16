@@ -245,3 +245,7 @@ export const createNewFile = function (json?: CREATE_NEW_FILE_PAYLOAD): CREATE_N
 export const editSvgStyle = function (style: EDIT_SVG_STYLE_PAYLOAD): EDIT_SVG_STYLE_ACTION {
     return { type: PAGES_ACTION_TYPES.EDIT_SVG_STYLE, payload: style };
 }
+
+export function updateCurrentPageSnapshot() {
+    return { type: PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT };
+}

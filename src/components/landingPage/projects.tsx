@@ -45,7 +45,7 @@ const Projects: React.FC = function () {
                             </div>
                             <span data-index={index} onClick={openProject}>
                                 <RenderRawSvg
-                                    shapes={pages.pages[0].shapes}
+                                    innerHtml={pages.snapshots[0]}
                                     key={pages.id}
                                     width={'22vw'}
                                     style={{ margin: '8px' }}
