@@ -37,6 +37,7 @@ const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             {...getStyleObj(shape.style)}
             points={shape.points.toString()}
             transform-origin={`${midPoint.x} ${midPoint.y}`}
+            ref={ref}
         />
     );
 }
