@@ -33,10 +33,13 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const shape = props.shape as GROUP_SHAPE;
     const ref = useRef<any>(null);
     const [groupMidPoint, setGroupMidPoint] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
-    const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage, () => false);
+    const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage);
 
     useLayoutEffect(function () {
-        setGroupMidPoint(getBoundingRectMidPoint(ref.current?.getBBox()));
+        const timeout = setTimeout(function () {
+            setGroupMidPoint(getBoundingRectMidPoint(ref.current?.getBBox()));
+            clearTimeout(timeout);
+        })
     }, []);
 
     return (
