@@ -59,6 +59,7 @@ svg#svgEditor>*.active{
   align-items: center;
   justify-content: center;
   background:rgba(0,0,0,.4);
+  z-index: 3;
 }
 
 .modalChild{
@@ -66,5 +67,4 @@ svg#svgEditor>*.active{
   width:70%;
   background:white;
   border-radius: 8px;
-  z-index: 2;
 }
