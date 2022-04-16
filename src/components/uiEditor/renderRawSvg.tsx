@@ -24,6 +24,7 @@ const RenderRawSvg: React.FC<props> = function ({ innerHtml, isActive = false, c
             data-index={index}
             style={style}
             dangerouslySetInnerHTML={{ __html: innerHtml }}
+            isProjectPreview={!!width}
         />
     );
 }
@@ -31,18 +32,17 @@ const RenderRawSvg: React.FC<props> = function ({ innerHtml, isActive = false, c
 export default RenderRawSvg;
 
 
-const StyledSvg = styled.svg<{ isActive: boolean, width: number | string | undefined }>`
+const StyledSvg = styled.svg<{ isActive: boolean, isProjectPreview: boolean }>`
     ${props => {
         const theme = props.theme as THEME;
         return css`
             background-color: white;
-            outline:${props.isActive ? '2px solid red' : 'none'};
             margin:${theme.spacing(.5)}px 0;
             transition:.3s ease-in-out;
-            outline:${props.width ? '1px solid #333' : 'none'};
+            outline:${props.isProjectPreview ? '1px solid #333' : props.isActive ? '2px solid #333' : '1px solid #777'};
             &:hover{
                 cursor: pointer;
-                outline:${props.width ? '3px solid #000' : '2px solid red'};
+                outline:${props.isProjectPreview ? '3px solid #000' : '2px solid #333'};
             }
         `;
     }}

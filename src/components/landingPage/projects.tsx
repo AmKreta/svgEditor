@@ -48,7 +48,7 @@ const Projects: React.FC = function () {
                                     innerHtml={pages.snapshots[0]}
                                     key={pages.id}
                                     width={'22vw'}
-                                    style={{ margin: '8px' }}
+                                    style={{ margin: '8px', backgroundColor: pages.pages[0].svgStyle.backgroundColor }}
                                 />
                             </span>
                             <div>{pages.pages.length} {pages.pages.length > 1 ? 'pages' : 'page'}</div>

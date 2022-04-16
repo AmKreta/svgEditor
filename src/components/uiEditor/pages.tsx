@@ -17,6 +17,7 @@ const Pages: React.FC<props> = function ({ closePages }) {
     const pages = useSelector<State, SHAPE_COLLECTION[]>(getCurrentPage);
     const actiivePageIndex = useSelector<State, number>(getActivePageIndex);
     const snapShots = useSelector(getCurrentDocumentSnapshots);
+    const backgroundColors = useSelector((state: State) => state.page.pages.map(item => item.svgStyle.backgroundColor));
     const dispatch = useDispatch();
 
     const handleAdd = function () {
@@ -52,6 +53,7 @@ const Pages: React.FC<props> = function ({ closePages }) {
                                 isActive={actiivePageIndex === index}
                                 clickHandler={changePage}
                                 index={index}
+                                style={{ backgroundColor: backgroundColors[index] }}
                             />))
                     }
                 </div>
