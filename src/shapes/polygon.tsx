@@ -1,5 +1,6 @@
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
-import { getStyleObj, getTransformOrigin } from "../utils/utils";
+import { getBoundingRectMidPoint, getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
 
 interface POLYGON {
@@ -18,7 +19,12 @@ export const getPolygonDefaultProps: (points: Array<[number, number]>) => POLYGO
 
 const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const shape = props.shape as POLYGON_SHAPE;
-    const transformOrigin = getTransformOrigin(shape.points);
+    const [midPoint, setMidPoint] = useState({ x: 0, y: 0 });
+    const ref = useRef<SVGPolygonElement>(null);
+
+    useLayoutEffect(function () {
+        setMidPoint(getBoundingRectMidPoint(ref.current?.getBBox()));
+    }, [shape.points])
 
     return (
         <polygon
@@ -30,7 +36,7 @@ const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             className={props.hovered || props.isActive ? 'active' : 'inactive'}
             {...getStyleObj(shape.style)}
             points={shape.points.toString()}
-            transform-origin={transformOrigin}
+            transform-origin={`${midPoint.x} ${midPoint.y}`}
         />
     );
 }

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import BaseTool, { BASE_SHAPE, WRAPPED_SHAPE_PROPS, getBaseToolDefaultProps } from "./baseShapes";
 import { getBoundingRectMidPoint, getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
@@ -28,10 +28,15 @@ export const getTextDefaultProps: (x: number, y: number) => TEXT_SHAPE = (x: num
 };
 
 
-const Circle: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
+const Text: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const shape = props.shape as TEXT_SHAPE;
     const ref = useRef<SVGTextElement>(null);
-    const midPoint = getBoundingRectMidPoint(ref.current?.getBBox());
+    const [midPoint, setMidpoint] = useState({ x: 0, y: 0 });
+
+    useLayoutEffect(function () {
+        setMidpoint(getBoundingRectMidPoint(ref.current?.getBBox()));
+    }, [shape.x, shape.y]);
+
     return (
         <text
             x={`${shape.x}${shape.x_unit}`}
@@ -55,4 +60,4 @@ const Circle: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     );
 }
 
-export default BaseTool(Circle);
+export default BaseTool(Text);
