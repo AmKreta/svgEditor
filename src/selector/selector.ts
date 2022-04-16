@@ -1,7 +1,7 @@
 import { State } from "../store/store";
 import { AVAILABLE_SHAPES } from "../shapes/availableShapes";
 import { SHAPE_TYPES } from "../utils/constant";
-import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO, GRADIENT } from "../actions/pages/pages.interface";
+import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO, GRADIENT, SVG_STYLE } from "../actions/pages/pages.interface";
 import { AVAILABLE_FILTERS } from "../filters/availableFilters";
 import { HELPERS } from "../actions/helpers/helpers.interface";
 import { SHAPE_COLLECTION } from "../actions/pages/pages.interface";
@@ -96,4 +96,8 @@ export function getActivePageIndex(state: State): number {
 
 export function getCurrentDocName(state: State): string {
     return state.page.name;
+}
+
+export function getSvgStyle(state: State): SVG_STYLE {
+    return state.page.pages[state.page.activePageIndex].svgStyle;
 }

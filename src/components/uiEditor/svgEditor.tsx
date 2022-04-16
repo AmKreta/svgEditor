@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { getActiveShapesInfo, getActiveTool, getHoveredShapeId, getShapesOfCurrentPage, getContextMenuState, getHelpers } from '../../selector/selector';
+import { getActiveShapesInfo, getActiveTool, getHoveredShapeId, getShapesOfCurrentPage, getContextMenuState, getHelpers, getSvgStyle } from '../../selector/selector';
 import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
 import { multiPointShpes, SHAPE_TYPES, TRANSFORM_CURSOR_MAPPING } from '../../utils/constant';
@@ -27,6 +27,7 @@ const SvgEditor: React.FC<{}> = function () {
     const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
     const hoveredShapeId = useSelector<State, string | null>(getHoveredShapeId);
     const helpers = useSelector<State, HELPERS>(getHelpers, isEqual);
+    const svgStyle = useSelector(getSvgStyle);
 
     const [shapeSelectorProps, setShapeSelectorProps] = useState<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
     const [pointsArray, setPointsArray] = useState<Array<[number, number]>>([]);
@@ -172,15 +173,15 @@ const SvgEditor: React.FC<{}> = function () {
     }
 
     return (
-        <SvgContainer onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}>
+        <SvgContainer onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }} style={{overflow:'scroll'}}>
             {
                 helpers.gridHelpers
                     ? <GridHelper />
                     : null
             }
             <StyledSvg
-                height='100%'
-                width='100%'
+                height={`${svgStyle.height}%`}
+                width={`${svgStyle.width}%`}
                 onMouseDown={mouseDownHandler}
                 onMouseUp={mouseUpHandler}
                 id='svgEditor'
@@ -188,6 +189,7 @@ const SvgEditor: React.FC<{}> = function () {
                 xmlns='http://www.w3.org/2000/svg'
                 xmlnsXlink='http://www.w3.org/1999/xlink'
                 version='1.1'
+                style={{ backgroundColor: svgStyle.backgroundColor }}
             >
                 <defs>
                     <Filters />

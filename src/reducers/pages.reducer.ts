@@ -18,7 +18,7 @@ const initialState: PAGES = {
     clipboard: [],
     contextMenu: { show: false, x: 0, y: 0, clipboard: { x: 0, y: 0 } },
     pages: [
-        { id: id, activeShapes: [], shapes: {}, filters: {}, renderTree: [] }
+        { id: id, activeShapes: [], shapes: {}, filters: {}, renderTree: [], svgStyle: { backgroundColor: 'white', height: 100, width: 100 } }
     ],
     colors: {},
     gradients: {},
@@ -300,7 +300,8 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
                     activeShapes: [],
                     shapes: {},
                     filters: {},
-                    renderTree: []
+                    renderTree: [],
+                    svgStyle: { backgroundColor: 'white', height: 100, width: 100 }
                 });
                 state.pages = [...state.pages];
                 state.activePageIndex = state.pages.length - 1;
@@ -370,6 +371,13 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
         case PAGES_ACTION_TYPES.SAVE_FILE as any: {
             db.doc.put(state);
             return state;
+        }
+
+        case PAGES_ACTION_TYPES.EDIT_SVG_STYLE: {
+            const currentPage = state.pages[state.activePageIndex];
+            currentPage.svgStyle = { ...currentPage.svgStyle, ...action.payload };
+            state.pages[state.activePageIndex] = { ...currentPage };
+            return { ...state };
         }
 
         default: return state;

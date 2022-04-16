@@ -7,6 +7,7 @@ import { AVAILABLE_FILTERS, FILTER_TYPES } from "../../filters/availableFilters"
 export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; clipboard: { x: number, y: number } };
 export type ACTIVE_SHAPE_INFO = Array<{ id: string }>;
 export type RENDER_TREE = { id: string; children?: RENDER_TREE[] }[];
+export interface SVG_STYLE { backgroundColor: string, height: number, width: number };
 export type SHAPE_COLLECTION = {
     id: string;
     activeShapes: string[];
@@ -15,6 +16,7 @@ export type SHAPE_COLLECTION = {
     filters: {
         [key: string]: AVAILABLE_FILTERS
     };
+    svgStyle: SVG_STYLE;
 };
 
 export interface GRADIENT {
@@ -183,6 +185,8 @@ export type SAVE_FILE_AS_ACTION = ACTION<PAGES_ACTION_TYPES.SAVE_FILE_AS, SAVE_F
 export type CREATE_NEW_FILE_PAYLOAD = PAGES | undefined;
 export type CREATE_NEW_FILE_ACTION = ACTION<PAGES_ACTION_TYPES.CREATE_NEW_FILE, CREATE_NEW_FILE_PAYLOAD>;
 
+export type EDIT_SVG_STYLE_PAYLOAD = Partial<SVG_STYLE>;
+export type EDIT_SVG_STYLE_ACTION = ACTION<PAGES_ACTION_TYPES.EDIT_SVG_STYLE, EDIT_SVG_STYLE_PAYLOAD>;
 
 
 export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
@@ -214,6 +218,7 @@ export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | SCALE_ACTIVE_SHAPE_ACTION
     | OPEN_A_FILE_ACTION
     | SAVE_FILE_AS_ACTION
-    | CREATE_NEW_FILE_ACTION;
+    | CREATE_NEW_FILE_ACTION
+    | EDIT_SVG_STYLE_ACTION;
 
 

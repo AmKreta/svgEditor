@@ -59,7 +59,9 @@ import {
     SAVE_FILE_AS_ACTION,
     SAVE_FILE_AS_PAYLOAD,
     CREATE_NEW_FILE_ACTION,
-    CREATE_NEW_FILE_PAYLOAD
+    CREATE_NEW_FILE_PAYLOAD,
+    EDIT_SVG_STYLE_ACTION,
+    EDIT_SVG_STYLE_PAYLOAD
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -238,4 +240,8 @@ export const openFile = function (id: OPEN_A_FILE_PAYLOAD): OPEN_A_FILE_ACTION {
 
 export const createNewFile = function (json?: CREATE_NEW_FILE_PAYLOAD): CREATE_NEW_FILE_ACTION {
     return { type: PAGES_ACTION_TYPES.CREATE_NEW_FILE, payload: json };
+}
+
+export const editSvgStyle = function (style: EDIT_SVG_STYLE_PAYLOAD): EDIT_SVG_STYLE_ACTION {
+    return { type: PAGES_ACTION_TYPES.EDIT_SVG_STYLE, payload: style };
 }

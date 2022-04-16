@@ -15,6 +15,7 @@ import SvgTextEditor from '../../shapeEditor/SvgTextEditor';
 import ImageEditor from '../../shapeEditor/imageEditor';
 import GroupEditor from '../../shapeEditor/groupEditor';
 import PathEditor from '../../shapeEditor/pathEditor';
+import SvgContainerEditor from '../../shapeEditor/svgEditor';
 
 const ElementFormatter: React.FC<{}> = function () {
 
@@ -109,7 +110,7 @@ const ElementFormatter: React.FC<{}> = function () {
                             }
                         </div>
                     )
-                    : null
+                    :<SvgContainerEditor />
             }
         </StyledDiv>
     );
