@@ -5,7 +5,8 @@ import Button from '../button.component';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createNewFile } from '../../actions/pages/pages.actions';
-import { SHAPE_TYPES } from '../../utils/constant';
+import { PAGES } from '../../actions/pages/pages.interface';
+import generateId from '../../utils/idGenerator';
 
 const Header: React.FC = function () {
     const dispatch = useDispatch();
@@ -27,15 +28,8 @@ const Header: React.FC = function () {
             let fileReader = new FileReader();
             fileReader.addEventListener('load', ev => {
                 try {
-                    let data = (JSON.parse(ev.target!.result as string));
-                    data = {
-                        ...data,
-                        activePageIndex: 0,
-                        activeTool: SHAPE_TYPES.PAN,
-                        hoveredShapeId: null,
-                        clipboard: [],
-                        contextMenu: { show: false, x: 0, y: 0, clipboard: { x: 0, y: 0 } },
-                    }
+                    let data: PAGES = (JSON.parse(ev.target!.result as string));
+                    data.id = generateId();
                     dispatch(createNewFile(data));
                     navigate('./editor');
                 }
