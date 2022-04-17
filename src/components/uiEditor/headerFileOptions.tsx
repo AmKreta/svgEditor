@@ -8,13 +8,15 @@ import Modal from '../modal.component';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewFile, saveFile, saveFileAS } from '../../actions/pages/pages.actions';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentDocName } from '../../selector/selector';
+import { getCurrentDocId, getCurrentDocName } from '../../selector/selector';
+import { personalProjectIds } from '../../seed';
 
 const HeaderFileOptions: React.FC = function () {
 
     const [showMenu, setShowMenu] = useState(false);
     const [saveAsModal, setShowSaveAsModal] = useState({ show: false, value: '' });
     const currentDocName = useSelector(getCurrentDocName);
+    const currentDocId = useSelector(getCurrentDocId);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -35,7 +37,7 @@ const HeaderFileOptions: React.FC = function () {
                 toggleMenu();
                 dispatch(saveFile());
             },
-            disabled: !currentDocName.length
+            disabled: !currentDocName.length || personalProjectIds.includes(currentDocId)
         },
         {
             name: 'Save as',

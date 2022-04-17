@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { createNewFile } from '../../actions/pages/pages.actions';
 import { AiFillDelete } from 'react-icons/ai';
 import Icon from '../../components/icon.component';
+import selfprojects from '../../seed/index';
 
 const Projects: React.FC = function () {
 
@@ -30,10 +31,36 @@ const Projects: React.FC = function () {
         db.doc.where('id').equals(doc.id).delete()
     }
 
+    const openSelfProject=function(e: React.MouseEvent<HTMLSpanElement>){
+        const name=e.currentTarget.dataset['name']!;
+        const doc=(selfprojects as any)[name];
+        dispatch(createNewFile(doc));
+        navigate('/editor')
+    }
+
     return (
         <ProjectsContainer>
             <h2>Projects</h2>
             <div className='projectCardContainer'>
+                {
+                    // rendering personal projects
+                    Object.keys(selfprojects).map(item => (
+                        <div className='projectCard' key={item}>
+                            <div className='projectCardHeader'>
+                                <div className='projectName'>{(selfprojects as any)[item].name}</div>
+                            </div>
+                            <span data-name={item} onClick={openSelfProject}>
+                                <RenderRawSvg
+                                    innerHtml={(selfprojects as any)[item].snapshots[0]}
+                                    key={(selfprojects as any)[item].id}
+                                    width={'22vw'}
+                                    style={{ margin: '8px', backgroundColor: (selfprojects as any)[item].pages[0].svgStyle.backgroundColor }}
+                                />
+                            </span>
+                            <div>{(selfprojects as any)[item].pages.length} {(selfprojects as any)[item].pages.length > 1 ? 'pages' : 'page'}</div>
+                        </div>
+                    ))
+                }
                 {
                     docs?.map((pages, index) => (
                         <div className='projectCard' key={pages.id}>
@@ -56,13 +83,13 @@ const Projects: React.FC = function () {
                     ))
                 }
             </div>
-            {
+            {/* {
                 !docs.length
                     ? <div className='noItems'>
                         No Project To Show
                     </div>
                     : null
-            }
+            } */}
         </ProjectsContainer>
     );
 }

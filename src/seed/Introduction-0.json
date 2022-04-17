@@ -1,0 +1,800 @@
+{
+    "activePageIndex": 0,
+    "activeTool": "Pan",
+    "hoveredShapeId": null,
+    "clipboard": [
+        {
+            "id": "87542347-dab7-6268-20fc-f7c4a4590436",
+            "name": "FaImage",
+            "type": "FaImage",
+            "x": 100,
+            "y": 100,
+            "x_unit": "px",
+            "y_unit": "px",
+            "style": {
+                "fill": "transparent",
+                "fillRule": "nonzero",
+                "stroke": "black",
+                "strokeWidth": 1,
+                "strokeWidth_unit": "px",
+                "strokeDasharray": [],
+                "strokeDashoffset": 0,
+                "strokeLinecap": "square",
+                "strokeOpacity": 1,
+                "strokeLinejoin": "miter",
+                "strokeMitterlimit": 4,
+                "fillOpacity": 1,
+                "rotate": 0,
+                "translate": [
+                    47,
+                    359
+                ],
+                "skewX": 0,
+                "skewY": 0,
+                "scale": [
+                    1,
+                    1
+                ],
+                "cssFilters": {},
+                "svgFilters": {}
+            },
+            "render": false,
+            "height": 30,
+            "height_unit": "px",
+            "width": 30,
+            "width_unit": "px",
+            "base64Url": "https://permaclipart.org/download/102528/"
+        },
+        {
+            "id": "be293e26-4adc-77ac-3f31-25977f774db8",
+            "name": "TEXT",
+            "type": "TEXT",
+            "x": 311,
+            "y": 484.109375,
+            "x_unit": "px",
+            "y_unit": "px",
+            "style": {
+                "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                "fillRule": "nonzero",
+                "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                "strokeWidth": 1,
+                "strokeWidth_unit": "px",
+                "strokeDasharray": [],
+                "strokeDashoffset": 0,
+                "strokeLinecap": "square",
+                "strokeOpacity": 1,
+                "strokeLinejoin": "miter",
+                "strokeMitterlimit": 4,
+                "fillOpacity": 1,
+                "rotate": 0,
+                "translate": [
+                    -122,
+                    0
+                ],
+                "skewX": 0,
+                "skewY": 0,
+                "scale": [
+                    1,
+                    1
+                ],
+                "cssFilters": {},
+                "svgFilters": {}
+            },
+            "render": true,
+            "text": "https://www.linkedin.com/in/kumar-amresh-1017a7161/",
+            "fontSize": 30,
+            "fontWeight": 400,
+            "fontStyle": "normal",
+            "fontFamily": "Arial",
+            "genericFontFamily": "sans-serif"
+        }
+    ],
+    "contextMenu": {
+        "show": false,
+        "x": 0,
+        "y": 0,
+        "clipboard": {
+            "x": 556.171875,
+            "y": 473.609375
+        }
+    },
+    "pages": [
+        {
+            "id": "e217339b-f5af-53fc-4ea0-04e6ec239805",
+            "activeShapes": [],
+            "shapes": {
+                "2c70ca3b-e818-480a-462b-c16e7b313834": {
+                    "id": "2c70ca3b-e818-480a-462b-c16e7b313834",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            677,
+                            156
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            2.0999999999999996,
+                            2.2499999999999996
+                        ],
+                        "cssFilters": {
+                            "invert": 42
+                        },
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "height": 200,
+                    "height_unit": "px",
+                    "width": 200,
+                    "width_unit": "px",
+                    "base64Url": "https://pixabay.com/get/g315105631ea499605f0fda22359bac72d0f0b58da48f248108b6f5676c1d26888d4c1176c49142d0858db11b2ad580a056df8e417c6cc43a732c510e48c265c7_1280.png"
+                },
+                "ad93cec8-96d8-fbed-7861-10ef807c1a94": {
+                    "id": "ad93cec8-96d8-fbed-7861-10ef807c1a94",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 359,
+                    "y": 127.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -297,
+                            -30
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "text": "Hi!",
+                    "fontSize": 50,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Bodoni 72",
+                    "genericFontFamily": "sans-serif"
+                },
+                "f664c093-ee0d-9a59-bd28-2527dd9fcd60": {
+                    "id": "f664c093-ee0d-9a59-bd28-2527dd9fcd60",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 444,
+                    "y": 245.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -384,
+                            -96
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "text": "I'm Amresh",
+                    "fontSize": 40,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Bodoni 72",
+                    "genericFontFamily": "sans-serif"
+                },
+                "ea9dbc78-9182-8a30-1582-86f513a7dd0d": {
+                    "id": "ea9dbc78-9182-8a30-1582-86f513a7dd0d",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 639,
+                    "y": 411.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -578,
+                            -217
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "text": "Frontend Developer | React Developer | Vue Developer",
+                    "fontSize": 25,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Bodoni 72",
+                    "genericFontFamily": "sans-serif"
+                },
+                "5f2676c3-2d6d-1d15-b44c-7b7bad1d66ca": {
+                    "id": "5f2676c3-2d6d-1d15-b44c-7b7bad1d66ca",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            35,
+                            278
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "height": 30,
+                    "height_unit": "px",
+                    "width": 30,
+                    "width_unit": "px",
+                    "base64Url": "https://pixabay.com/get/gf66bd161203231c2ddc5ac7fada0861ffbe2a5e40beb61bcb30a63857bf6112e60b9cc58cf5d63dfa2e495faaeccc965b53211b156c6f199f388dfc662b7310e_1280.png"
+                },
+                "ae24f905-ac8a-0546-7e0a-067db0aee38e": {
+                    "id": "ae24f905-ac8a-0546-7e0a-067db0aee38e",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 220,
+                    "y": 363.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -46,
+                            41
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "+918146602796",
+                    "fontSize": 30,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "1a497972-1090-7c33-cbbe-4d07e3bf9068": {
+                    "id": "1a497972-1090-7c33-cbbe-4d07e3bf9068",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -74,
+                            104
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "children": [
+                        "5f2676c3-2d6d-1d15-b44c-7b7bad1d66ca",
+                        "ae24f905-ac8a-0546-7e0a-067db0aee38e"
+                    ]
+                },
+                "9fe61b12-9995-0e9f-2cba-b01cdec7d043": {
+                    "id": "9fe61b12-9995-0e9f-2cba-b01cdec7d043",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            35,
+                            278
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "height": 30,
+                    "height_unit": "px",
+                    "width": 30,
+                    "width_unit": "px",
+                    "base64Url": "https://pixabay.com/get/gf66bd161203231c2ddc5ac7fada0861ffbe2a5e40beb61bcb30a63857bf6112e60b9cc58cf5d63dfa2e495faaeccc965b53211b156c6f199f388dfc662b7310e_1280.png"
+                },
+                "74870453-b253-0e69-55bb-879047e4b280": {
+                    "id": "74870453-b253-0e69-55bb-879047e4b280",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 220,
+                    "y": 363.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -46,
+                            41
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "+918146602796",
+                    "fontSize": 30,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "87542347-dab7-6268-20fc-f7c4a4590436": {
+                    "id": "87542347-dab7-6268-20fc-f7c4a4590436",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            47,
+                            359
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "height": 30,
+                    "height_unit": "px",
+                    "width": 30,
+                    "width_unit": "px",
+                    "base64Url": "https://permaclipart.org/download/102528/"
+                },
+                "be293e26-4adc-77ac-3f31-25977f774db8": {
+                    "id": "be293e26-4adc-77ac-3f31-25977f774db8",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 311,
+                    "y": 484.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -122,
+                            0
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "https://www.linkedin.com/in/kumar-amresh-1017a7161/",
+                    "fontSize": 30,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "614f334a-caf6-c7f5-c6ab-4064a5c7c817": {
+                    "id": "614f334a-caf6-c7f5-c6ab-4064a5c7c817",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 311,
+                    "y": 484.109375,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -122.171875,
+                            58.5
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "kamresh485@gmail.com",
+                    "fontSize": 30,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "41a443be-4448-f406-6407-57200f645d03": {
+                    "id": "41a443be-4448-f406-6407-57200f645d03",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            45,
+                            415
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "height": 35,
+                    "height_unit": "px",
+                    "width": 35,
+                    "width_unit": "px",
+                    "base64Url": "https://pixabay.com/get/g59900360a8c7238b6c2f7ade8ccd79ad920ed185e9c0bbd4ee44d209276aedecc62eae51bda1cf6f812554f3f3fe374e93be8ca2678b44e6e7bc0839dad7a7b8_1280.png"
+                },
+                "61aa4a1e-30bd-15cf-4f8a-49f148d84311": {
+                    "id": "61aa4a1e-30bd-15cf-4f8a-49f148d84311",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -85,
+                            126
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "children": [
+                        "87542347-dab7-6268-20fc-f7c4a4590436",
+                        "be293e26-4adc-77ac-3f31-25977f774db8"
+                    ]
+                },
+                "6b607d3c-1541-6823-97a9-97ec28e5c418": {
+                    "id": "6b607d3c-1541-6823-97a9-97ec28e5c418",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -85,
+                            13
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "children": [
+                        "614f334a-caf6-c7f5-c6ab-4064a5c7c817",
+                        "41a443be-4448-f406-6407-57200f645d03"
+                    ]
+                }
+            },
+            "filters": {},
+            "renderTree": [
+                {
+                    "id": "2c70ca3b-e818-480a-462b-c16e7b313834"
+                },
+                {
+                    "id": "ad93cec8-96d8-fbed-7861-10ef807c1a94"
+                },
+                {
+                    "id": "f664c093-ee0d-9a59-bd28-2527dd9fcd60"
+                },
+                {
+                    "id": "ea9dbc78-9182-8a30-1582-86f513a7dd0d"
+                },
+                {
+                    "id": "abb75483-d3ae-40d2-999c-7740969b2d78"
+                },
+                {
+                    "id": "5f2676c3-2d6d-1d15-b44c-7b7bad1d66ca"
+                },
+                {
+                    "id": "ae24f905-ac8a-0546-7e0a-067db0aee38e"
+                },
+                {
+                    "id": "199264c1-3acd-bf83-c84c-445f346b4c49"
+                },
+                {
+                    "id": "8391983b-7d9b-0743-ea25-46ff659cf2ce"
+                },
+                {
+                    "id": "87542347-dab7-6268-20fc-f7c4a4590436"
+                },
+                {
+                    "id": "be293e26-4adc-77ac-3f31-25977f774db8"
+                },
+                {
+                    "id": "41a443be-4448-f406-6407-57200f645d03"
+                }
+            ],
+            "svgStyle": {
+                "backgroundColor": "#1d1b1b",
+                "height": 101,
+                "width": 100
+            }
+        }
+    ],
+    "colors": {
+        "395d24a9-b5ab-4110-d1e1-532bd1eb485a": "#b8b8b8",
+        "30d10b44-8131-ed35-fa3e-a3b04a526c2c": "#473e3e"
+    },
+    "gradients": {},
+    "images": {},
+    "name": "Introduction",
+    "id": "9e6e02fc-90d2-d86b-ed55-0a9a25474b40",
+    "snapshots": [
+        "<defs><pattern id=\"395d24a9-b5ab-4110-d1e1-532bd1eb485a\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#b8b8b8\"></rect></pattern><pattern id=\"30d10b44-8131-ed35-fa3e-a3b04a526c2c\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#473e3e\"></rect></pattern></defs><image x=\"100px\" y=\"100px\" height=\"200px\" width=\"200px\" id=\"2c70ca3b-e818-480a-462b-c16e7b313834\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(677 156) scale(2.0999999999999996 2.2499999999999996) rotate(0) skewX(0) skewY(0)\" transform-origin=\"200 200\" preserveAspectRatio=\"true\" href=\"https://pixabay.com/get/g315105631ea499605f0fda22359bac72d0f0b58da48f248108b6f5676c1d26888d4c1176c49142d0858db11b2ad580a056df8e417c6cc43a732c510e48c265c7_1280.png\" style=\"filter: invert(42%);\"></image><text x=\"359px\" y=\"127.109375px\" id=\"ad93cec8-96d8-fbed-7861-10ef807c1a94\" class=\"inactive\" font-size=\"50\" font-weight=\"400\" font-style=\"normal\" fill=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-297 -30) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"388.8125 108.109375\" font-family=\"Bodoni 72, sans-serif\">Hi!</text><text x=\"444px\" y=\"245.109375px\" id=\"f664c093-ee0d-9a59-bd28-2527dd9fcd60\" class=\"inactive\" font-size=\"40\" font-weight=\"400\" font-style=\"normal\" fill=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-384 -96) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"540.3671875 230.109375\" font-family=\"Bodoni 72, sans-serif\">I'm Amresh</text><text x=\"639px\" y=\"411.109375px\" id=\"ea9dbc78-9182-8a30-1582-86f513a7dd0d\" class=\"inactive\" font-size=\"25\" font-weight=\"400\" font-style=\"normal\" fill=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-578 -217) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"923.015625 401.859375\" font-family=\"Bodoni 72, sans-serif\">Frontend Developer | React Developer | Vue Developer</text><g id=\"1a497972-1090-7c33-cbbe-4d07e3bf9068\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-74 104) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"263.3671875 393.859375\"><image x=\"100\" y=\"100\" height=\"30\" width=\"30\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(35 278) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"115 115\" href=\"https://pixabay.com/get/gf66bd161203231c2ddc5ac7fada0861ffbe2a5e40beb61bcb30a63857bf6112e60b9cc58cf5d63dfa2e495faaeccc965b53211b156c6f199f388dfc662b7310e_1280.png\"></image><text x=\"220\" y=\"363.109375\" fill=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-46 41) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"263.3671875 393.859375\" font-size=\"30\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">+918146602796</text></g><g id=\"61aa4a1e-30bd-15cf-4f8a-49f148d84311\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-85 126) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"533.171875 473.859375\"><image x=\"100\" y=\"100\" height=\"30\" width=\"30\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(47 359) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"115 115\" href=\"https://permaclipart.org/download/102528/\"></image><text x=\"311\" y=\"484.109375\" fill=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-122 0) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"533.171875 473.859375\" font-size=\"30\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">https://www.linkedin.com/in/kumar-amresh-1017a7161/</text></g><g id=\"6b607d3c-1541-6823-97a9-97ec28e5c418\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-85 13) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"333.03515625 532.5\"><text x=\"311\" y=\"484.109375\" fill=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#395d24a9-b5ab-4110-d1e1-532bd1eb485a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-122.171875 58.5) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"333.03515625 532.5\" font-size=\"30\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">kamresh485@gmail.com</text><image x=\"100\" y=\"100\" height=\"35\" width=\"35\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(45 415) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"117.5 117.5\" href=\"https://pixabay.com/get/g59900360a8c7238b6c2f7ade8ccd79ad920ed185e9c0bbd4ee44d209276aedecc62eae51bda1cf6f812554f3f3fe374e93be8ca2678b44e6e7bc0839dad7a7b8_1280.png\"></image></g>"
+    ]
+}

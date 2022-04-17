@@ -109,3 +109,7 @@ export function getCurrentDocumentSnapshots(state: State): string[] {
 export function getCurrentDocumentPreview(state: State): string {
     return state.page.snapshots[0];
 }
+
+export function getCurrentDocId(state: State): string {
+    return state.page.id;
+}

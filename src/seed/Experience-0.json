@@ -1,0 +1,1722 @@
+{
+    "activePageIndex": 0,
+    "activeTool": "Pan",
+    "hoveredShapeId": null,
+    "clipboard": [
+        {
+            "id": "41fa0b30-c8af-2ba4-5ad6-32a198767c3d",
+            "name": "Group",
+            "type": "Group",
+            "x": 0,
+            "y": 0,
+            "x_unit": "px",
+            "y_unit": "px",
+            "style": {
+                "fill": "transparent",
+                "fillRule": "nonzero",
+                "stroke": "black",
+                "strokeWidth": 1,
+                "strokeWidth_unit": "px",
+                "strokeDasharray": [],
+                "strokeDashoffset": 0,
+                "strokeLinecap": "square",
+                "strokeOpacity": 1,
+                "strokeLinejoin": "miter",
+                "strokeMitterlimit": 4,
+                "fillOpacity": 1,
+                "rotate": 0,
+                "translate": [
+                    -82,
+                    -43
+                ],
+                "skewX": 0,
+                "skewY": 0,
+                "scale": [
+                    1,
+                    1
+                ],
+                "cssFilters": {},
+                "svgFilters": {}
+            },
+            "render": true,
+            "children": [
+                "fe0bd887-8b66-6a37-5c49-bc375d2aa3a3",
+                "9fbd7032-2159-4744-3b37-acbf4ef6c6b2",
+                "8d788396-f351-f7db-97e6-2a2668815aa6",
+                "cb90d6ea-e6f0-3eee-a5cd-5a2e935cf16b",
+                "ed312152-3c01-85db-c575-0c3103114937",
+                "5f28946a-161d-6b96-7c4e-13baa9081e4f",
+                "7b0607c8-08ea-e096-5265-d8e611619627",
+                "e89ed08b-ebc4-39a8-8a10-83cd431d8cdf",
+                "d3c1f977-36c8-680d-4f3d-95ea273dcdda",
+                "bff888ec-9ccb-acb1-cad1-dde41991daa1"
+            ]
+        }
+    ],
+    "contextMenu": {
+        "show": false,
+        "x": 0,
+        "y": 0,
+        "clipboard": {
+            "x": 344.77880859375,
+            "y": 237.5576171875
+        }
+    },
+    "pages": [
+        {
+            "id": "758754fd-323a-44f1-fb64-274f0da1ba37",
+            "activeShapes": [],
+            "shapes": {
+                "16719b58-692d-6802-4461-4f5f5f928fb3": {
+                    "id": "16719b58-692d-6802-4461-4f5f5f928fb3",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 317,
+                    "y": 102.8046875,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -236,
+                            -17
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "height": 40,
+                    "height_unit": "px",
+                    "width": 40,
+                    "width_unit": "px",
+                    "base64Url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAyCAYAAAAus5mQAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAFHGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIwLTAxLTI1VDEzOjQ1OjE5KzA1OjMwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMC0wMS0yNVQxMzo1MjozNiswNTozMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMC0wMS0yNVQxMzo1MjozNiswNTozMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDphY2E0MzVhZC01ZGFl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"
+                },
+                "6d5e4f72-bb5f-ed6a-ec47-eb93d87a351f": {
+                    "id": "6d5e4f72-bb5f-ed6a-ec47-eb93d87a351f",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 301,
+                    "y": 85.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -171,
+                            31
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Dezigndia",
+                    "fontSize": 30,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "fe0bd887-8b66-6a37-5c49-bc375d2aa3a3": {
+                    "id": "fe0bd887-8b66-6a37-5c49-bc375d2aa3a3",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -1,
+                            -3
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "children": [
+                        "16719b58-692d-6802-4461-4f5f5f928fb3",
+                        "6d5e4f72-bb5f-ed6a-ec47-eb93d87a351f"
+                    ]
+                },
+                "5fcc393c-fb76-1772-e0c2-84d0d6f01963": {
+                    "id": "5fcc393c-fb76-1772-e0c2-84d0d6f01963",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 407,
+                    "y": 119.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#1be40a88-0517-9c6f-5038-93b9828a12f0)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#1be40a88-0517-9c6f-5038-93b9828a12f0)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            91,
+                            -80
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "text": "Experience",
+                    "fontSize": 41,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Bodoni 72",
+                    "genericFontFamily": "sans-serif"
+                },
+                "bda9b598-3075-bb9c-8a5e-00ffe8cf09b1": {
+                    "id": "bda9b598-3075-bb9c-8a5e-00ffe8cf09b1",
+                    "name": "CIRCLE",
+                    "type": "CIRCLE",
+                    "x": 197,
+                    "y": 274.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "#000000",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 3,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -81,
+                            -71
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "radius": 3,
+                    "radius_unit": "px"
+                },
+                "e34daafe-0557-7e7b-cce3-4b9cd61771cc": {
+                    "id": "e34daafe-0557-7e7b-cce3-4b9cd61771cc",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 247,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -118,
+                            -34
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Worked as react developer ",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "148a5d80-905a-84b4-60e8-c88799bc0f8d": {
+                    "id": "148a5d80-905a-84b4-60e8-c88799bc0f8d",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 500,
+                    "y": 260.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            0,
+                            0
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Jan 2021 - Apr 2021 · 4 mos",
+                    "fontSize": 15,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "93477ce0-8e1e-7f6a-4ea2-2b084732aa53": {
+                    "id": "93477ce0-8e1e-7f6a-4ea2-2b084732aa53",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 500,
+                    "y": 260.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            1.359375,
+                            21.25
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Mumbai, Maharashtra, India",
+                    "fontSize": 15,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "9fbd7032-2159-4744-3b37-acbf4ef6c6b2": {
+                    "id": "9fbd7032-2159-4744-3b37-acbf4ef6c6b2",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -369,
+                            -119
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "children": [
+                        "148a5d80-905a-84b4-60e8-c88799bc0f8d",
+                        "93477ce0-8e1e-7f6a-4ea2-2b084732aa53"
+                    ]
+                },
+                "8d788396-f351-f7db-97e6-2a2668815aa6": {
+                    "id": "8d788396-f351-f7db-97e6-2a2668815aa6",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -207,
+                            -44
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Worked as Software Development Intern",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "cb90d6ea-e6f0-3eee-a5cd-5a2e935cf16b": {
+                    "id": "cb90d6ea-e6f0-3eee-a5cd-5a2e935cf16b",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -207.4580078125,
+                            -16
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Created reusable, responsive and robust ui components,",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "ed312152-3c01-85db-c575-0c3103114937": {
+                    "id": "ed312152-3c01-85db-c575-0c3103114937",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -207.4580078125,
+                            12
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Used redux as state management solution, ",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "5f28946a-161d-6b96-7c4e-13baa9081e4f": {
+                    "id": "5f28946a-161d-6b96-7c4e-13baa9081e4f",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -208.4580078125,
+                            39
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Used redux thunk for seperating data fetching logic from component,",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "7b0607c8-08ea-e096-5265-d8e611619627": {
+                    "id": "7b0607c8-08ea-e096-5265-d8e611619627",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -209.4580078125,
+                            69
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Used react-router for routing, used material ui as ui framework ,",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "e89ed08b-ebc4-39a8-8a10-83cd431d8cdf": {
+                    "id": "e89ed08b-ebc4-39a8-8a10-83cd431d8cdf",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -209.4580078125,
+                            98
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Used node-sass for creating reusable stylesheets, ",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "d3c1f977-36c8-680d-4f3d-95ea273dcdda": {
+                    "id": "d3c1f977-36c8-680d-4f3d-95ea273dcdda",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -208.4580078125,
+                            127
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Wrote clean, efficient, error free and testable code ,",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "bff888ec-9ccb-acb1-cad1-dde41991daa1": {
+                    "id": "bff888ec-9ccb-acb1-cad1-dde41991daa1",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -209.4580078125,
+                            155
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Tech used:- Html,Css, Js, React, Node, Express, MongoDB",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "41fa0b30-c8af-2ba4-5ad6-32a198767c3d": {
+                    "id": "41fa0b30-c8af-2ba4-5ad6-32a198767c3d",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -82,
+                            -43
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "children": [
+                        "fe0bd887-8b66-6a37-5c49-bc375d2aa3a3",
+                        "9fbd7032-2159-4744-3b37-acbf4ef6c6b2",
+                        "8d788396-f351-f7db-97e6-2a2668815aa6",
+                        "cb90d6ea-e6f0-3eee-a5cd-5a2e935cf16b",
+                        "ed312152-3c01-85db-c575-0c3103114937",
+                        "5f28946a-161d-6b96-7c4e-13baa9081e4f",
+                        "7b0607c8-08ea-e096-5265-d8e611619627",
+                        "e89ed08b-ebc4-39a8-8a10-83cd431d8cdf",
+                        "d3c1f977-36c8-680d-4f3d-95ea273dcdda",
+                        "bff888ec-9ccb-acb1-cad1-dde41991daa1"
+                    ]
+                },
+                "6e4155df-7ccd-8b88-1973-d6f60ce0987b": {
+                    "id": "6e4155df-7ccd-8b88-1973-d6f60ce0987b",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -1,
+                            -3
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "children": [
+                        "4d942968-5639-401f-1703-aabe65604d8c",
+                        "2466150a-7599-9698-8a0e-c91cc9adbe54"
+                    ]
+                },
+                "4d942968-5639-401f-1703-aabe65604d8c": {
+                    "id": "4d942968-5639-401f-1703-aabe65604d8c",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 317,
+                    "y": 102.8046875,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -236,
+                            -17
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "height": 40,
+                    "height_unit": "px",
+                    "width": 40,
+                    "width_unit": "px",
+                    "base64Url": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzdweCIgaGVpZ2h0PSIyOHB4IiB2aWV3Qm94PSIwIDAgNzcgMjgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+QXJ0Ym9hcmQ8L3RpdGxlPgogICAgPGcgaWQ9IkFydGJvYXJkIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iR3JvdXAtQ29weS0yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyLjAwMDAwMCwgMC40MzAwMDApIj4KICAgICAgICAgICAgPGcgaWQ9Ikdyb3VwLUNvcHkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMDAwMDAwLCAwLjU3MDAwMCkiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTI5LjY0MTY1NTIsMTkuOTE0OTc2NCBMMjkuNjQxNjU1Miw2LjEwMjMyMjgzIEMyOS42NDE2NTUyLDIuNzQzIDMyLjQyMDA0MTUsMC4wMTk5NjA2Mjk5IDM1Ljg0NzI4MTgsMC4wMTk5NjA2Mjk5IEMzOS4yNzQ2MjY2LDAuMDE5OTYwNjI5OSA0Mi4wNTI4MDQsMi43NDMgNDIuMDUyODA0LDYuMTAyMzIyODMgTDQyLjA1MjgwNCwxOS45MTQ5NzY0IEM0Mi4wNTI4MDQsMjMuMjc0Mjk5MiAzOS4yNzQ2MjY2LDI1Ljk5NzU0MzMgMzUuODQ3MjgxOCwyNS45OTc1NDMzIEMzMi40MjAwNDE1LDI1Ljk5NzU0MzMgMjkuNjQxNjU1MiwyMy4yNzQyOTkyIDI5LjY0MTY1NTIsMTkuOTE0OTc2NCIgaWQ9IkZpbGwtMyIgZmlsbD0iIzMxN0ZFRCI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTYuMjc0MDMxNDcsMTMuODMyNTExOCBMMTIuNDc5NjU4MSwxMy44MzI1MTE4IEwxMi40Nzk2NTgxLDYuMTAyMzIyODMgQzEyLjQ3OTY1ODEsMi43NDMxMDIzNiA5LjcwMTI3MTgyLDAuMDE5ODU4MjY3NyA2LjI3NDAzMTQ3LDAuMDE5ODU4MjY3NyBDMi44NDY2ODY3LDAuMDE5ODU4MjY3NyAwLjA2ODUwOTI5OSwyLjc0MzEwMjM2IDAuMDY4NTA5Mjk5LDYuMTAyMzIyODMgTDAuMDY4NTA5Mjk5LDE5LjkxNTA3ODcgQzAuMDY4NTA5Mjk5LDE2LjU1NTg1ODMgMi44NDY2ODY3LDEzLjgzMjUxMTggNi4yNzQwMzE0NywxMy44MzI1MTE4IiBpZD0iRmlsbC00IiBmaWxsPSIjMzE3RkVEIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMjAuMzY2MzczNCwxMy44MzI1MTE4IEwxMi40Nzk2NTgxLDEzLjgzMjUxMTggTDEyLjQ3OTY1ODEsMTkuOTE1MDc4NyBDMTIuNDc5NjU4MSwyMy4yNzQyOTkyIDkuNzAxMjcxODIsMjUuOTk3NDQwOSA2LjI3MzkyNzA0LDI1Ljk5NzQ0MDkgTDIwLjM2NjM3MzQsMjUuOTk3NDQwOSBDMjMuNzkzNzE4MiwyNS45OTc0NDA5IDI2LjU3MTg5NTYsMjMuMjc0Mjk5MiAyNi41NzE4OTU2LDE5LjkxNTA3ODcgQzI2LjU3MTg5NTYsMTYuNTU1ODU4MyAyMy43OTM3MTgyLDEzLjgzMjUxMTggMjAuMzY2MzczNCwxMy44MzI1MTE4IiBpZD0iRmlsbC01IiBmaWxsPSIjMzE3RkVEIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMTIuNDc5NTUzNiwxOS45MTQ5NzY0IEwxMi40Nzk1NTM2LDEzLjgzMjUxMTggTDYuMjczOTI3MDQsMTMuODMyNTExOCBDMi44NDY2ODY3LDEzLjgzMjUxMTggMC4wNjg0MDQ4NjQxLDE2LjU1NTc1NTkgMC4wNjg0MDQ4NjQxLDE5LjkxNDk3NjQgQzAuMDY4NDA0ODY0MSwyMy4yNzQyOTkyIDIuODQ2Njg2NywyNS45OTc1NDMzIDYuMjczOTI3MDQsMjUuOTk3NTQzMyBMNi4yNzQxMzU5MSwyNS45OTc1NDMzIEM5LjcwMTE2NzM4LDI1Ljk5NzU0MzMgMTIuNDc5NTUzNiwyMy4yNzQyOTkyIDEyLjQ3OTU1MzYsMTkuOTE0OTc2NCIgaWQ9IkZpbGwtNiIgZmlsbD0iIzA2Q0FFMiI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTcyLjk1MzQyMiwxMy4wMDcxNjU0IEM3Mi45NTM0MjIsMjAuMTgxNTI3NiA2Ny4wMTk2Mzk1LDI1Ljk5NzQ0MDkgNTkuNzAwMDA1NywyNS45OTc0NDA5IEM1Mi4zODAyNjc1LDI1Ljk5NzQ0MDkgNDYuNDQ2NTg5NCwyMC4xODE1Mjc2IDQ2LjQ0NjU4OTQsMTMuMDA3MTY1NCBDNDYuNDQ2NTg5NCw1LjgzMjcwMDc5IDUyLjM4MDI2NzUsMC4wMTY3ODc0MDE2IDU5LjcwMDAwNTcsMC4wMTY3ODc0MDE2IEM2Ny4wMTk2Mzk1LDAuMDE2Nzg3NDAxNiA3Mi45NTM0MjIsNS44MzI3MDA3OSA3Mi45NTM0MjIsMTMuMDA3MTY1NCIgaWQ9IkZpbGwtNyIgZmlsbD0iIzMxN0ZFRCI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTY0LjExODU0MjIsMTMuMDA3MTY1NCBDNjQuMTE4NTQyMiwxNS4zOTg5NjA2IDYyLjE0MDMzNjIsMTcuMzM3OTA1NSA1OS43MDAwMDU3LDE3LjMzNzkwNTUgQzU3LjI1OTc3OTcsMTcuMzM3OTA1NSA1NS4yODE1NzM3LDE1LjM5ODk2MDYgNTUuMjgxNTczNywxMy4wMDcxNjU0IEM1NS4yODE1NzM3LDEwLjYxNTI2NzcgNTcuMjU5Nzc5Nyw4LjY3NjMyMjgzIDU5LjcwMDAwNTcsOC42NzYzMjI4MyBDNjIuMTQwMzM2Miw4LjY3NjMyMjgzIDY0LjExODU0MjIsMTAuNjE1MjY3NyA2NC4xMTg1NDIyLDEzLjAwNzE2NTQiIGlkPSJGaWxsLTgiIGZpbGw9IiMwNkNBRTIiPjwvcGF0aD4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik00Mi4wNjU4NTg0LDYuMTE1MTE4MTEgQzQyLjA2NTg1ODQsOS40ODE0MDE1NyAzOS4yODE2MjM3LDEyLjIxMDE3MzIgMzUuODQ3MjgxOCwxMi4yMTAxNzMyIEMzMi40MTI4MzU1LDEyLjIxMDE3MzIgMjkuNjI4NjAwOSw5LjQ4MTQwMTU3IDI5LjYyODYwMDksNi4xMTUxMTgxMSBDMjkuNjI4NjAwOSwyLjc0ODczMjI4IDMyLjQxMjgzNTUsMC4wMTk5NjA2Mjk5IDM1Ljg0NzI4MTgsMC4wMTk5NjA2Mjk5IEMzOS4yODE2MjM3LDAuMDE5OTYwNjI5OSA0Mi4wNjU4NTg0LDIuNzQ4NzMyMjggNDIuMDY1ODU4NCw2LjExNTExODExIiBpZD0iRmlsbC05IiBmaWxsPSIjMDZDQUUyIj48L3BhdGg+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg=="
+                },
+                "2466150a-7599-9698-8a0e-c91cc9adbe54": {
+                    "id": "2466150a-7599-9698-8a0e-c91cc9adbe54",
+                    "name": "Swific Technologies Pvt Ltd.",
+                    "type": "TEXT",
+                    "x": 301,
+                    "y": 85.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -171,
+                            31
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Swific Technologies Pvt Ltd.",
+                    "fontSize": 30,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "7b1ade15-e144-453a-23f6-932c47a4255f": {
+                    "id": "7b1ade15-e144-453a-23f6-932c47a4255f",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -369,
+                            -119
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "children": [
+                        "0cae3a0e-5101-9f35-9496-151d87372f72",
+                        "57cbda62-13f9-3561-07d4-429aa449be16"
+                    ]
+                },
+                "0cae3a0e-5101-9f35-9496-151d87372f72": {
+                    "id": "0cae3a0e-5101-9f35-9496-151d87372f72",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 500,
+                    "y": 260.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            0,
+                            0
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Sep 2021 - Present · 8 mos",
+                    "fontSize": 15,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "57cbda62-13f9-3561-07d4-429aa449be16": {
+                    "id": "57cbda62-13f9-3561-07d4-429aa449be16",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 500,
+                    "y": 260.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            1.359375,
+                            21.25
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "India",
+                    "fontSize": 15,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "bdc17e92-a467-07e3-3d88-e3a706288140": {
+                    "id": "bdc17e92-a467-07e3-3d88-e3a706288140",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -207,
+                            -44
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Worked as react developer",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "c47dc3b5-a731-5165-732a-1a33ec51900c": {
+                    "id": "c47dc3b5-a731-5165-732a-1a33ec51900c",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -207.4580078125,
+                            -16
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Created web version of popular record management app Lio,",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "c03d933a-83e3-f6e5-6468-a420a43cb4e5": {
+                    "id": "c03d933a-83e3-f6e5-6468-a420a43cb4e5",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -207.4580078125,
+                            12
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "With column types such as text, audio, image, select etc.",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "51f6f5f8-a2e8-8ef4-1cad-c28327342484": {
+                    "id": "51f6f5f8-a2e8-8ef4-1cad-c28327342484",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -208.4580078125,
+                            39
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Used AgGrid to implement table with custom renderers and editors,",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "71f8b9ca-2cd7-f905-2850-caff11e566fc": {
+                    "id": "71f8b9ca-2cd7-f905-2850-caff11e566fc",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -209.4580078125,
+                            69
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Implemented features such as teams and file sharing to enable -",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "95292499-ed78-334e-fbc2-5cf8de1feb1f": {
+                    "id": "95292499-ed78-334e-fbc2-5cf8de1feb1f",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -209.4580078125,
+                            98
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "realtime editing of same document across multiple devices.",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "90a4f53e-9aa9-21fc-753d-cb5c6a74a7c8": {
+                    "id": "90a4f53e-9aa9-21fc-753d-cb5c6a74a7c8",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -208.4580078125,
+                            127
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Added new features, resolved some critical bugs and improved ui",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "a169a50a-4809-dd6a-a81b-d46f0d60f071": {
+                    "id": "a169a50a-4809-dd6a-a81b-d46f0d60f071",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 337,
+                    "y": 243.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#c6054284-cec5-df54-35b0-beb29c92ae2b)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -209.4580078125,
+                            155
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": false,
+                    "text": "Improved overall UX which helped in increase of user-base from 10M to 20M",
+                    "fontSize": 20,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "b8c0a848-7e20-bd3c-dc7f-d3314740e43b": {
+                    "id": "b8c0a848-7e20-bd3c-dc7f-d3314740e43b",
+                    "name": "Group",
+                    "type": "Group",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            316.22119140625,
+                            300.5439453125
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "children": [
+                        "6e4155df-7ccd-8b88-1973-d6f60ce0987b",
+                        "7b1ade15-e144-453a-23f6-932c47a4255f",
+                        "bdc17e92-a467-07e3-3d88-e3a706288140",
+                        "c47dc3b5-a731-5165-732a-1a33ec51900c",
+                        "c03d933a-83e3-f6e5-6468-a420a43cb4e5",
+                        "51f6f5f8-a2e8-8ef4-1cad-c28327342484",
+                        "71f8b9ca-2cd7-f905-2850-caff11e566fc",
+                        "95292499-ed78-334e-fbc2-5cf8de1feb1f",
+                        "90a4f53e-9aa9-21fc-753d-cb5c6a74a7c8",
+                        "a169a50a-4809-dd6a-a81b-d46f0d60f071"
+                    ]
+                },
+                "3d1753e1-fb72-1f5c-4bc0-3afa737801c1": {
+                    "id": "3d1753e1-fb72-1f5c-4bc0-3afa737801c1",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            626,
+                            -27
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "height": 271,
+                    "height_unit": "px",
+                    "width": 381,
+                    "width_unit": "px",
+                    "base64Url": "https://pixabay.com/get/g4f95ea546b7959874802b1bc359d851290d0cc5eb7e85eae3a5ff3530b47bca96d437d9ad8a6b95b5e7d09041b4f32bd2abff6f09d1f57d505d8adf081db9463_1280.png"
+                },
+                "846f265a-111f-4ad2-7dc9-14c079a0fccc": {
+                    "id": "846f265a-111f-4ad2-7dc9-14c079a0fccc",
+                    "name": "TEXT",
+                    "type": "TEXT",
+                    "x": 236,
+                    "y": 505.1015625,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "url(#7aea69b6-6cb7-87d8-2165-9dd58ab04d6a)",
+                        "fillRule": "nonzero",
+                        "stroke": "url(#7aea69b6-6cb7-87d8-2165-9dd58ab04d6a)",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            -134,
+                            176
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "text": "Won Best Employe In Tech (web)",
+                    "fontSize": 15,
+                    "fontWeight": 400,
+                    "fontStyle": "normal",
+                    "fontFamily": "Arial",
+                    "genericFontFamily": "sans-serif"
+                },
+                "2876e059-a8e9-769b-8395-2ff2d2d06914": {
+                    "id": "2876e059-a8e9-769b-8395-2ff2d2d06914",
+                    "name": "LINE",
+                    "type": "LINE",
+                    "x": 0,
+                    "y": 0,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 0.30000000000000016,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            0,
+                            -5
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "points": [
+                        [
+                            4,
+                            376.1015625
+                        ],
+                        [
+                            1127,
+                            377.1015625
+                        ]
+                    ]
+                },
+                "e8dd03f9-43c5-5549-e7d6-0084192471a9": {
+                    "id": "e8dd03f9-43c5-5549-e7d6-0084192471a9",
+                    "name": "FaImage",
+                    "type": "FaImage",
+                    "x": 100,
+                    "y": 100,
+                    "x_unit": "px",
+                    "y_unit": "px",
+                    "style": {
+                        "fill": "transparent",
+                        "fillRule": "nonzero",
+                        "stroke": "black",
+                        "strokeWidth": 1,
+                        "strokeWidth_unit": "px",
+                        "strokeDasharray": [],
+                        "strokeDashoffset": 0,
+                        "strokeLinecap": "square",
+                        "strokeOpacity": 1,
+                        "strokeLinejoin": "miter",
+                        "strokeMitterlimit": 4,
+                        "fillOpacity": 1,
+                        "rotate": 0,
+                        "translate": [
+                            7,
+                            359
+                        ],
+                        "skewX": 0,
+                        "skewY": 0,
+                        "scale": [
+                            1,
+                            1
+                        ],
+                        "cssFilters": {},
+                        "svgFilters": {}
+                    },
+                    "render": true,
+                    "height": 200,
+                    "height_unit": "px",
+                    "width": 200,
+                    "width_unit": "px",
+                    "base64Url": "https://pixabay.com/get/gd7f7986398e68fba64797d5130cdf6083968dff1613457ccebbe32cc196f6d8ce48968634b0476e52bd0278272052a996a23f52c9b580b1483c5e7a912528db1_1280.png"
+                }
+            },
+            "filters": {},
+            "renderTree": [
+                {
+                    "id": "16719b58-692d-6802-4461-4f5f5f928fb3"
+                },
+                {
+                    "id": "6d5e4f72-bb5f-ed6a-ec47-eb93d87a351f"
+                },
+                {
+                    "id": "5fcc393c-fb76-1772-e0c2-84d0d6f01963"
+                },
+                {
+                    "id": "bda9b598-3075-bb9c-8a5e-00ffe8cf09b1"
+                },
+                {
+                    "id": "e34daafe-0557-7e7b-cce3-4b9cd61771cc"
+                },
+                {
+                    "id": "148a5d80-905a-84b4-60e8-c88799bc0f8d"
+                },
+                {
+                    "id": "8d788396-f351-f7db-97e6-2a2668815aa6"
+                },
+                {
+                    "id": "3d1753e1-fb72-1f5c-4bc0-3afa737801c1"
+                },
+                {
+                    "id": "846f265a-111f-4ad2-7dc9-14c079a0fccc"
+                },
+                {
+                    "id": "2876e059-a8e9-769b-8395-2ff2d2d06914"
+                },
+                {
+                    "id": "78c723c5-7d73-3710-8c25-3e36f99fb06e"
+                },
+                {
+                    "id": "e8dd03f9-43c5-5549-e7d6-0084192471a9"
+                }
+            ],
+            "svgStyle": {
+                "backgroundColor": "#e6e6e6",
+                "height": 100,
+                "width": 100
+            }
+        }
+    ],
+    "colors": {
+        "bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3": "#443c3c",
+        "1be40a88-0517-9c6f-5038-93b9828a12f0": "#1d1616",
+        "d1993ea8-9714-74d2-16e0-90c13bec09b3": "#9c9191",
+        "c6054284-cec5-df54-35b0-beb29c92ae2b": "#564d4d",
+        "7aea69b6-6cb7-87d8-2165-9dd58ab04d6a": "#546ad9"
+    },
+    "gradients": {},
+    "images": {},
+    "name": "Experience",
+    "id": "9ed4b295-a5d8-c98c-bdaf-2a62ea41c9f0",
+    "snapshots": [
+        "<defs><pattern id=\"bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#443c3c\"></rect></pattern><pattern id=\"1be40a88-0517-9c6f-5038-93b9828a12f0\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#1d1616\"></rect></pattern><pattern id=\"d1993ea8-9714-74d2-16e0-90c13bec09b3\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#9c9191\"></rect></pattern><pattern id=\"c6054284-cec5-df54-35b0-beb29c92ae2b\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#564d4d\"></rect></pattern><pattern id=\"7aea69b6-6cb7-87d8-2165-9dd58ab04d6a\" height=\"100%\" width=\"100%\"><rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" fill=\"#546ad9\"></rect></pattern></defs><text x=\"407px\" y=\"119.1015625px\" id=\"5fcc393c-fb76-1772-e0c2-84d0d6f01963\" class=\"inactive\" font-size=\"41\" font-weight=\"400\" font-style=\"normal\" fill=\"url(#1be40a88-0517-9c6f-5038-93b9828a12f0)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#1be40a88-0517-9c6f-5038-93b9828a12f0)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(91 -80) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"545.640625 108.8515625\" font-family=\"Bodoni 72, sans-serif\">Experience</text><g id=\"41fa0b30-c8af-2ba4-5ad6-32a198767c3d\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-82 -43) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\"><g id=\"fe0bd887-8b66-6a37-5c49-bc375d2aa3a3\" class=\"inactive\" fill=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-1 -3) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"172.2109375 105.8046875\"><image x=\"317\" y=\"102.8046875\" height=\"40\" width=\"40\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-236 -17) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"337 122.8046875\" href=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAyCAYAAAAus5mQAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAFHGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIwLTAxLTI1VDEzOjQ1OjE5KzA1OjMwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMC0wMS0yNVQxMzo1MjozNiswNTozMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMC0wMS0yNVQxMzo1MjozNiswNTozMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDphY2E0MzVhZC01ZGFl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\"></image><text x=\"301\" y=\"85.1015625\" fill=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-171 31) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"172.2109375 105.8046875\" font-size=\"30\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Dezigndia</text></g><g id=\"9fbd7032-2159-4744-3b37-acbf4ef6c6b2\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-369 -119) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"594.640625 265.4765625\"><text x=\"500\" y=\"260.1015625\" fill=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(0 0) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"594.640625 265.4765625\" font-size=\"15\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Jan 2021 - Apr 2021 · 4 mos</text><text x=\"500\" y=\"260.1015625\" fill=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(1.359375 21.25) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"594.640625 265.4765625\" font-size=\"15\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Mumbai, Maharashtra, India</text></g><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-207 -44) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Worked as Software Development Intern</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-207.4580078125 -16) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Created reusable, responsive and robust ui components,</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-207.4580078125 12) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Used redux as state management solution, </text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-208.4580078125 39) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Used redux thunk for seperating data fetching logic from component,</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-209.4580078125 69) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Used react-router for routing, used material ui as ui framework ,</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-209.4580078125 98) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Used node-sass for creating reusable stylesheets, </text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-208.4580078125 127) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Wrote clean, efficient, error free and testable code ,</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-209.4580078125 155) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Tech used:- Html,Css, Js, React, Node, Express, MongoDB</text></g><g id=\"b8c0a848-7e20-bd3c-dc7f-d3314740e43b\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(316.22119140625 300.5439453125) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"407.77880859375 242.5576171875\"><g id=\"6e4155df-7ccd-8b88-1973-d6f60ce0987b\" class=\"inactive\" fill=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-1 -3) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"172.2109375 105.8046875\" style=\"\"><image x=\"317\" y=\"102.8046875\" height=\"40\" width=\"40\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-236 -17) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"337 122.8046875\" href=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzdweCIgaGVpZ2h0PSIyOHB4IiB2aWV3Qm94PSIwIDAgNzcgMjgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+QXJ0Ym9hcmQ8L3RpdGxlPgogICAgPGcgaWQ9IkFydGJvYXJkIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iR3JvdXAtQ29weS0yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyLjAwMDAwMCwgMC40MzAwMDApIj4KICAgICAgICAgICAgPGcgaWQ9Ikdyb3VwLUNvcHkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMDAwMDAwLCAwLjU3MDAwMCkiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTI5LjY0MTY1NTIsMTkuOTE0OTc2NCBMMjkuNjQxNjU1Miw2LjEwMjMyMjgzIEMyOS42NDE2NTUyLDIuNzQzIDMyLjQyMDA0MTUsMC4wMTk5NjA2Mjk5IDM1Ljg0NzI4MTgsMC4wMTk5NjA2Mjk5IEMzOS4yNzQ2MjY2LDAuMDE5OTYwNjI5OSA0Mi4wNTI4MDQsMi43NDMgNDIuMDUyODA0LDYuMTAyMzIyODMgTDQyLjA1MjgwNCwxOS45MTQ5NzY0IEM0Mi4wNTI4MDQsMjMuMjc0Mjk5MiAzOS4yNzQ2MjY2LDI1Ljk5NzU0MzMgMzUuODQ3MjgxOCwyNS45OTc1NDMzIEMzMi40MjAwNDE1LDI1Ljk5NzU0MzMgMjkuNjQxNjU1MiwyMy4yNzQyOTkyIDI5LjY0MTY1NTIsMTkuOTE0OTc2NCIgaWQ9IkZpbGwtMyIgZmlsbD0iIzMxN0ZFRCI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTYuMjc0MDMxNDcsMTMuODMyNTExOCBMMTIuNDc5NjU4MSwxMy44MzI1MTE4IEwxMi40Nzk2NTgxLDYuMTAyMzIyODMgQzEyLjQ3OTY1ODEsMi43NDMxMDIzNiA5LjcwMTI3MTgyLDAuMDE5ODU4MjY3NyA2LjI3NDAzMTQ3LDAuMDE5ODU4MjY3NyBDMi44NDY2ODY3LDAuMDE5ODU4MjY3NyAwLjA2ODUwOTI5OSwyLjc0MzEwMjM2IDAuMDY4NTA5Mjk5LDYuMTAyMzIyODMgTDAuMDY4NTA5Mjk5LDE5LjkxNTA3ODcgQzAuMDY4NTA5Mjk5LDE2LjU1NTg1ODMgMi44NDY2ODY3LDEzLjgzMjUxMTggNi4yNzQwMzE0NywxMy44MzI1MTE4IiBpZD0iRmlsbC00IiBmaWxsPSIjMzE3RkVEIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMjAuMzY2MzczNCwxMy44MzI1MTE4IEwxMi40Nzk2NTgxLDEzLjgzMjUxMTggTDEyLjQ3OTY1ODEsMTkuOTE1MDc4NyBDMTIuNDc5NjU4MSwyMy4yNzQyOTkyIDkuNzAxMjcxODIsMjUuOTk3NDQwOSA2LjI3MzkyNzA0LDI1Ljk5NzQ0MDkgTDIwLjM2NjM3MzQsMjUuOTk3NDQwOSBDMjMuNzkzNzE4MiwyNS45OTc0NDA5IDI2LjU3MTg5NTYsMjMuMjc0Mjk5MiAyNi41NzE4OTU2LDE5LjkxNTA3ODcgQzI2LjU3MTg5NTYsMTYuNTU1ODU4MyAyMy43OTM3MTgyLDEzLjgzMjUxMTggMjAuMzY2MzczNCwxMy44MzI1MTE4IiBpZD0iRmlsbC01IiBmaWxsPSIjMzE3RkVEIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMTIuNDc5NTUzNiwxOS45MTQ5NzY0IEwxMi40Nzk1NTM2LDEzLjgzMjUxMTggTDYuMjczOTI3MDQsMTMuODMyNTExOCBDMi44NDY2ODY3LDEzLjgzMjUxMTggMC4wNjg0MDQ4NjQxLDE2LjU1NTc1NTkgMC4wNjg0MDQ4NjQxLDE5LjkxNDk3NjQgQzAuMDY4NDA0ODY0MSwyMy4yNzQyOTkyIDIuODQ2Njg2NywyNS45OTc1NDMzIDYuMjczOTI3MDQsMjUuOTk3NTQzMyBMNi4yNzQxMzU5MSwyNS45OTc1NDMzIEM5LjcwMTE2NzM4LDI1Ljk5NzU0MzMgMTIuNDc5NTUzNiwyMy4yNzQyOTkyIDEyLjQ3OTU1MzYsMTkuOTE0OTc2NCIgaWQ9IkZpbGwtNiIgZmlsbD0iIzA2Q0FFMiI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTcyLjk1MzQyMiwxMy4wMDcxNjU0IEM3Mi45NTM0MjIsMjAuMTgxNTI3NiA2Ny4wMTk2Mzk1LDI1Ljk5NzQ0MDkgNTkuNzAwMDA1NywyNS45OTc0NDA5IEM1Mi4zODAyNjc1LDI1Ljk5NzQ0MDkgNDYuNDQ2NTg5NCwyMC4xODE1Mjc2IDQ2LjQ0NjU4OTQsMTMuMDA3MTY1NCBDNDYuNDQ2NTg5NCw1LjgzMjcwMDc5IDUyLjM4MDI2NzUsMC4wMTY3ODc0MDE2IDU5LjcwMDAwNTcsMC4wMTY3ODc0MDE2IEM2Ny4wMTk2Mzk1LDAuMDE2Nzg3NDAxNiA3Mi45NTM0MjIsNS44MzI3MDA3OSA3Mi45NTM0MjIsMTMuMDA3MTY1NCIgaWQ9IkZpbGwtNyIgZmlsbD0iIzMxN0ZFRCI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTY0LjExODU0MjIsMTMuMDA3MTY1NCBDNjQuMTE4NTQyMiwxNS4zOTg5NjA2IDYyLjE0MDMzNjIsMTcuMzM3OTA1NSA1OS43MDAwMDU3LDE3LjMzNzkwNTUgQzU3LjI1OTc3OTcsMTcuMzM3OTA1NSA1NS4yODE1NzM3LDE1LjM5ODk2MDYgNTUuMjgxNTczNywxMy4wMDcxNjU0IEM1NS4yODE1NzM3LDEwLjYxNTI2NzcgNTcuMjU5Nzc5Nyw4LjY3NjMyMjgzIDU5LjcwMDAwNTcsOC42NzYzMjI4MyBDNjIuMTQwMzM2Miw4LjY3NjMyMjgzIDY0LjExODU0MjIsMTAuNjE1MjY3NyA2NC4xMTg1NDIyLDEzLjAwNzE2NTQiIGlkPSJGaWxsLTgiIGZpbGw9IiMwNkNBRTIiPjwvcGF0aD4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik00Mi4wNjU4NTg0LDYuMTE1MTE4MTEgQzQyLjA2NTg1ODQsOS40ODE0MDE1NyAzOS4yODE2MjM3LDEyLjIxMDE3MzIgMzUuODQ3MjgxOCwxMi4yMTAxNzMyIEMzMi40MTI4MzU1LDEyLjIxMDE3MzIgMjkuNjI4NjAwOSw5LjQ4MTQwMTU3IDI5LjYyODYwMDksNi4xMTUxMTgxMSBDMjkuNjI4NjAwOSwyLjc0ODczMjI4IDMyLjQxMjgzNTUsMC4wMTk5NjA2Mjk5IDM1Ljg0NzI4MTgsMC4wMTk5NjA2Mjk5IEMzOS4yODE2MjM3LDAuMDE5OTYwNjI5OSA0Mi4wNjU4NTg0LDIuNzQ4NzMyMjggNDIuMDY1ODU4NCw2LjExNTExODExIiBpZD0iRmlsbC05IiBmaWxsPSIjMDZDQUUyIj48L3BhdGg+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==\"></image><text x=\"301\" y=\"85.1015625\" fill=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#bb0a91b9-dae5-f71a-44d1-d9d5a0a905e3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-171 31) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"291.15625 105.8046875\" font-size=\"30\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Swific Technologies Pvt Ltd.</text></g><g id=\"7b1ade15-e144-453a-23f6-932c47a4255f\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-369 -119) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"594.640625 265.4765625\"><text x=\"500\" y=\"260.1015625\" fill=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(0 0) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"591.71484375 265.4765625\" font-size=\"15\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Sep 2021 - Present · 8 mos</text><text x=\"500\" y=\"260.1015625\" fill=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#d1993ea8-9714-74d2-16e0-90c13bec09b3)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(1.359375 21.25) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"591.71484375 265.4765625\" font-size=\"15\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">India</text></g><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-207 -44) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Worked as react developer</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-207.4580078125 -16) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Created web version of popular record management app Lio,</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-207.4580078125 12) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">With column types such as text, audio, image, select etc.</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-208.4580078125 39) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Used AgGrid to implement table with custom renderers and editors,</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-209.4580078125 69) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Implemented features such as teams and file sharing to enable -</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-209.4580078125 98) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">realtime editing of same document across multiple devices.</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-208.4580078125 127) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Added new features, resolved some critical bugs and improved ui</text><text x=\"337\" y=\"243.1015625\" fill=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#c6054284-cec5-df54-35b0-beb29c92ae2b)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-209.4580078125 155) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"443.37646484375 242.453125\" font-size=\"20\" font-weight=\"400\" font-style=\"normal\" font-family=\"Arial, sans-serif\">Improved overall UX which helped in increase of user-base from 10M to 20M</text></g><image x=\"100px\" y=\"100px\" height=\"271px\" width=\"381px\" id=\"3d1753e1-fb72-1f5c-4bc0-3afa737801c1\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(626 -27) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"290.5 235.5\" preserveAspectRatio=\"true\" href=\"https://pixabay.com/get/g4f95ea546b7959874802b1bc359d851290d0cc5eb7e85eae3a5ff3530b47bca96d437d9ad8a6b95b5e7d09041b4f32bd2abff6f09d1f57d505d8adf081db9463_1280.png\"></image><text x=\"236px\" y=\"505.1015625px\" id=\"846f265a-111f-4ad2-7dc9-14c079a0fccc\" class=\"inactive\" font-size=\"15\" font-weight=\"400\" font-style=\"normal\" fill=\"url(#7aea69b6-6cb7-87d8-2165-9dd58ab04d6a)\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"url(#7aea69b6-6cb7-87d8-2165-9dd58ab04d6a)\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(-134 176) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"374.640625 494.8515625\" font-family=\"Arial, sans-serif\">Won Best Employe In Tech (web)</text><line id=\"2876e059-a8e9-769b-8395-2ff2d2d06914\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"0.30000000000000016\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(0 -5) scale(1 1) rotate(0) skewX(0) skewY(0)\" x1=\"4\" y1=\"376.1015625\" x2=\"1127\" y2=\"377.1015625\" transform-origin=\"565.5 376.6015625\"></line><image x=\"100px\" y=\"100px\" height=\"200px\" width=\"200px\" id=\"e8dd03f9-43c5-5549-e7d6-0084192471a9\" class=\"inactive\" fill=\"transparent\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"black\" stroke-width=\"1px\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" stroke-linecap=\"square\" stroke-opacity=\"1\" stroke-linejoin=\"miter\" strokeMitterlimit=\"4\" transform=\"translate(7 359) scale(1 1) rotate(0) skewX(0) skewY(0)\" transform-origin=\"200 200\" preserveAspectRatio=\"true\" href=\"https://pixabay.com/get/gd7f7986398e68fba64797d5130cdf6083968dff1613457ccebbe32cc196f6d8ce48968634b0476e52bd0278272052a996a23f52c9b580b1483c5e7a912528db1_1280.png\"></image>"
+    ]
+}
