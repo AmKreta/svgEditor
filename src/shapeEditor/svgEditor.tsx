@@ -20,7 +20,7 @@ const SvgContainerEditor: React.FC = function () {
                     value={svgStyle.height}
                     label='height'
                     onChange={val => {
-                        val > 100 && dispatch(editSvgStyle({ height: val }));
+                        val >= 100 && dispatch(editSvgStyle({ height: val }));
                     }}
                     step={5}
                 />
@@ -28,7 +28,7 @@ const SvgContainerEditor: React.FC = function () {
                     value={svgStyle.width}
                     label='width'
                     onChange={val => {
-                        val > 100 && dispatch(editSvgStyle({ width: val }));
+                        val >= 100 && dispatch(editSvgStyle({ width: val }));
                     }}
                     step={5}
                 />

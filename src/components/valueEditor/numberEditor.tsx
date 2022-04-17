@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../button.component';
 import { THEME } from '../../theme/theme';
@@ -15,6 +15,8 @@ interface props {
 const NumberEditor: React.FC<props> = function ({ value, onChange, label, step = 1, disabled = false }) {
 
     const timerRef = useRef<any>(null);
+    const [isFocused, setIsFocused] = useState(false);
+    const [focusedVal, setFocusedVal] = useState(0);
 
     const cancelTimerRef = function () {
         timerRef.current && clearInterval(timerRef.current);
@@ -62,8 +64,26 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
     }
 
     const changeHandler = function (e: React.ChangeEvent<HTMLInputElement>) {
-        const val = parseInt(e.target.value);
-        val !== value && onChange(val);
+        let val = parseInt(e.target.value);
+        if (isNaN(val)) {
+            val = 0;
+        }
+        setFocusedVal(val);
+    }
+
+    const focusHandler = function (e: React.FocusEvent<HTMLInputElement>) {
+        setIsFocused(true);
+        setFocusedVal(value);
+        e.target.onkeydown = ev => {
+            if (ev.key === 'Enter') {
+                const val = parseInt(e.target.value);
+                val !== value && onChange(val);
+                e.target.onkeydown = null;
+                e.target.blur();
+                setFocusedVal(0);
+                setIsFocused(false);
+            }
+        }
     }
 
     return (
@@ -75,7 +95,7 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
             }
             <div className='editorContainer'>
                 <Button startIcon={FaMinus} onMouseDown={minusPressedHandler} onClick={minusHandler} />
-                <input type='text' value={value} onChange={changeHandler} />
+                <input type='text' value={isFocused ? focusedVal : value} onChange={changeHandler} onFocus={focusHandler} />
                 <Button startIcon={FaPlus} onMouseDown={plusPressedHandler} onClick={plusHandler} />
             </div>
         </Editor>
