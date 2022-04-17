@@ -18,7 +18,7 @@ const EllipseEditor: React.FC<EditorProps> = function ({ shape }) {
                     onChange={val => {
                         val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { radiusX: val } }));
                     }}
-                    step={5}
+                    step={10}
                 />
                 <NumberEditor
                     value={s.radiusY}
@@ -26,7 +26,7 @@ const EllipseEditor: React.FC<EditorProps> = function ({ shape }) {
                     onChange={val => {
                         val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { radiusY: val } }));
                     }}
-                    step={5}
+                    step={10}
                 />
             </div>
             <div className='EditorCaegoryContainer'>

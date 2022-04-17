@@ -33,7 +33,10 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const shape = props.shape as GROUP_SHAPE;
     const ref = useRef<any>(null);
     const [groupMidPoint, setGroupMidPoint] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
-    const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage);
+    const groupChildren = useSelector((state: State) => {
+        const groundChildren = shape.children.map(childId => state.page.pages[state.page.activePageIndex].shapes[childId]);
+        return groundChildren;
+    });
 
     useLayoutEffect(function () {
         const timeout = setTimeout(function () {
@@ -55,8 +58,7 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             transform-origin={`${groupMidPoint.x} ${groupMidPoint.y}`}
         >
             {
-                shape.children?.map(childShapeId => {
-                    const childShape = shapesOfCurrentPage[childShapeId];
+                groupChildren?.map(childShape => {
                     switch (childShape.type) {
 
                         case SHAPE_TYPES.CIRCLE: {

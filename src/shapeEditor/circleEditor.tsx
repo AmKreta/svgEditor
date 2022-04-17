@@ -18,7 +18,7 @@ const CircleEditor: React.FC<EditorProps> = function ({ shape }) {
                     onChange={val => {
                         val > 0 && dispatch(formatActiveShape({ id: s.id, properties: { radius: val } }));
                     }}
-                    step={5}
+                    step={10}
                 />
             </div>
             <div className='EditorCaegoryContainer'>

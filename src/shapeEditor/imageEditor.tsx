@@ -36,7 +36,7 @@ const ImageEditor: React.FC<EditorProps> = function ({ shape }) {
                     onChange={val => {
                         val > 0 && dispatch(formatActiveShape({ id:s.id, properties: { height: val } }));
                     }}
-                    step={5}
+                    step={10}
                 />
                 <NumberEditor
                     value={s.width}
@@ -44,7 +44,7 @@ const ImageEditor: React.FC<EditorProps> = function ({ shape }) {
                     onChange={val => {
                         val > 0 && dispatch(formatActiveShape({ id:s.id, properties: { width: val } }));
                     }}
-                    step={5}
+                    step={10}
                 />
             </div>
             <div className='EditorCaegoryContainer'>

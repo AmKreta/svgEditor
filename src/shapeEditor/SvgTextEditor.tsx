@@ -32,6 +32,7 @@ const SvgTEXTEditor: React.FC<EditorProps> = function ({ shape }) {
                     onChange={val => {
                         val >= 10 && dispatch(formatActiveShape({ id:s.id, properties: { fontSize: val } }))
                     }}
+                    step={10}
                 />
                 <NumberEditor
                     label='weight'
