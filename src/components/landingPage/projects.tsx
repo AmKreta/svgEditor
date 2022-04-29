@@ -98,7 +98,7 @@ const ProjectsContainer = styled.main`
     ${props => {
         const theme = props.theme as THEME;
         return css`
-            padding:${theme.spacing(2)}px;
+            padding:${theme.spacing(2)}px ${theme.spacing(1.5)}px;
             &>h2{
                 margin-bottom:${theme.spacing(2)}px;
             }
@@ -108,7 +108,7 @@ const ProjectsContainer = styled.main`
                 flex-wrap: wrap;
                 text-align: center;
                 &>div.projectCard{
-                    padding:${theme.spacing(2)}px ${theme.spacing(1.2)}px;
+                   padding:${theme.spacing(1)}px ${theme.spacing(1.1)}px;
                     &>div.projectCardHeader{
                         display: flex;
                         align-items: center;
