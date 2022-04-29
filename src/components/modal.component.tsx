@@ -17,6 +17,7 @@ const Modal: React.FC<Props> = function ({ overlayStyle = {}, modalStyle = {}, c
     function disableScroll() {
         document.body.style.maxHeight = '100vh';
         document.body.style.overflow = 'hidden';
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
 
     function enableScroll() {
