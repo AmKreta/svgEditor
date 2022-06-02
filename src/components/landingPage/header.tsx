@@ -83,6 +83,12 @@ const StyledHeader = Styled.header`
                     &>button:first-child{
                         margin-right:${theme.spacing(2)}px;
                     }
+                    &>button:nth-child(2){
+                        background-color:#333;
+                        color:white;
+                        border-radius: 8px;
+                        transform:scale(1.1)
+                    }
                 }
             `;
     }
