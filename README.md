@@ -4,8 +4,6 @@
 
 [Click here to visit site ](https://react-svg-editor.netlify.app/)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rqtKGGTlQC4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 # About
  - React Svg Editor is a powerful design tool that  helps you to create anything: websites, applications, logos, and much more. 
 - Built for Web, React Svg Editor helps you create, share, test, and ship better designs from start to finish. 
