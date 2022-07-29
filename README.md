@@ -12,7 +12,7 @@
 # About
  - React Svg Editor is a powerful design tool that  helps you to create anything: websites, applications, logos, and much more. 
 - Built for Web, React Svg Editor helps you create, share, test, and ship better designs from start to finish. 
-- Whether it’s consolidating tools, simplifying workflows, or collaborating across teams and time zones, React Svg Editor makes the design process faster, more efficient, and fun while keeping everyone on the same page.
+- Whether it’s consolidating tools or simplifying workflows React Svg Editor makes the design process faster, more efficient, and fun while keeping everyone on the same page.
 
 ## Features
 -  Multiple tools provided to design layouts.
