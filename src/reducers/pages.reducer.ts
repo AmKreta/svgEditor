@@ -45,7 +45,10 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
         case PAGES_ACTION_TYPES.ADD_SHAPE: {
             const currentPage = state.pages[state.activePageIndex];
             if (currentPage) {
-                currentPage.shapes = { ...currentPage.shapes, [action.payload.id]: action.payload };
+                currentPage.shapes = {
+                    ...currentPage.shapes,
+                    [action.payload.id]: { ...action.payload, pageId: currentPage.id }
+                };
                 currentPage.activeShapes = [action.payload.id];
                 currentPage.renderTree = [...currentPage.renderTree, { id: action.payload.id }];
                 return { ...state, pages: [...state.pages] }
@@ -138,16 +141,18 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             const currentPage = state.pages[state.activePageIndex];
 
             // deep cloning a group element
-            const deepCloneGroup = function (shape: GROUP_SHAPE) {
+            const deepCloneGroup = function (shape: GROUP_SHAPE, pageIndex: number) {
                 for (let i = 0; i < shape.children.length; i++) {
                     const childShapeId = shape.children[i];
-                    const newChildShape = cloneDeep(currentPage.shapes[childShapeId]);
+                    const newChildShape = cloneDeep(state.pages[pageIndex].shapes[childShapeId]);
                     newChildShape.id = generateId();
                     shape.children[i] = newChildShape.id;
                     currentPage.shapes[newChildShape.id] = newChildShape;
                     if (newChildShape.type === SHAPE_TYPES.GROUP) {
-                        deepCloneGroup(newChildShape as GROUP_SHAPE);
+                        const pageIndex = state.pages.findIndex(page => page.id === newChildShape.pageId)
+                        deepCloneGroup(newChildShape as GROUP_SHAPE, pageIndex);
                     }
+                    newChildShape.pageId = currentPage.id
                 }
                 shape.children = [...shape.children];
             }
@@ -159,8 +164,10 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
                 newShape.style.translate = [item.style.translate[0] + dx, item.style.translate[1] + dy];
                 shapesToPaste[newShape.id] = newShape;
                 if (newShape.type === SHAPE_TYPES.GROUP) {
-                    deepCloneGroup(newShape as GROUP_SHAPE)
+                    const pageIndex = state.pages.findIndex(page => page.id === newShape.pageId);
+                    deepCloneGroup(newShape as GROUP_SHAPE, pageIndex)
                 }
+                newShape.pageId = currentPage.id;
             });
 
             // concatining newly shapes with existing shapes
@@ -198,6 +205,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             })
             // creating new group shape
             const newGroup: GROUP_SHAPE = getGroupDefaultProps(groupChildren);
+            newGroup.pageId = currentPage.id;
             // assigning new shapes array to currentpage.shapes
             currentPage.shapes = { ...currentPage.shapes, [newGroup.id]: newGroup };
             // // setting newly created group as active shape

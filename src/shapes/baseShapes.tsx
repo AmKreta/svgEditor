@@ -21,6 +21,7 @@ export interface BASE_SHAPE {
     y_unit: MEASUREMENT;
     style: STYLE;
     render: boolean;
+    pageId?:string;
 };
 
 export interface BASE_SHAPE_PROPS {
