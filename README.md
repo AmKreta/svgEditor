@@ -1,6 +1,6 @@
 # **React Svg Editor**
 
-- For any feature request Ping me on linkedIn 👇
+For any feature request Ping me on linkedIn 👇
 
 [Follow me on linkedin for more interesting projects](https://www.linkedin.com/in/kumar-amresh-1017a7161/)
 
