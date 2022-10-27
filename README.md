@@ -1,4 +1,6 @@
-# **React Svg Editor** ^( no svg library used, built from scratch)^
+# **React Svg Editor**
+
+###### no svg library used, built from scratch
 
 For any feature request Ping me on linkedIn 👇
 
