@@ -6,7 +6,7 @@ import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
 import { MIN_PATH_POINT_DISTANCE, multiPointShpes, POINTER_BUTTON, SHAPE_TYPES } from '../../utils/constant';
 import { useDispatch } from 'react-redux';
-import { addShape, formatActiveShape, setActiveShape, toggleContextMenu } from '../../actions/pages/pages.actions';
+import { addShape, formatActiveShape, setActiveShape, setActiveTool, toggleContextMenu } from '../../actions/pages/pages.actions';
 import DrawShapes from './drawShape';
 import ShapeSelector, { SHAPE_SELECTOR_PROPS, initialShapeSelectorProps } from './shapeSelector';
 import { areColliding } from '../../utils/utils';
@@ -63,6 +63,9 @@ const SvgEditor: React.FC<{}> = function () {
     const dispatch = useDispatch();
     useTransformMode();
 
+    /** Once a shape is finished, go back to the select tool so it can be moved/resized straight away. */
+    const finishDrawing = () => dispatch(setActiveTool(SHAPE_TYPES.PAN));
+
     const flushPathPoint = useRAFThrottled(() => {
         const next = pendingPathPoint.current;
         if (!next) {
@@ -115,6 +118,7 @@ const SvgEditor: React.FC<{}> = function () {
         if (e.button === POINTER_BUTTON.SECONDARY) {
             if ((activeTool === SHAPE_TYPES.POLYGON || activeTool === SHAPE_TYPES.POLYLINE) && pointsArray.length >= 2) {
                 dispatch(addShape({ shape: activeTool, x, y, pointsArray }));
+                finishDrawing();
                 pointsArrayRef.current = [];
                 setPointsArray([]);
             }
@@ -140,6 +144,7 @@ const SvgEditor: React.FC<{}> = function () {
         if (multiPointShpes.includes(activeTool)) {
             if (activeTool === SHAPE_TYPES.LINE && pointsArray.length === 1) {
                 dispatch(addShape({ shape: activeTool, x, y, pointsArray: [...pointsArray, [x, y]] }));
+                finishDrawing();
                 pointsArrayRef.current = [];
                 setPointsArray([]);
             }
@@ -174,6 +179,7 @@ const SvgEditor: React.FC<{}> = function () {
 
         else if (activeTool !== SHAPE_TYPES.PAN) {
             dispatch(addShape({ shape: activeTool, x, y, pointsArray: [[x, y]] }));
+            finishDrawing();
         }
 
         else {
@@ -228,6 +234,7 @@ const SvgEditor: React.FC<{}> = function () {
             const drawnPoints = pointsArrayRef.current;
             if (drawnPoints.length) {
                 dispatch(addShape({ shape: activeTool, pointsArray: drawnPoints, x: 0, y: 0 }));
+                finishDrawing();
             }
             pointsArrayRef.current = [];
             setPointsArray([]);
@@ -245,6 +252,7 @@ const SvgEditor: React.FC<{}> = function () {
                 // plain click: add the shape at its default size
                 dispatch(addShape({ shape: gesture.tool, x: gesture.start.x, y: gesture.start.y }));
             }
+            gesture && finishDrawing();
             return;
         }
 
@@ -254,6 +262,7 @@ const SvgEditor: React.FC<{}> = function () {
             const { x, y } = eventToSvgPoint(svgEditorRef.current, e);
             if (start && pointDistance(start, [x, y]) >= DRAG_THRESHOLD) {
                 dispatch(addShape({ shape: SHAPE_TYPES.LINE, x, y, pointsArray: [start, [x, y]] }));
+                finishDrawing();
                 pointsArrayRef.current = [];
                 setPointsArray([]);
             }
