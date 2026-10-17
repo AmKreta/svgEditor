@@ -40,10 +40,10 @@ const StyledSvg = styled.svg<{ isActive: boolean, isProjectPreview: boolean }>`
             background-color: white;
             margin:${theme.spacing(.5)}px 0;
             transition:.3s ease-in-out;
-            outline:${props.isProjectPreview ? '1px solid #333' : props.isActive ? `2px solid ${UI_COLORS.accent}` : `1px solid ${UI_COLORS.border}`};
+            outline:${props.isProjectPreview ? 'none' : props.isActive ? `2px solid ${UI_COLORS.accent}` : `1px solid ${UI_COLORS.border}`};
             &:hover{
                 cursor: pointer;
-                outline:${props.isProjectPreview ? '3px solid #000' : props.isActive ? `2px solid ${UI_COLORS.accent}` : `2px solid ${UI_COLORS.inputBorder}`};
+                outline:${props.isProjectPreview ? 'none' : props.isActive ? `2px solid ${UI_COLORS.accent}` : `2px solid ${UI_COLORS.inputBorder}`};
             }
         `;
     }}
