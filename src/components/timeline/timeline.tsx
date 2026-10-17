@@ -21,7 +21,7 @@ import { CLIP_REF, CUTSCENE, MAX_ZOOM_SECONDS, MIN_ZOOM_SECONDS, TIMELINE_TRACK 
 import { useEventListener } from '../../hooks/useEventListener';
 import generateId from '../../utils/idGenerator';
 import { formatTime } from './format';
-import { Body, ClipMenu, LABEL_WIDTH, ROW_COLORS, RULER_HEIGHT, TimelineContainer, Toolbar } from './timeline.styles';
+import { Body, CLIP_GAP, ClipMenu, LABEL_WIDTH, ROW_COLORS, RULER_HEIGHT, TimelineContainer, Toolbar } from './timeline.styles';
 
 const DEFAULT_VISIBLE_SECONDS = 10;
 const SNAP_PX = 6;
@@ -715,10 +715,11 @@ const Timeline: React.FC = function () {
                                                             return (
                                                                 <div
                                                                     key={cutscene.id}
-                                                                    className={`clip${selected ? ' selected' : ''}${draft?.[cutscene.id] ? ' dragging' : ''}${count ? '' : ' empty'}`}
+                                                                    className={`clip${selected ? ' selected' : ''}${draft?.[cutscene.id] ? ' dragging' : ''}${count ? '' : ' noChanges'}`}
                                                                     style={{
-                                                                        left: cutscene.start * pps,
-                                                                        width: Math.max(6, (cutscene.end - cutscene.start) * pps),
+                                                                        // inset so back-to-back cutscenes keep a visible gap
+                                                                        left: cutscene.start * pps + CLIP_GAP,
+                                                                        width: Math.max(6, (cutscene.end - cutscene.start) * pps - CLIP_GAP * 2),
                                                                         backgroundColor: color,
                                                                     }}
                                                                     title={`${cutscene.name}\n${formatTime(cutscene.start)} → ${formatTime(cutscene.end)}\nClick to edit · double-click to rename`}

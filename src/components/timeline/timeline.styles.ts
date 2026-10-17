@@ -3,7 +3,9 @@ import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
 
 export const LABEL_WIDTH = 180;
 export const RULER_HEIGHT = 28;
-export const ROW_HEIGHT = 36;
+export const ROW_HEIGHT = 44;
+/** Space kept around each cutscene so neighbours and rows read as separate blocks. */
+export const CLIP_GAP = 2;
 
 /** One hue per row so neighbouring rows are easy to tell apart. */
 export const ROW_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ec4899', '#06b6d4'];
@@ -291,8 +293,8 @@ export const Body = styled.div`
 
     & .clip{
         position: absolute;
-        top: 5px;
-        bottom: 5px;
+        top: 7px;
+        bottom: 7px;
         display: flex;
         align-items: center;
         min-width: 6px;
@@ -314,7 +316,7 @@ export const Body = styled.div`
                 font-weight: 400;
             }
         }
-        &.empty{
+        &.noChanges{
             background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, .18) 0 6px, transparent 6px 12px);
         }
         &>.handle{
@@ -374,24 +376,6 @@ export const Body = styled.div`
         }
     }
 
-    & .empty{
-        position: sticky;
-        left: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        padding: 24px 16px;
-        color: ${UI_COLORS.textMuted};
-        text-align: center;
-        & b{
-            color: ${UI_COLORS.text};
-        }
-    }
-
-    &.recording .row, &.recording .ruler>.scale{
-        pointer-events: none;
-    }
 `;
 
 export const ClipMenu = styled.div`
