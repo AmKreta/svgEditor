@@ -16,6 +16,8 @@ import ImageEditor from '../../shapeEditor/imageEditor';
 import GroupEditor from '../../shapeEditor/groupEditor';
 import PathEditor from '../../shapeEditor/pathEditor';
 import SvgContainerEditor from '../../shapeEditor/svgEditor';
+import CutsceneProperties from '../timeline/cutsceneProperties';
+import { getTimelineUi } from '../../selector/selector';
 import { EditorProps } from '../../shapeEditor/baseShapeEditor';
 
 const SHAPE_EDITORS: Partial<Record<SHAPE_TYPES, React.ComponentType<EditorProps>>> = {
@@ -36,17 +38,24 @@ const ElementFormatter: React.FC<{}> = function () {
     // edits dimensions, add filters and edit styles, add masks, add pattern fills,
     const activeShapesInfo = useSelector<State, string[]>(getActiveShapesInfo);
     const shapeWithId = useSelector<State, (id: string) => AVAILABLE_SHAPES>(getShapeWithId);
+    const isEditingCutscene = Boolean(useSelector(getTimelineUi).editing);
 
     return (
         <StyledDiv>
             <div className='panelHeader'>
-                <span className='title'>{activeShapesInfo?.length ? 'Properties' : 'Canvas'}</span>
+                <span className='title'>{activeShapesInfo?.length ? 'Properties' : isEditingCutscene ? 'Cutscene' : 'Canvas'}</span>
                 {
                     activeShapesInfo?.length > 1
                         ? <span className='badge'>{activeShapesInfo.length} selected</span>
                         : null
                 }
             </div>
+            <CutsceneProperties />
+            {
+                isEditingCutscene && !activeShapesInfo?.length
+                    ? <p className='cutsceneHint'>Select a shape on the canvas to animate it in this cutscene.</p>
+                    : null
+            }
             {
                 activeShapesInfo?.length
                     ? (
@@ -69,7 +78,7 @@ const ElementFormatter: React.FC<{}> = function () {
                             }
                         </div>
                     )
-                    :<SvgContainerEditor />
+                    : isEditingCutscene ? null : <SvgContainerEditor />
             }
         </StyledDiv>
     );
@@ -103,6 +112,14 @@ const StyledDiv = styled.div`
             padding: 2px 8px;
             border-radius: 999px;
         }
+    }
+
+    &>.cutsceneHint{
+        margin: 8px 16px;
+        color: #6b7280;
+        font-size: 12px;
+        line-height: 1.4;
+        text-align: left;
     }
 
     &>.formatterList{

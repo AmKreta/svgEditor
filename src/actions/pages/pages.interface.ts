@@ -3,7 +3,7 @@ import { PAGES_ACTION_TYPES } from "./pages.actionTypes";
 import { SHAPE_TYPES } from "../../utils/constant";
 import { STYLE } from "../../shapes/style";
 import { AVAILABLE_FILTERS, FILTER_TYPES } from "../../filters/availableFilters";
-import { TIMELINE } from "../../timeline/timeline.types";
+import { TIMELINE_TRACK } from "../../timeline/timeline.types";
 
 export interface CONTEXT_MENU_INTERFACE { show: boolean; x: number; y: number; clipboard: { x: number, y: number } };
 export type ACTIVE_SHAPE_INFO = Array<{ id: string }>;
@@ -18,8 +18,8 @@ export type SHAPE_COLLECTION = {
         [key: string]: AVAILABLE_FILTERS
     };
     svgStyle: SVG_STYLE;
-    /** animation cutscenes per shape; missing on documents saved before timelines existed */
-    timeline?: TIMELINE;
+    /** animation timelines; missing on documents saved before timelines existed */
+    timelines?: TIMELINE_TRACK[];
 };
 
 export interface GRADIENT {
@@ -192,8 +192,8 @@ export type CREATE_NEW_FILE_ACTION = ACTION<PAGES_ACTION_TYPES.CREATE_NEW_FILE, 
 export type EDIT_SVG_STYLE_PAYLOAD = Partial<SVG_STYLE>;
 export type EDIT_SVG_STYLE_ACTION = ACTION<PAGES_ACTION_TYPES.EDIT_SVG_STYLE, EDIT_SVG_STYLE_PAYLOAD>;
 
-export type SET_PAGE_TIMELINE_PAYLOAD = TIMELINE;
-export type SET_PAGE_TIMELINE_ACTION = ACTION<PAGES_ACTION_TYPES.SET_PAGE_TIMELINE, SET_PAGE_TIMELINE_PAYLOAD>;
+export type SET_PAGE_TIMELINES_PAYLOAD = TIMELINE_TRACK[];
+export type SET_PAGE_TIMELINES_ACTION = ACTION<PAGES_ACTION_TYPES.SET_PAGE_TIMELINES, SET_PAGE_TIMELINES_PAYLOAD>;
 
 
 export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
@@ -227,6 +227,6 @@ export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | SAVE_FILE_AS_ACTION
     | CREATE_NEW_FILE_ACTION
     | EDIT_SVG_STYLE_ACTION
-    | SET_PAGE_TIMELINE_ACTION;
+    | SET_PAGE_TIMELINES_ACTION;
 
 

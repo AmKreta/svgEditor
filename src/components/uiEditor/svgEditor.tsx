@@ -47,9 +47,9 @@ const SvgEditor: React.FC<{}> = function () {
     const hoveredShapeId = useSelector<State, string | null>(getHoveredShapeId);
     const helpers = useSelector<State, HELPERS>(getHelpers, isEqual);
     const svgStyle = useSelector(getSvgStyle);
-    const { preview, recording } = useSelector(getTimelineUi);
+    const { preview, editing } = useSelector(getTimelineUi);
     // while the timeline previews a moment other than the start, the canvas is view-only
-    const isPreviewing = Boolean(preview) && !recording;
+    const isPreviewing = Boolean(preview) && !editing;
 
     const [shapeSelectorProps, setShapeSelectorProps] = useState<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
     const [pointsArray, setPointsArray] = useState<Array<[number, number]>>([]);
@@ -301,7 +301,7 @@ const SvgEditor: React.FC<{}> = function () {
         <SvgContainer
             onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}
             style={{ overflow: 'scroll' }}
-            className={recording ? 'recording' : isPreviewing ? 'previewing' : ''}
+            className={isPreviewing ? 'previewing' : ''}
         >
             {
                 helpers.gridHelpers

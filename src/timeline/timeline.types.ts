@@ -2,35 +2,42 @@
 export type FLAT_STATE = Record<string, number | string>;
 
 /**
- * One animation segment on a shape's row. The shape animates from its state at `start`
- * (its own properties plus everything earlier cutscenes on the row changed) to `state`.
- * Only properties that change are stored.
+ * One animation segment. Every shape it mentions animates from its state at `start`
+ * (its own properties plus everything earlier cutscenes changed) to the values in
+ * `state[shapeId]`. Only properties that change are stored.
  */
 export interface CUTSCENE {
     id: string;
+    name: string;
     /** seconds */
     start: number;
     /** seconds */
     end: number;
     /** GSAP ease name */
     ease: string;
-    state: FLAT_STATE;
+    state: { [shapeId: string]: FLAT_STATE };
 }
 
-export interface TIMELINE_ROW {
+/** A named row of cutscenes. Cutscenes in one timeline never overlap. */
+export interface TIMELINE_TRACK {
+    id: string;
+    name: string;
     cutscenes: CUTSCENE[];
 }
 
-/** Keyed by shape id; each id renders as its own row. */
-export type TIMELINE = { [shapeId: string]: TIMELINE_ROW };
+export interface CLIP_REF {
+    timelineId: string;
+    id: string;
+}
 
-export interface RECORDING {
-    /** playhead time the snapshot is taken at */
-    time: number;
-    /** page shapes as they were before recording started, restored afterwards */
-    backup: { [shapeId: string]: any };
-    /** flattened state of every shape at `time`, used to work out what changed */
-    stateAtTime: { [shapeId: string]: FLAT_STATE };
+/** Set while a cutscene is selected: shape edits go into it instead of the shapes. */
+export interface EDITING {
+    timelineId: string;
+    cutsceneId: string;
+    /** animatable properties of every shape before editing started, restored afterwards */
+    backup: { [shapeId: string]: FLAT_STATE };
+    /** each shape's state when the cutscene starts; edits are stored relative to this */
+    from: { [shapeId: string]: FLAT_STATE };
 }
 
 export const MIN_ZOOM_SECONDS = 1;

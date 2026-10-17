@@ -1,27 +1,27 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { isEqual } from 'lodash';
 import {
-    BsCheckLg, BsChevronDown, BsChevronUp, BsClipboard, BsFiles, BsPauseFill, BsPencil,
-    BsPlayFill, BsRecordCircle, BsScissors, BsSkipStartFill, BsTrash, BsX, BsZoomIn, BsZoomOut, BsArrowsExpand
+    BsChevronDown, BsChevronUp, BsClipboard, BsFiles, BsPauseFill, BsPencil, BsPlayFill, BsPlusLg,
+    BsScissors, BsSkipStartFill, BsTrash, BsZoomIn, BsZoomOut, BsArrowsExpand, BsLayers
 } from 'react-icons/bs';
 import { IconType } from 'react-icons';
-import { State } from '../../store/store';
+import store, { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
-import { getActiveShapesInfo, getActivePageIndex, getPageTimeline, getShapesOfCurrentPage, getTimelineUi } from '../../selector/selector';
-import { setActiveShape, setPageTimeline } from '../../actions/pages/pages.actions';
-import { setPlayback } from '../../actions/timeline/timeline.actions';
+import { getActivePageIndex, getPageTimelines, getShapesOfCurrentPage, getTimelineUi } from '../../selector/selector';
+import { setPageTimelines } from '../../actions/pages/pages.actions';
+import { setPlayback, setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { timelinePlayer } from '../../timeline/player';
-import { cancelRecording, commitRecording, showTimeOnCanvas, startRecording } from '../../timeline/recording';
-import { describeState } from '../../timeline/animatable';
+import { enterCutscene, exitCutscene, showTimeOnCanvas, watchShapeEdits } from '../../timeline/editing';
 import {
-    applyDraft, CLIPBOARD_ITEM, CLIP_REF, edgeLimits, findClips, moveLimits, pasteClips,
-    removeClips, roundTime, snapEdges, TIME_DRAFT, updateClip
+    addCutscene, applyDraft, CLIPBOARD_ITEM, cloneCutscene, edgeLimits, findClips, moveLimits, nextTimelineName,
+    pasteClips, removeClips, roundTime, snapEdges, TIME_DRAFT, updateClip
 } from '../../timeline/clipOps';
-import { CUTSCENE, EASES, MAX_ZOOM_SECONDS, MIN_CUTSCENE_DURATION, MIN_ZOOM_SECONDS, TIMELINE } from '../../timeline/timeline.types';
+import { findCutscene } from '../../timeline/model';
+import { CLIP_REF, CUTSCENE, MAX_ZOOM_SECONDS, MIN_ZOOM_SECONDS, TIMELINE_TRACK } from '../../timeline/timeline.types';
 import { useEventListener } from '../../hooks/useEventListener';
+import generateId from '../../utils/idGenerator';
 import { formatTime } from './format';
-import { Body, ClipMenu, Inspector, LABEL_WIDTH, ROW_COLORS, RULER_HEIGHT, TimelineContainer, Toolbar } from './timeline.styles';
+import { Body, ClipMenu, LABEL_WIDTH, ROW_COLORS, RULER_HEIGHT, TimelineContainer, Toolbar } from './timeline.styles';
 
 const DEFAULT_VISIBLE_SECONDS = 10;
 const SNAP_PX = 6;
@@ -33,6 +33,9 @@ const MOD = isMac ? '⌘' : 'Ctrl+';
 
 // survives the timeline remounting (e.g. leaving and re-entering the editor)
 let clipboard: CLIPBOARD_ITEM[] = [];
+
+/** Timelines straight from the store, for handlers that run after other updates in the same tick. */
+const latestTimelines = () => getPageTimelines(store.getState());
 
 interface DRAG {
     mode: 'move' | 'start' | 'end';
@@ -48,7 +51,7 @@ interface DRAG {
 interface MENU {
     x: number;
     y: number;
-    shapeId: string;
+    timelineId: string;
     onClip: boolean;
 }
 
@@ -60,44 +63,69 @@ const tickLabel = (t: number, step: number) => {
     return `${step < 1 ? t.toFixed(step < 0.1 ? 2 : 1).replace(/\.?0+$/, '') : t}s`;
 };
 
+/** Text field that edits a name in place; Enter or blur saves, Escape cancels. */
+const InlineRename: React.FC<{ value: string, onDone: (value: string | null) => void }> = function ({ value, onDone }) {
+    const [text, setText] = useState(value);
+    const done = useRef(false);
+    const finish = (result: string | null) => {
+        if (!done.current) {
+            done.current = true;
+            onDone(result);
+        }
+    };
+    return (
+        <input
+            className='rename'
+            value={text}
+            autoFocus
+            onFocus={e => e.target.select()}
+            onChange={e => setText(e.target.value)}
+            onBlur={() => finish(text.trim() || null)}
+            onKeyDown={e => {
+                e.stopPropagation();
+                if (e.key === 'Enter') finish(text.trim() || null);
+                if (e.key === 'Escape') finish(null);
+            }}
+            onPointerDown={e => e.stopPropagation()}
+            onDoubleClick={e => e.stopPropagation()}
+        />
+    );
+}
+
 const Timeline: React.FC = function () {
     const dispatch = useDispatch();
-    const timeline = useSelector<State, TIMELINE>(getPageTimeline);
+    const timelines = useSelector<State, TIMELINE_TRACK[]>(getPageTimelines);
     const shapes = useSelector<State, { [id: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage);
-    const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
     const activePageIndex = useSelector<State, number>(getActivePageIndex);
-    const { time, playing, recording } = useSelector(getTimelineUi);
+    const { time, playing, selection, editing } = useSelector(getTimelineUi);
 
     const bodyRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const dragRef = useRef<DRAG | null>(null);
+    const draftRef = useRef<TIME_DRAFT | null>(null);
     const [viewportWidth, setViewportWidth] = useState(800);
     const [pxPerSecond, setPxPerSecond] = useState<number | null>(null);
     const [collapsed, setCollapsed] = useState(false);
-    const [selection, setSelection] = useState<CLIP_REF[]>([]);
     const [draft, setDraft] = useState<TIME_DRAFT | null>(null);
     const [menu, setMenu] = useState<MENU | null>(null);
+    const [renaming, setRenaming] = useState<string | null>(null);
     const [hasClipboard, setHasClipboard] = useState(clipboard.length > 0);
-    const dragRef = useRef<DRAG | null>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const draftRef = useRef<TIME_DRAFT | null>(null);
 
     // ---------- derived data
 
-    timelinePlayer.sync(timeline, shapes);
-    const duration = useMemo(() => timelinePlayer.duration, [timeline, shapes]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const shownTimeline = useMemo(() => draft ? applyDraft(timeline, draft) : timeline, [timeline, draft]);
-
-    const rows = useMemo(() => Object.keys(shapes).filter(id =>
-        shapes[id].render && (timeline[id]?.cutscenes.length || activeShapes.includes(id))
-    ), [shapes, timeline, activeShapes]);
+    timelinePlayer.sync(timelines, shapes);
+    const duration = useMemo(() => timelinePlayer.duration, [timelines, shapes]); // eslint-disable-line react-hooks/exhaustive-deps
+    const shownTimelines = useMemo(() => draft ? applyDraft(timelines, draft) : timelines, [timelines, draft]);
 
     const validSelection = useMemo(
-        () => findClips(timeline, selection).map(({ shapeId, cutscene }) => ({ shapeId, id: cutscene.id })),
-        [timeline, selection]
+        () => findClips(timelines, selection).map(({ timelineId, cutscene }) => ({ timelineId, id: cutscene.id })),
+        [timelines, selection]
     );
     const selectedIds = useMemo(() => new Set(validSelection.map(ref => ref.id)), [validSelection]);
-    const singleSelected = validSelection.length === 1 ? findClips(timeline, validSelection)[0] : null;
+    const setSelection = useCallback((refs: CLIP_REF[]) => dispatch(setTimelineSelection(refs)), [dispatch]);
+    // where "Add cutscene" and paste go
+    const focusTimelineId = validSelection[0]?.timelineId || timelines[0].id;
 
     const minPps = viewportWidth / MAX_ZOOM_SECONDS;
     const maxPps = viewportWidth / MIN_ZOOM_SECONDS;
@@ -122,11 +150,40 @@ const Timeline: React.FC = function () {
         return () => observer.disconnect();
     }, [collapsed]);
 
+    // ---------- editing a cutscene follows the selection
+
+    const editKey = validSelection.length === 1 ? `${validSelection[0].timelineId}/${validSelection[0].id}` : null;
+    useEffect(() => {
+        if (validSelection.length === 1) {
+            enterCutscene(validSelection[0]);
+        } else {
+            exitCutscene();
+        }
+    }, [editKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // shape edits go into the selected cutscene (or refresh a paused preview)
+    useEffect(() => watchShapeEdits(), []);
+
+    // keep a paused preview in step with timeline changes
+    useEffect(() => {
+        if (!editing && !playing && time > 0) {
+            showTimeOnCanvas(time);
+        }
+    }, [timelines]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // keep the playhead on the end of the cutscene being edited when it's moved or resized
+    const editedEnd = editing ? findCutscene(timelines, editing.timelineId, editing.cutsceneId)?.end : undefined;
+    useEffect(() => {
+        if (editedEnd !== undefined && editedEnd !== time) {
+            dispatch(setPlayback({ time: editedEnd }));
+        }
+    }, [editedEnd]); // eslint-disable-line react-hooks/exhaustive-deps
+
     // ---------- playback
 
     const pause = useCallback(() => {
-        const t = timelinePlayer.pause();
-        dispatch(setPlayback({ playing: false, time: t }));
+        timelinePlayer.pause();
+        dispatch(setPlayback({ playing: false }));
     }, [dispatch]);
 
     const seek = useCallback((t: number) => {
@@ -138,37 +195,36 @@ const Timeline: React.FC = function () {
     }, [dispatch, playing]);
 
     const play = useCallback(() => {
-        if (timelinePlayer.isEmpty || recording) {
+        if (duration <= 0) {
             return;
         }
+        // leaving cutscene editing puts the shapes back before playing
+        setSelection([]);
+        exitCutscene(false);
         const from = time >= duration - 0.01 ? 0 : time;
         dispatch(setPlayback({ playing: true }));
+        timelinePlayer.sync(latestTimelines(), getShapesOfCurrentPage(store.getState()));
         timelinePlayer.play(
             from,
             (t, preview) => dispatch(setPlayback({ time: t, preview })),
             () => dispatch(setPlayback({ playing: false }))
         );
-    }, [dispatch, duration, recording, time]);
+    }, [dispatch, duration, setSelection, time]);
 
     const togglePlay = () => playing ? pause() : play();
 
-    // re-render the preview when shapes or animations change while paused mid-timeline
-    useEffect(() => {
-        if (!playing && !recording && time > 0) {
-            showTimeOnCanvas(time);
-        }
-    }, [timeline, shapes]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // a different page has a different timeline
+    // a different page has different timelines
     useEffect(() => {
         timelinePlayer.pause();
+        exitCutscene(false);
         setSelection([]);
         dispatch(setPlayback({ playing: false, time: 0, preview: null }));
-    }, [activePageIndex, dispatch]);
+    }, [activePageIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => () => {
         timelinePlayer.pause();
-        cancelRecording();
+        exitCutscene(false);
+        dispatch(setTimelineSelection([]));
         dispatch(setPlayback({ playing: false, time: 0, preview: null }));
     }, [dispatch]);
 
@@ -224,72 +280,106 @@ const Timeline: React.FC = function () {
 
     // ---------- timeline edits
 
-    const commit = useCallback((next: TIMELINE) => dispatch(setPageTimeline(next)), [dispatch]);
+    const commit = useCallback((next: TIMELINE_TRACK[]) => dispatch(setPageTimelines(next)), [dispatch]);
+
+    const addCutsceneTo = useCallback((timelineId: string) => {
+        const result = addCutscene(latestTimelines(), timelineId);
+        commit(result.tracks);
+        setSelection([result.ref]);
+    }, [commit, setSelection]);
+
+    const addTimeline = () => {
+        const track: TIMELINE_TRACK = { id: generateId(), name: nextTimelineName(timelines), cutscenes: [] };
+        commit([...timelines, track]);
+        setRenaming(track.id);
+    };
+
+    const deleteTimeline = (timelineId: string) => {
+        const track = timelines.find(t => t.id === timelineId);
+        if (!track || timelines.length <= 1) {
+            return;
+        }
+        if (track.cutscenes.length && !window.confirm(`Delete “${track.name}” and its ${track.cutscenes.length} cutscene(s)?`)) {
+            return;
+        }
+        setSelection([]);
+        exitCutscene(false);
+        commit(latestTimelines().filter(t => t.id !== timelineId));
+    };
+
+    const rename = (id: string, name: string | null) => {
+        setRenaming(null);
+        containerRef.current?.focus();
+        if (!name) {
+            return;
+        }
+        const current = latestTimelines();
+        if (current.some(t => t.id === id)) {
+            commit(current.map(t => t.id === id ? { ...t, name } : t));
+            return;
+        }
+        const owner = current.find(t => t.cutscenes.some(c => c.id === id));
+        owner && commit(updateClip(current, { timelineId: owner.id, id }, { name }));
+    };
 
     const copySelection = useCallback(() => {
-        const items = findClips(timeline, validSelection);
+        const items = findClips(timelines, validSelection);
         if (items.length) {
-            clipboard = items.map(item => ({ shapeId: item.shapeId, cutscene: { ...item.cutscene, state: { ...item.cutscene.state } } }));
+            clipboard = items.map(item => ({ timelineId: item.timelineId, cutscene: cloneCutscene(item.cutscene) }));
             setHasClipboard(true);
         }
-    }, [timeline, validSelection]);
+    }, [timelines, validSelection]);
 
     const deleteSelection = useCallback(() => {
         if (validSelection.length) {
-            commit(removeClips(timeline, validSelection));
             setSelection([]);
+            exitCutscene(false);
+            commit(removeClips(latestTimelines(), validSelection));
         }
-    }, [commit, timeline, validSelection]);
+    }, [commit, setSelection, validSelection]);
 
-    const pasteAt = useCallback((at: number, targetShapeId?: string) => {
+    const pasteAt = useCallback((at: number, targetTimelineId?: string) => {
         if (!clipboard.length) {
             return;
         }
-        // one selected shape (or the row that was right-clicked) receives everything;
-        // otherwise each clip goes back to the shape it was copied from
-        const target = targetShapeId
-            || (activeShapes.length === 1 && shapes[activeShapes[0]]?.render ? activeShapes[0] : null);
-        const result = pasteClips(timeline, clipboard, at, item =>
-            target || (shapes[item.shapeId]?.render ? item.shapeId : null)
+        const current = latestTimelines();
+        // the right-clicked timeline or the selected cutscene's timeline receives everything;
+        // otherwise each cutscene goes back to the timeline it was copied from
+        const target = targetTimelineId || (validSelection.length ? focusTimelineId : null);
+        const result = pasteClips(current, clipboard, at, item =>
+            target || (current.some(t => t.id === item.timelineId) ? item.timelineId : current[0].id)
         );
         if (result.pasted.length) {
-            commit(result.timeline);
+            commit(result.tracks);
             setSelection(result.pasted);
         }
-    }, [activeShapes, commit, shapes, timeline]);
+    }, [commit, focusTimelineId, setSelection, validSelection.length]);
 
     const duplicateSelection = useCallback(() => {
-        const items = findClips(timeline, validSelection);
+        const current = latestTimelines();
+        const items = findClips(current, validSelection);
         if (!items.length) {
             return;
         }
         const after = Math.max(...items.map(item => item.cutscene.end));
-        const result = pasteClips(timeline, items, after, item => item.shapeId);
-        commit(result.timeline);
+        const result = pasteClips(current, items, after, item => item.timelineId);
+        commit(result.tracks);
         setSelection(result.pasted);
-    }, [commit, timeline, validSelection]);
+    }, [commit, setSelection, validSelection]);
 
     const nudgeSelection = useCallback((delta: number) => {
         if (!validSelection.length) {
             return;
         }
-        const [lo, hi] = moveLimits(timeline, validSelection);
+        const current = latestTimelines();
+        const [lo, hi] = moveLimits(current, validSelection);
         const d = Math.min(hi, Math.max(lo, delta));
         const moved: TIME_DRAFT = {};
-        findClips(timeline, validSelection).forEach(({ cutscene }) => {
+        findClips(current, validSelection).forEach(({ cutscene }) => {
             moved[cutscene.id] = { start: roundTime(cutscene.start + d), end: roundTime(cutscene.end + d) };
         });
-        commit(applyDraft(timeline, moved));
-    }, [commit, timeline, validSelection]);
-
-    const editClip = useCallback((cutscene: CUTSCENE) => {
-        seek(cutscene.end);
-        startRecording();
-    }, [seek]);
-
-    const updateSelected = (patch: Partial<CUTSCENE>) => {
-        singleSelected && commit(updateClip(timeline, { shapeId: singleSelected.shapeId, id: singleSelected.cutscene.id }, patch));
-    };
+        commit(applyDraft(current, moved));
+    }, [commit, validSelection]);
 
     // ---------- pointer interactions
 
@@ -299,15 +389,13 @@ const Timeline: React.FC = function () {
         return Math.max(0, (clientX - rect.left - LABEL_WIDTH + body.scrollLeft) / pps);
     };
 
-    const startScrub = (e: React.PointerEvent, shapeId?: string) => {
-        if (e.button !== 0 || recording) {
+    const startScrub = (e: React.PointerEvent) => {
+        if (e.button !== 0) {
             return;
         }
         containerRef.current?.focus();
         setSelection([]);
-        if (shapeId) {
-            dispatch(setActiveShape([shapeId]));
-        }
+        exitCutscene(false);
         seek(timeFromClientX(e.clientX));
         const onMove = (ev: PointerEvent) => seek(timeFromClientX(ev.clientX));
         const onUp = () => {
@@ -334,26 +422,23 @@ const Timeline: React.FC = function () {
         return best;
     };
 
-    const startClipDrag = (e: React.PointerEvent, shapeId: string, cutscene: CUTSCENE, mode: DRAG['mode']) => {
-        if (e.button !== 0 || recording) {
+    const startClipDrag = (e: React.PointerEvent, timelineId: string, cutscene: CUTSCENE, mode: DRAG['mode']) => {
+        if (e.button !== 0) {
             return;
         }
         e.stopPropagation();
         containerRef.current?.focus();
-        const ref = { shapeId, id: cutscene.id };
+        const ref = { timelineId, id: cutscene.id };
         const isSelected = selectedIds.has(cutscene.id);
-        let refs: CLIP_REF[];
         if (e.shiftKey || e.metaKey || e.ctrlKey) {
-            refs = isSelected ? validSelection.filter(r => r.id !== cutscene.id) : [...validSelection, ref];
-            setSelection(refs);
+            setSelection(isSelected ? validSelection.filter(r => r.id !== cutscene.id) : [...validSelection, ref]);
             return;
         }
-        refs = isSelected && mode === 'move' ? validSelection : [ref];
+        const refs = isSelected && mode === 'move' ? validSelection : [ref];
         setSelection(refs);
-        dispatch(setActiveShape([shapeId]));
 
         const original: DRAG['original'] = {};
-        findClips(timeline, refs).forEach(item => {
+        findClips(timelines, refs).forEach(item => {
             original[item.cutscene.id] = { start: item.cutscene.start, end: item.cutscene.end };
         });
         dragRef.current = {
@@ -362,8 +447,8 @@ const Timeline: React.FC = function () {
             primary: ref,
             pointerStartX: e.clientX,
             original,
-            limits: mode === 'move' ? moveLimits(timeline, refs) : edgeLimits(timeline, ref, mode),
-            edges: snapEdges(timeline, new Set(refs.map(r => r.id))),
+            limits: mode === 'move' ? moveLimits(timelines, refs) : edgeLimits(timelines, ref, mode),
+            edges: snapEdges(timelines, new Set(refs.map(r => r.id))),
             moved: false,
         };
 
@@ -383,7 +468,7 @@ const Timeline: React.FC = function () {
             const next: TIME_DRAFT = {};
 
             if (drag.mode === 'move') {
-                // snap whichever edge of the grabbed clip is closer to something
+                // snap whichever edge of the grabbed clip lands closer to something
                 const snappedStart = snap(primary.start + dt, drag.edges, noSnap) - primary.start;
                 const snappedEnd = snap(primary.end + dt, drag.edges, noSnap) - primary.end;
                 let delta = Math.abs(snappedStart - dt) <= Math.abs(snappedEnd - dt) ? snappedStart : snappedEnd;
@@ -411,7 +496,8 @@ const Timeline: React.FC = function () {
             dragRef.current = null;
             draftRef.current = null;
             if (drag?.moved && finalDraft) {
-                commit(applyDraft(timeline, finalDraft));
+                // edits to the cutscene may have been saved meanwhile, so apply to the latest timelines
+                commit(applyDraft(latestTimelines(), finalDraft));
             } else if (drag && !drag.moved && drag.refs.length > 1) {
                 // plain click inside a multi-selection selects just that clip
                 setSelection([drag.primary]);
@@ -422,22 +508,19 @@ const Timeline: React.FC = function () {
         window.addEventListener('pointerup', onUp);
     };
 
+    const openMenu = (e: React.MouseEvent, timelineId: string, cutscene?: CUTSCENE) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (cutscene && !selectedIds.has(cutscene.id)) {
+            setSelection([{ timelineId, id: cutscene.id }]);
+        }
+        setMenu({ x: e.clientX, y: e.clientY, timelineId, onClip: Boolean(cutscene) });
+    };
+
     // menu items unmount on click, so hand keyboard focus back to the timeline for Del/⌘C etc.
     const closeMenu = () => {
         setMenu(null);
         containerRef.current?.focus();
-    };
-
-    const openMenu = (e: React.MouseEvent, shapeId: string, cutscene?: CUTSCENE) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (recording) {
-            return;
-        }
-        if (cutscene && !selectedIds.has(cutscene.id)) {
-            setSelection([{ shapeId, id: cutscene.id }]);
-        }
-        setMenu({ x: e.clientX, y: e.clientY, shapeId, onClip: Boolean(cutscene) });
     };
 
     // the timeline sits at the bottom of the screen, so open the menu upwards / leftwards when needed
@@ -471,17 +554,12 @@ const Timeline: React.FC = function () {
         const key = e.key.toLowerCase();
         let handled = true;
 
-        if (recording) {
-            if (e.key === 'Escape') cancelRecording();
-            else if (e.key === 'Enter') commitRecording();
-            else handled = false;
-        }
-        else if (key === ' ') togglePlay();
+        if (key === ' ') togglePlay();
         else if (mod && key === 'c') copySelection();
         else if (mod && key === 'x') { copySelection(); deleteSelection(); }
         else if (mod && key === 'v') pasteAt(time);
         else if (mod && key === 'd') duplicateSelection();
-        else if (mod && key === 'a') setSelection(rows.flatMap(id => (timeline[id]?.cutscenes || []).map(c => ({ shapeId: id, id: c.id }))));
+        else if (mod && key === 'a') setSelection(timelines.flatMap(t => t.cutscenes.map(c => ({ timelineId: t.id, id: c.id }))));
         else if (e.key === 'Delete' || e.key === 'Backspace') deleteSelection();
         else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             const step = (e.shiftKey ? 1 : 0.1) * (e.key === 'ArrowLeft' ? -1 : 1);
@@ -489,8 +567,8 @@ const Timeline: React.FC = function () {
         }
         else if (e.key === 'Home') seek(0);
         else if (e.key === 'End') seek(duration);
-        else if (e.key === 'Enter' && singleSelected) editClip(singleSelected.cutscene);
-        else if (e.key === 'Escape') { setSelection([]); closeMenu(); }
+        else if ((e.key === 'Enter' || e.key === 'F2') && validSelection.length === 1) setRenaming(validSelection[0].id);
+        else if (e.key === 'Escape') { setSelection([]); setMenu(null); }
         else handled = false;
 
         if (handled) {
@@ -505,8 +583,7 @@ const Timeline: React.FC = function () {
         const list: Array<{ t: number, major: boolean }> = [];
         const count = Math.ceil(contentSeconds / minorStep);
         for (let i = 0; i <= count; i++) {
-            const t = roundTime(i * minorStep * 1000) / 1000;
-            list.push({ t, major: i % 5 === 0 });
+            list.push({ t: Math.round(i * minorStep * 1000) / 1000, major: i % 5 === 0 });
         }
         return list;
     }, [contentSeconds, minorStep]);
@@ -517,7 +594,8 @@ const Timeline: React.FC = function () {
         </button>
     );
 
-    const canEditClips = !recording && validSelection.length > 0;
+    const hasSelection = validSelection.length > 0;
+    const shapeCount = (cutscene: CUTSCENE) => Object.keys(cutscene.state).filter(id => shapes[id]).length;
 
     return (
         <TimelineContainer
@@ -528,32 +606,25 @@ const Timeline: React.FC = function () {
             aria-label='Animation timeline'
         >
             <Toolbar>
-                {toolButton(playing ? BsPauseFill : BsPlayFill, playing ? 'Pause (Space)' : 'Play (Space)', togglePlay, timelinePlayer.isEmpty || Boolean(recording), 'iconButton play')}
-                {toolButton(BsSkipStartFill, 'Back to start (Home)', () => seek(0), Boolean(recording))}
+                {toolButton(playing ? BsPauseFill : BsPlayFill, playing ? 'Pause (Space)' : 'Play (Space)', togglePlay, duration <= 0, 'iconButton play')}
+                {toolButton(BsSkipStartFill, 'Back to start (Home)', () => { setSelection([]); seek(0); })}
                 <span className='time'>
                     {formatTime(time)} <span className='total'>/ {formatTime(duration)}</span>
                 </span>
                 <div className='divider' />
-                {
-                    recording
-                        ? (
-                            <>
-                                <button className='textButton primary' onClick={() => commitRecording()}><BsCheckLg /> Done</button>
-                                <button className='textButton' onClick={cancelRecording}><BsX /> Cancel</button>
-                            </>
-                        )
-                        : (
-                            <button className='textButton record' onClick={startRecording} title='Change shapes on the canvas and save them as animation ending at the playhead'>
-                                <BsRecordCircle /> Record snapshot
-                            </button>
-                        )
-                }
+                <button
+                    className='textButton'
+                    onClick={() => addCutsceneTo(focusTimelineId)}
+                    title={`Add a 1 second cutscene at the end of ${timelines.find(t => t.id === focusTimelineId)?.name}`}
+                >
+                    <BsPlusLg /> Add cutscene
+                </button>
                 <div className='divider' />
-                {toolButton(BsFiles, `Copy (${MOD}C)`, copySelection, !canEditClips)}
-                {toolButton(BsScissors, `Cut (${MOD}X)`, () => { copySelection(); deleteSelection(); }, !canEditClips)}
-                {toolButton(BsClipboard, `Paste at playhead (${MOD}V)`, () => pasteAt(time), Boolean(recording) || !hasClipboard)}
-                {toolButton(BsPencil, 'Edit selected animation (Enter)', () => singleSelected && editClip(singleSelected.cutscene), Boolean(recording) || !singleSelected)}
-                {toolButton(BsTrash, 'Delete (Del)', deleteSelection, !canEditClips)}
+                {toolButton(BsFiles, `Copy (${MOD}C)`, copySelection, !hasSelection)}
+                {toolButton(BsScissors, `Cut (${MOD}X)`, () => { copySelection(); deleteSelection(); }, !hasSelection)}
+                {toolButton(BsClipboard, `Paste at playhead (${MOD}V)`, () => pasteAt(time), !hasClipboard)}
+                {toolButton(BsPencil, 'Rename (Enter)', () => validSelection.length === 1 && setRenaming(validSelection[0].id), validSelection.length !== 1)}
+                {toolButton(BsTrash, 'Delete (Del)', deleteSelection, !hasSelection)}
                 <div className='spacer' />
                 <div className='zoom'>
                     {toolButton(BsZoomOut, 'Zoom out', () => zoomTo(pps / 1.5))}
@@ -575,80 +646,13 @@ const Timeline: React.FC = function () {
             </Toolbar>
 
             {
-                !collapsed && singleSelected && !recording
-                    ? (
-                        <Inspector>
-                            <span className='title'>{shapes[singleSelected.shapeId]?.name}</span>
-                            <label>
-                                Start
-                                <input
-                                    type='number'
-                                    step={0.1}
-                                    min={0}
-                                    value={singleSelected.cutscene.start}
-                                    onChange={e => {
-                                        const [lo, hi] = moveLimits(timeline, [{ shapeId: singleSelected.shapeId, id: singleSelected.cutscene.id }]);
-                                        const c = singleSelected.cutscene;
-                                        const delta = Math.min(hi, Math.max(lo, (Number(e.target.value) || 0) - c.start));
-                                        updateSelected({ start: roundTime(c.start + delta), end: roundTime(c.end + delta) });
-                                    }}
-                                />
-                            </label>
-                            <label>
-                                Duration
-                                <input
-                                    type='number'
-                                    step={0.1}
-                                    min={MIN_CUTSCENE_DURATION}
-                                    value={roundTime(singleSelected.cutscene.end - singleSelected.cutscene.start)}
-                                    onChange={e => {
-                                        const c = singleSelected.cutscene;
-                                        const [lo, hi] = edgeLimits(timeline, { shapeId: singleSelected.shapeId, id: c.id }, 'end');
-                                        const end = Math.min(hi, Math.max(lo, c.start + (Number(e.target.value) || 0)));
-                                        updateSelected({ end: roundTime(end) });
-                                    }}
-                                />
-                            </label>
-                            <label>
-                                Easing
-                                <select value={singleSelected.cutscene.ease} onChange={e => updateSelected({ ease: e.target.value })}>
-                                    {EASES.map(ease => <option key={ease.value} value={ease.value}>{ease.label}</option>)}
-                                </select>
-                            </label>
-                            <div className='chips'>
-                                <span className='muted'>Animates</span>
-                                {
-                                    describeState(singleSelected.cutscene.state).map(group => (
-                                        <span className='chip' key={group.label}>
-                                            {group.label}
-                                            <button
-                                                title={`Stop animating ${group.label.toLowerCase()}`}
-                                                onClick={() => {
-                                                    const state = { ...singleSelected.cutscene.state };
-                                                    group.keys.forEach(key => delete state[key]);
-                                                    updateSelected({ state });
-                                                }}
-                                            >
-                                                <BsX />
-                                            </button>
-                                        </span>
-                                    ))
-                                }
-                                {Object.keys(singleSelected.cutscene.state).length === 0 ? <span className='muted'>nothing yet</span> : null}
-                            </div>
-                        </Inspector>
-                    )
-                    : null
-            }
-
-            {
                 !collapsed
                     ? (
-                        <Body ref={bodyRef} className={recording ? 'recording' : ''}>
+                        <Body ref={bodyRef}>
                             <div className='content' style={{ width: LABEL_WIDTH + contentWidth }}>
                                 <div className='ruler'>
-                                    <div className='corner'>Layers</div>
-                                    <div className='scale' style={{ width: contentWidth }} onPointerDown={e => startScrub(e)}>
+                                    <div className='corner'>Timelines</div>
+                                    <div className='scale' style={{ width: contentWidth }} onPointerDown={startScrub}>
                                         <svg width={contentWidth} height={RULER_HEIGHT}>
                                             {
                                                 ticks.map(({ t, major }) => (
@@ -667,54 +671,73 @@ const Timeline: React.FC = function () {
                                 </div>
 
                                 {
-                                    rows.length === 0
-                                        ? (
-                                            <div className='empty' style={{ width: viewportWidth + LABEL_WIDTH }}>
-                                                <b>No animations yet</b>
-                                                <span>Move the playhead, press <b>Record snapshot</b>, then move, resize or recolor shapes. Press Done to turn the changes into animation.</span>
-                                            </div>
-                                        )
-                                        : null
-                                }
-
-                                {
-                                    rows.map((shapeId, rowIndex) => {
+                                    shownTimelines.map((track, rowIndex) => {
                                         const color = ROW_COLORS[rowIndex % ROW_COLORS.length];
-                                        const cutscenes = shownTimeline[shapeId]?.cutscenes || [];
                                         return (
-                                            <div key={shapeId} className={`row${activeShapes.includes(shapeId) ? ' active' : ''}`}>
-                                                <div className='label' onClick={() => !recording && dispatch(setActiveShape([shapeId]))} title={shapes[shapeId].name}>
-                                                    <span className='swatch' style={{ backgroundColor: color }} />
-                                                    <span className='name'>{shapes[shapeId].name}</span>
-                                                    {cutscenes.length ? <span className='count'>{cutscenes.length}</span> : null}
+                                            <div key={track.id} className={`row${track.id === focusTimelineId && hasSelection ? ' active' : ''}`}>
+                                                <div
+                                                    className='label'
+                                                    onDoubleClick={() => setRenaming(track.id)}
+                                                    onContextMenu={e => openMenu(e, track.id)}
+                                                    title={`${track.name} · double-click to rename`}
+                                                >
+                                                    <BsLayers className='swatchIcon' style={{ color }} />
+                                                    {
+                                                        renaming === track.id
+                                                            ? <InlineRename value={track.name} onDone={name => rename(track.id, name)} />
+                                                            : <span className='name'>{track.name}</span>
+                                                    }
+                                                    <button
+                                                        className='addCutscene'
+                                                        title='Add a 1 second cutscene'
+                                                        aria-label={`Add cutscene to ${track.name}`}
+                                                        onClick={e => { e.stopPropagation(); addCutsceneTo(track.id); }}
+                                                        onDoubleClick={e => e.stopPropagation()}
+                                                    >
+                                                        <BsPlusLg />
+                                                    </button>
                                                 </div>
                                                 <div
                                                     className='track'
                                                     style={{ width: contentWidth, backgroundSize: `${majorStep * pps}px 100%` }}
-                                                    onPointerDown={e => startScrub(e, shapeId)}
-                                                    onContextMenu={e => openMenu(e, shapeId)}
+                                                    onPointerDown={startScrub}
+                                                    onContextMenu={e => openMenu(e, track.id)}
                                                 >
                                                     {
-                                                        cutscenes.map(cutscene => {
-                                                            const labels = describeState(cutscene.state).map(group => group.label).join(' · ') || 'No changes';
+                                                        track.cutscenes.length === 0
+                                                            ? <span className='trackHint'>No cutscenes yet. Press + to add one.</span>
+                                                            : null
+                                                    }
+                                                    {
+                                                        track.cutscenes.map(cutscene => {
                                                             const selected = selectedIds.has(cutscene.id);
+                                                            const count = shapeCount(cutscene);
                                                             return (
                                                                 <div
                                                                     key={cutscene.id}
-                                                                    className={`clip${selected ? ' selected' : ''}${draft?.[cutscene.id] ? ' dragging' : ''}`}
+                                                                    className={`clip${selected ? ' selected' : ''}${draft?.[cutscene.id] ? ' dragging' : ''}${count ? '' : ' empty'}`}
                                                                     style={{
                                                                         left: cutscene.start * pps,
                                                                         width: Math.max(6, (cutscene.end - cutscene.start) * pps),
                                                                         backgroundColor: color,
                                                                     }}
-                                                                    title={`${labels}\n${formatTime(cutscene.start)} → ${formatTime(cutscene.end)} · double-click to edit`}
-                                                                    onPointerDown={e => startClipDrag(e, shapeId, cutscene, 'move')}
-                                                                    onDoubleClick={() => editClip(cutscene)}
-                                                                    onContextMenu={e => openMenu(e, shapeId, cutscene)}
+                                                                    title={`${cutscene.name}\n${formatTime(cutscene.start)} → ${formatTime(cutscene.end)}\nClick to edit · double-click to rename`}
+                                                                    onPointerDown={e => startClipDrag(e, track.id, cutscene, 'move')}
+                                                                    onDoubleClick={() => setRenaming(cutscene.id)}
+                                                                    onContextMenu={e => openMenu(e, track.id, cutscene)}
                                                                 >
-                                                                    <span className='clipLabel'>{labels}</span>
-                                                                    <span className='handle start' onPointerDown={e => startClipDrag(e, shapeId, cutscene, 'start')} />
-                                                                    <span className='handle end' onPointerDown={e => startClipDrag(e, shapeId, cutscene, 'end')} />
+                                                                    {
+                                                                        renaming === cutscene.id
+                                                                            ? <InlineRename value={cutscene.name} onDone={name => rename(cutscene.id, name)} />
+                                                                            : (
+                                                                                <span className='clipLabel'>
+                                                                                    {cutscene.name}
+                                                                                    <span className='clipMeta'>{count ? ` · ${count} shape${count > 1 ? 's' : ''}` : ' · empty'}</span>
+                                                                                </span>
+                                                                            )
+                                                                    }
+                                                                    <span className='handle start' onPointerDown={e => startClipDrag(e, track.id, cutscene, 'start')} />
+                                                                    <span className='handle end' onPointerDown={e => startClipDrag(e, track.id, cutscene, 'end')} />
                                                                 </div>
                                                             );
                                                         })
@@ -725,7 +748,13 @@ const Timeline: React.FC = function () {
                                     })
                                 }
 
-                                <div className='playhead' style={{ left: LABEL_WIDTH + (recording ? recording.time : time) * pps }} />
+                                <div className='row addRow'>
+                                    <button className='label addTimeline' onClick={addTimeline}>
+                                        <BsPlusLg /> Add timeline
+                                    </button>
+                                </div>
+
+                                <div className='playhead' style={{ left: LABEL_WIDTH + time * pps }} />
                             </div>
                         </Body>
                     )
@@ -740,8 +769,8 @@ const Timeline: React.FC = function () {
                                 menu.onClip
                                     ? (
                                         <>
-                                            <button disabled={!singleSelected} onClick={() => { singleSelected && editClip(singleSelected.cutscene); closeMenu(); }}>
-                                                <BsPencil /> Edit animation <span className='shortcut'>Enter</span>
+                                            <button disabled={validSelection.length !== 1} onClick={() => { setRenaming(validSelection[0]?.id); setMenu(null); }}>
+                                                <BsPencil /> Rename <span className='shortcut'>Enter</span>
                                             </button>
                                             <div className='separator' />
                                             <button onClick={() => { copySelection(); closeMenu(); }}><BsFiles /> Copy <span className='shortcut'>{MOD}C</span></button>
@@ -749,20 +778,22 @@ const Timeline: React.FC = function () {
                                             <button onClick={() => { duplicateSelection(); closeMenu(); }}><BsFiles /> Duplicate <span className='shortcut'>{MOD}D</span></button>
                                         </>
                                     )
-                                    : null
-                            }
-                            <button disabled={!hasClipboard} onClick={() => { pasteAt(time, menu.shapeId); closeMenu(); }}>
-                                <BsClipboard /> Paste at playhead <span className='shortcut'>{MOD}V</span>
-                            </button>
-                            {
-                                menu.onClip
-                                    ? (
+                                    : (
                                         <>
+                                            <button onClick={() => { setRenaming(menu.timelineId); setMenu(null); }}><BsPencil /> Rename timeline</button>
+                                            <button onClick={() => { addCutsceneTo(menu.timelineId); closeMenu(); }}><BsPlusLg /> Add cutscene</button>
                                             <div className='separator' />
-                                            <button className='danger' onClick={() => { deleteSelection(); closeMenu(); }}><BsTrash /> Delete <span className='shortcut'>Del</span></button>
                                         </>
                                     )
-                                    : null
+                            }
+                            <button disabled={!hasClipboard} onClick={() => { pasteAt(time, menu.timelineId); closeMenu(); }}>
+                                <BsClipboard /> Paste at playhead <span className='shortcut'>{MOD}V</span>
+                            </button>
+                            <div className='separator' />
+                            {
+                                menu.onClip
+                                    ? <button className='danger' onClick={() => { deleteSelection(); closeMenu(); }}><BsTrash /> Delete <span className='shortcut'>Del</span></button>
+                                    : <button className='danger' disabled={timelines.length <= 1} onClick={() => { deleteTimeline(menu.timelineId); closeMenu(); }}><BsTrash /> Delete timeline</button>
                             }
                         </ClipMenu>
                     )

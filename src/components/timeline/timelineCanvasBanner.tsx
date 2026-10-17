@@ -1,24 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { BsCheckLg, BsEye, BsRecordCircle, BsSkipStartFill, BsX } from 'react-icons/bs';
-import { getTimelineUi } from '../../selector/selector';
-import { cancelRecording, commitRecording, showTimeOnCanvas, startRecording } from '../../timeline/recording';
+import { useDispatch, useSelector } from 'react-redux';
+import { BsCheckLg, BsEye, BsPencilFill, BsSkipStartFill } from 'react-icons/bs';
+import { getPageTimelines, getTimelineUi } from '../../selector/selector';
+import { showTimeOnCanvas } from '../../timeline/editing';
+import { findCutscene } from '../../timeline/model';
+import { setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
 import { formatTime } from './format';
 
-/** Floating status over the canvas while previewing an animation or recording a snapshot. */
+/** Floating status over the canvas while editing a cutscene or previewing the animation. */
 const TimelineCanvasBanner: React.FC = function () {
-    const { preview, recording, time, playing } = useSelector(getTimelineUi);
+    const dispatch = useDispatch();
+    const { preview, editing, time, playing } = useSelector(getTimelineUi);
+    const timelines = useSelector(getPageTimelines);
 
-    if (recording) {
+    if (editing) {
+        const cutscene = findCutscene(timelines, editing.timelineId, editing.cutsceneId);
+        if (!cutscene) {
+            return null;
+        }
         return (
             <Sticky>
-                <Banner className='recording'>
-                    <span className='dot' />
-                    <span><b>Recording at {formatTime(recording.time)}</b> · change shapes to animate them to this moment</span>
-                    <button className='primary' onClick={() => commitRecording()}><BsCheckLg /> Done</button>
-                    <button onClick={cancelRecording}><BsX /> Cancel</button>
+                <Banner className='editing'>
+                    <BsPencilFill className='icon accent' />
+                    <span><b>Editing {cutscene.name}</b> · changes animate {formatTime(cutscene.start)} → {formatTime(cutscene.end)}</span>
+                    <button className='primary' onClick={() => dispatch(setTimelineSelection([]))}><BsCheckLg /> Done</button>
                 </Banner>
             </Sticky>
         );
@@ -29,8 +36,7 @@ const TimelineCanvasBanner: React.FC = function () {
             <Sticky>
                 <Banner>
                     <BsEye className='icon' />
-                    <span>Previewing {formatTime(time)} · canvas is view-only</span>
-                    <button onClick={startRecording}><BsRecordCircle /> Record changes here</button>
+                    <span>Previewing {formatTime(time)} · select a cutscene to change it</span>
                     <button onClick={() => showTimeOnCanvas(0)}><BsSkipStartFill /> Back to start</button>
                 </Banner>
             </Sticky>
@@ -69,16 +75,12 @@ const Banner = styled.div`
         color: ${UI_COLORS.textMuted};
     }
 
-    &>.dot{
-        height: 10px;
-        width: 10px;
-        border-radius: 50%;
-        background-color: #ef4444;
-        box-shadow: 0 0 0 4px rgba(239, 68, 68, .2);
+    &>.icon.accent{
+        color: ${UI_COLORS.accent};
     }
 
-    &.recording{
-        border-color: #fecaca;
+    &.editing{
+        border-color: #bfdbfe;
     }
 
     &>button{

@@ -1,7 +1,8 @@
 import { gsap } from 'gsap';
 import { AVAILABLE_SHAPES } from '../shapes/availableShapes';
 import { applyFlatState, flattenShape } from './animatable';
-import { DEFAULT_EASE, FLAT_STATE, TIMELINE } from './timeline.types';
+import { orderedCutscenes, targetFor } from './model';
+import { DEFAULT_EASE, FLAT_STATE, TIMELINE_TRACK } from './timeline.types';
 
 type SHAPES = { [id: string]: AVAILABLE_SHAPES };
 export type PREVIEW = { [id: string]: AVAILABLE_SHAPES };
@@ -14,17 +15,22 @@ export type PREVIEW = { [id: string]: AVAILABLE_SHAPES };
 class TimelinePlayer {
     private tl: gsap.core.Timeline | null = null;
     private proxies: { [id: string]: FLAT_STATE } = {};
-    private timeline: TIMELINE = {};
+    private timelines: TIMELINE_TRACK[] = [];
     private shapes: SHAPES = {};
+    // reducers update shapes inside the same object, so changes are detected per shape
+    private shapeRefs: AVAILABLE_SHAPES[] = [];
     private dirty = true;
 
     /** Cheap: only marks the timeline for a rebuild when its inputs changed. */
-    sync(timeline: TIMELINE, shapes: SHAPES) {
-        if (timeline !== this.timeline || shapes !== this.shapes) {
-            this.timeline = timeline;
-            this.shapes = shapes;
+    sync(timelines: TIMELINE_TRACK[], shapes: SHAPES) {
+        const refs = Object.values(shapes);
+        const shapesChanged = refs.length !== this.shapeRefs.length || refs.some((shape, i) => shape !== this.shapeRefs[i]);
+        if (timelines !== this.timelines || shapesChanged) {
+            this.timelines = timelines;
+            this.shapeRefs = refs;
             this.dirty = true;
         }
+        this.shapes = shapes;
     }
 
     private ensureBuilt(): gsap.core.Timeline {
@@ -34,28 +40,28 @@ class TimelinePlayer {
         this.tl?.kill();
         this.proxies = {};
         const tl = gsap.timeline({ paused: true });
+        const ordered = orderedCutscenes(this.timelines);
 
-        Object.keys(this.timeline).forEach(id => {
+        Object.keys(this.shapes).forEach(id => {
             const shape = this.shapes[id];
-            const cutscenes = this.timeline[id]?.cutscenes || [];
-            if (!shape || !shape.render || !cutscenes.length) {
+            if (!shape.render) {
                 return;
             }
             const base = flattenShape(shape);
             const proxy: FLAT_STATE = { ...base };
             // state the next cutscene starts from
             let current: FLAT_STATE = { ...base };
+            let animated = false;
 
-            [...cutscenes].sort((a, b) => a.start - b.start).forEach(cutscene => {
-                const keys = Object.keys(cutscene.state).filter(key => key in base);
+            ordered.forEach(cutscene => {
+                const to = targetFor(cutscene, id, base);
+                const keys = Object.keys(to);
                 if (!keys.length) {
                     return;
                 }
                 const from: FLAT_STATE = {};
-                const to: FLAT_STATE = {};
                 keys.forEach(key => {
                     from[key] = current[key];
-                    to[key] = cutscene.state[key];
                 });
                 tl.fromTo(proxy, from, {
                     ...to,
@@ -64,8 +70,11 @@ class TimelinePlayer {
                     immediateRender: false,
                 }, cutscene.start);
                 current = { ...current, ...to };
+                animated = true;
             });
-            this.proxies[id] = proxy;
+            if (animated) {
+                this.proxies[id] = proxy;
+            }
         });
 
         this.tl = tl;
@@ -81,8 +90,9 @@ class TimelinePlayer {
         return preview;
     }
 
+    /** End of the last cutscene, including ones that don't change anything yet. */
     get duration() {
-        return this.ensureBuilt().duration();
+        return Math.max(0, ...this.timelines.flatMap(t => t.cutscenes.map(c => c.end)));
     }
 
     get isEmpty() {
@@ -100,19 +110,29 @@ class TimelinePlayer {
 
     play(from: number, onFrame: (time: number, preview: PREVIEW) => void, onEnd: () => void) {
         const tl = this.ensureBuilt();
-        tl.eventCallback('onUpdate', () => onFrame(tl.time(), this.frame()));
-        tl.eventCallback('onComplete', onEnd);
-        tl.play(from);
+        // play to the end of the last cutscene even if its final ones are still empty
+        const end = this.duration;
+        const startedAt = performance.now() - from * 1000;
+        tl.eventCallback('onUpdate', null);
+        tl.eventCallback('onComplete', null);
+        gsap.ticker.remove(this.tick);
+        this.tick = () => {
+            const t = Math.min(end, (performance.now() - startedAt) / 1000);
+            tl.seek(t, true);
+            onFrame(t, this.frame());
+            if (t >= end) {
+                gsap.ticker.remove(this.tick);
+                onEnd();
+            }
+        };
+        gsap.ticker.add(this.tick);
     }
 
-    pause(): number {
-        if (!this.tl) {
-            return 0;
-        }
-        this.tl.pause();
-        this.tl.eventCallback('onUpdate', null);
-        this.tl.eventCallback('onComplete', null);
-        return this.tl.time();
+    private tick = () => { };
+
+    pause() {
+        gsap.ticker.remove(this.tick);
+        this.tl?.pause();
     }
 }
 

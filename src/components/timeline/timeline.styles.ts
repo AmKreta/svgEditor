@@ -139,80 +139,6 @@ export const Toolbar = styled.div`
     }
 `;
 
-export const Inspector = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-    height: 38px;
-    padding: 0 12px;
-    border-bottom: 1px solid ${UI_COLORS.border};
-    background-color: ${UI_COLORS.surfaceMuted};
-    overflow-x: auto;
-    white-space: nowrap;
-
-    & .title{
-        font-weight: 600;
-    }
-
-    & label{
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        color: ${UI_COLORS.textMuted};
-    }
-
-    & input, & select{
-        height: 26px;
-        border: 1px solid ${UI_COLORS.inputBorder};
-        border-radius: 5px;
-        background-color: ${UI_COLORS.surface};
-        color: ${UI_COLORS.text};
-        font: inherit;
-        outline: none;
-        &:focus{
-            border-color: ${UI_COLORS.accent};
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, .2);
-        }
-    }
-    & input{
-        width: 64px;
-        padding: 0 6px;
-        font-variant-numeric: tabular-nums;
-    }
-
-    & .chips{
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    & .chip{
-        display: inline-flex;
-        align-items: center;
-        gap: 2px;
-        height: 22px;
-        padding: 0 4px 0 8px;
-        border-radius: 999px;
-        background-color: ${UI_COLORS.accentSoft};
-        color: ${UI_COLORS.accent};
-        font-weight: 500;
-        &>button{
-            display: inline-flex;
-            padding: 2px;
-            border: none;
-            border-radius: 50%;
-            background: transparent;
-            color: inherit;
-            &:hover{
-                background-color: rgba(59, 130, 246, .15);
-            }
-        }
-    }
-    & .muted{
-        color: ${UI_COLORS.textMuted};
-    }
-`;
-
 export const Body = styled.div`
     position: relative;
     flex-grow: 1;
@@ -280,11 +206,25 @@ export const Body = styled.div`
             border-right: 1px solid ${UI_COLORS.border};
             background-color: ${UI_COLORS.surface};
             cursor: pointer;
-            &>.swatch{
+            &>.swatchIcon{
                 flex-shrink: 0;
-                height: 8px;
-                width: 8px;
-                border-radius: 2px;
+            }
+            &>.addCutscene{
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                height: 24px;
+                width: 24px;
+                margin-left: auto;
+                border: none;
+                border-radius: 6px;
+                background: transparent;
+                color: ${UI_COLORS.textMuted};
+                &:hover{
+                    background-color: ${UI_COLORS.pressed};
+                    color: ${UI_COLORS.text};
+                }
             }
             &>.name{
                 overflow: hidden;
@@ -292,10 +232,6 @@ export const Body = styled.div`
                 white-space: nowrap;
                 font-weight: 500;
                 text-transform: capitalize;
-            }
-            &>.count{
-                margin-left: auto;
-                color: ${UI_COLORS.textMuted};
             }
             &:hover{
                 background-color: ${UI_COLORS.hover};
@@ -311,7 +247,46 @@ export const Body = styled.div`
             position: relative;
             flex-shrink: 0;
             background-image: linear-gradient(to right, ${UI_COLORS.hover} 1px, transparent 1px);
+            &>.trackHint{
+                position: sticky;
+                left: 12px;
+                display: inline-flex;
+                align-items: center;
+                height: 100%;
+                padding-left: 12px;
+                color: ${UI_COLORS.textMuted};
+                pointer-events: none;
+            }
         }
+
+        &.addRow{
+            border-bottom: none;
+            &>.addTimeline{
+                gap: 8px;
+                border: none;
+                border-right: 1px solid ${UI_COLORS.border};
+                color: ${UI_COLORS.textMuted};
+                font-weight: 500;
+                text-align: left;
+                &:hover{
+                    color: ${UI_COLORS.text};
+                }
+            }
+        }
+    }
+
+    & input.rename{
+        flex-grow: 1;
+        min-width: 0;
+        height: 24px;
+        padding: 0 6px;
+        border: 1px solid ${UI_COLORS.accent};
+        border-radius: 5px;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, .2);
+        background-color: ${UI_COLORS.surface};
+        color: ${UI_COLORS.text};
+        font: inherit;
     }
 
     & .clip{
@@ -334,6 +309,13 @@ export const Body = styled.div`
             overflow: hidden;
             text-overflow: ellipsis;
             pointer-events: none;
+            &>.clipMeta{
+                opacity: .75;
+                font-weight: 400;
+            }
+        }
+        &.empty{
+            background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, .18) 0 6px, transparent 6px 12px);
         }
         &>.handle{
             position: absolute;
