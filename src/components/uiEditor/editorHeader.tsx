@@ -36,8 +36,7 @@ const EditorHeader: React.FC<{}> = function () {
         setActiveOption(e.currentTarget.innerText)
     }
 
-    function addClipArt(e: React.ChangeEvent<HTMLImageElement>) {
-        const src = (e.target as HTMLImageElement).dataset['src'];
+    function addClipArt(src: string) {
         dispatch(addShape({ shape: SHAPE_TYPES.IMAGE, x: 100, y: 100, src }))
         closeAddClipArtModal();
     }
