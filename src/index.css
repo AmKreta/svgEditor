@@ -25,6 +25,10 @@ html,body,#root,.App{
   width:100%;
 }
 
+#svgEditor * {
+  touch-action: none;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height:5px;
@@ -45,8 +49,15 @@ html,body,#root,.App{
   background: #555;
 }
 
-svg#svgEditor>*.active{
-  outline: 1px solid rgb(243, 88, 88);
+/* selected shapes get handles from the selection overlay instead */
+svg#svgEditor>*.hovered{
+  outline: 1px solid #3b82f6;
+}
+
+/* set by setGlobalCursor while a drag/resize/rotate is in progress */
+html.global-cursor,
+html.global-cursor * {
+  cursor: var(--global-cursor) !important;
 }
 
 .modalOverlay{

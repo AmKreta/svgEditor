@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
-import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
+import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, shapePointerProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
 import { getBoundingRectMidPoint, getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
 
@@ -29,11 +29,8 @@ const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     return (
         <polygon
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             {...getStyleObj(shape.style)}
             points={shape.points.toString()}
             transform-origin={`${midPoint.x} ${midPoint.y}`}

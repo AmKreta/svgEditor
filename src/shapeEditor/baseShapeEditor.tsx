@@ -4,8 +4,7 @@ import ColorEditor from '../components/valueEditor/colorEditor';
 import { useDispatch } from 'react-redux';
 import { AVAILABLE_SHAPES } from '../shapes/availableShapes';
 import { formatActiveShape } from '../actions/pages/pages.actions';
-import styled, { css } from 'styled-components';
-import { THEME } from '../theme/theme';
+import { EditorContainer } from './editorPanel.styles';
 import OptionEditor from '../components/valueEditor/optionEditor';
 import InputEditor from '../components/valueEditor/textEditor';
 import CssFiltersEditor from './cssFiltersEditor';
@@ -69,7 +68,7 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                     />
                     <OptionEditor
                         value={shape.style.strokeLinejoin}
-                        options={['bevel', 'mitter', 'round']}
+                        options={['miter', 'bevel', 'round']}
                         label='Line Join'
                         onChange={val => {
                             dispatch(formatActiveShape({ id:shape.id, style: { strokeLinejoin: val as any } }));
@@ -170,27 +169,6 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
     }
 }
 
-const EditorContainer = styled.div`
-    ${props => {
-        const theme = props.theme as THEME;
-        return css`
-            flex-grow: 1;
-            overflow-y: scroll;
-            &>.EditorCaegoryContainer{
-                border:1px solid #ccc;
-                padding:${theme.spacing(1)}px ${theme.spacing(.3)}px;
-                margin:${theme.spacing(1)}px ${theme.spacing(.5)}px;
-                text-align: left;
-                &>.editorCategory{
-                    text-align: center;
-                    font-weight: bold;
-                    opacity:.5;
-                    font-size: .8em;
-                }
-            }
-        `;
-    }}
-`;
 
 export default ModifiedEditor;
 

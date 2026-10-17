@@ -1,6 +1,6 @@
 import React, { useRef, useState, useLayoutEffect } from 'react';
 import { AVAILABLE_SHAPES } from "./availableShapes";
-import BaseShape, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
+import BaseShape, { BASE_SHAPE, getBaseToolDefaultProps, shapePointerProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
 import { SHAPE_TYPES } from "../utils/constant";
 import { getBoundingRectMidPoint, getStyleObj, getTransformOrigin } from "../utils/utils";
 import { CIRCLE_SHAPE } from "./circle";
@@ -48,11 +48,8 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     return (
         <g
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             {...getStyleObj(shape.style)}
             ref={ref}
             transform-origin={`${groupMidPoint.x} ${groupMidPoint.y}`}
@@ -217,7 +214,6 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
                                 <Group
                                     shape={childShape}
                                     mouseDownHandler={props.mouseDownHandler}
-                                    mouseUpHandler={props.mouseUpHandler}
                                     mouseEnterHandler={props.mouseEnterHandler}
                                     mouseLeaveHandler={props.mouseLeaveHandler}
                                     isActive={props.isActive}

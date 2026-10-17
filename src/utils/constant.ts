@@ -150,8 +150,22 @@ export const availableFonts = [
     "Zapfino"
 ];
 
-export enum TRANSFORM_CURSOR_MAPPING {
-    SCALE = 'cell',
-    ROTATE = 'alias',
-    DEFAULT = 'default'
+export enum TRANSFORM_MODE {
+    TRANSLATE = 'TRANSLATE',
+    SCALE = 'SCALE',
+    ROTATE = 'ROTATE'
 }
+
+export const POINTER_BUTTON = {
+    PRIMARY: 0,
+    MIDDLE: 1,
+    SECONDARY: 2
+} as const;
+
+/** Scale factor applied per CSS pixel of drag while Ctrl is held. */
+export const SCALE_PER_PIXEL = 0.01;
+/** Rotation in degrees applied per CSS pixel of horizontal drag while Shift is held. */
+export const ROTATE_DEGREES_PER_PIXEL = 0.5;
+export const MIN_SHAPE_SCALE = 0.05;
+/** Skip path samples closer than this (svg units) so freehand paths stay lighter. */
+export const MIN_PATH_POINT_DISTANCE = 2;

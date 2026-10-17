@@ -3,8 +3,7 @@ import NumberEditor from '../components/valueEditor/numberEditor';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSvgStyle } from '../selector/selector';
 import { editSvgStyle } from '../actions/pages/pages.actions';
-import styled, { css } from 'styled-components';
-import { THEME } from '../theme/theme';
+import { EditorContainer } from './editorPanel.styles';
 import ColorEditor from '../components/valueEditor/colorEditor';
 
 const SvgContainerEditor: React.FC = function () {
@@ -46,26 +45,5 @@ const SvgContainerEditor: React.FC = function () {
     );
 }
 
-const EditorContainer = styled.div`
-    ${props => {
-        const theme = props.theme as THEME;
-        return css`
-            flex-grow: 1;
-            overflow-y: scroll;
-            &>.EditorCaegoryContainer{
-                border:1px solid #ccc;
-                padding:${theme.spacing(1)}px ${theme.spacing(.3)}px;
-                margin:${theme.spacing(1)}px ${theme.spacing(.5)}px;
-                text-align: left;
-                &>.editorCategory{
-                    text-align: center;
-                    font-weight: bold;
-                    opacity:.5;
-                    font-size: .8em;
-                }
-            }
-        `;
-    }}
-`;
 
 export default SvgContainerEditor;

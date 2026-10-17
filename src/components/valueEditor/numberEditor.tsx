@@ -31,10 +31,11 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
                 onChange(val - times);
                 times += step;
             }, 200);
-            window.onmouseup = function () {
+            const onMouseUp = function () {
                 cancelTimerRef();
-                window.onmouseup = null;
-            }
+                window.removeEventListener('mouseup', onMouseUp);
+            };
+            window.addEventListener('mouseup', onMouseUp);
         }
     }
 
@@ -46,10 +47,11 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
                 onChange(val + times);
                 times += step;
             }, 200);
-            window.onmouseup = function () {
+            const onMouseUp = function () {
                 cancelTimerRef();
-                window.onmouseup = null;
-            }
+                window.removeEventListener('mouseup', onMouseUp);
+            };
+            window.addEventListener('mouseup', onMouseUp);
         }
     }
 
@@ -87,7 +89,7 @@ const NumberEditor: React.FC<props> = function ({ value, onChange, label, step =
     }
 
     return (
-        <Editor disabled={disabled}>
+        <Editor disabled={disabled} className='valueEditor numberEditor'>
             {
                 label
                     ? <div className='label'>{label}</div>
@@ -136,9 +138,20 @@ const Editor = styled.div<styleProps>`
                 `}
                 
                 &>button{
-                    height: 25px;
-                    width:25px;
-
+                    height: 28px;
+                    width: 24px;
+                    flex-shrink: 0;
+                    padding: 0;
+                    justify-content: center;
+                    border: 1px solid #d1d5db;
+                    border-radius: ${theme.spacing(.5)}px;
+                    background-color: white;
+                    color: #4b5563;
+                    &>svg{ margin: 0 !important; }
+                    &:hover{
+                        opacity: 1;
+                        background-color: #f3f4f6;
+                    }
                 }
 
                 &>input{
@@ -146,9 +159,15 @@ const Editor = styled.div<styleProps>`
                     width:50px;
                     margin:0 ${theme.spacing(.5)}px;
                     text-align: center;
-                    border: 1px solid #555;
-                    outline: none;
+                    border: 1px solid #d1d5db;
                     border-radius: ${theme.spacing(.5)}px;
+                    background-color: white;
+                    font-size: 12px;
+                    outline: none;
+                    &:focus{
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 2px rgba(59, 130, 246, .2);
+                    }
                 }
             }
 

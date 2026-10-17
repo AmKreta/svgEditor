@@ -1,15 +1,30 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { State } from '../store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { getActiveShapesInfo, getCurrentShape } from '../selector/selector';
+import { getActiveShapesInfo, getActiveTool, getCurrentShape } from '../selector/selector';
 import { AVAILABLE_SHAPES } from './availableShapes';
 import { translateActiveShape, toggleContextMenu, scaleActiveShape, rotateActiveShape } from '../actions/pages/pages.actions';
-import { SHAPE_TYPES, TRANSFORM_CURSOR_MAPPING } from '../utils/constant';
+import {
+    POINTER_BUTTON,
+    ROTATE_DEGREES_PER_PIXEL,
+    SCALE_PER_PIXEL,
+    SHAPE_TYPES,
+    TRANSFORM_MODE
+} from '../utils/constant';
 import { MEASUREMENT, STYLE } from './style';
 import generateId from '../utils/idGenerator';
 import { setHoveredShape, setActiveShape } from '../actions/pages/pages.actions';
 import { getBoundingRectMidPoint } from '../utils/utils';
 import { isEqual } from 'lodash';
+import { useRAFThrottled } from '../hooks/useRAFThrottled';
+import { getActiveTransformMode } from '../utils/transformMode';
+import { CURSORS, setGlobalCursor } from '../utils/cursor';
+
+const DRAG_CURSOR_BY_MODE: Record<TRANSFORM_MODE, string> = {
+    [TRANSFORM_MODE.TRANSLATE]: CURSORS.DRAGGING,
+    [TRANSFORM_MODE.SCALE]: CURSORS.SCALE,
+    [TRANSFORM_MODE.ROTATE]: CURSORS.ROTATE,
+};
 
 export interface BASE_SHAPE {
     type: SHAPE_TYPES,
@@ -21,7 +36,7 @@ export interface BASE_SHAPE {
     y_unit: MEASUREMENT;
     style: STYLE;
     render: boolean;
-    pageId?:string;
+    pageId?: string;
 };
 
 export interface BASE_SHAPE_PROPS {
@@ -30,15 +45,24 @@ export interface BASE_SHAPE_PROPS {
     hovered: boolean;
 };
 
+export type ShapePointerEvent = React.PointerEvent<SVGElement>;
+
 export interface WRAPPED_SHAPE_PROPS {
-    mouseDownHandler: (e: React.MouseEvent<SVGElement>) => void;
-    mouseEnterHandler: (e: React.MouseEvent<SVGElement>) => void;
-    mouseLeaveHandler: (e: React.MouseEvent<SVGElement>) => void;
-    mouseUpHandler: (e: React.MouseEvent<SVGElement>) => void;
+    mouseDownHandler: (e: ShapePointerEvent) => void;
+    mouseEnterHandler: (e: ShapePointerEvent) => void;
+    mouseLeaveHandler: (e: ShapePointerEvent) => void;
     hovered: boolean;
     isActive: boolean;
     shape: AVAILABLE_SHAPES;
 };
+
+export function shapePointerProps(props: WRAPPED_SHAPE_PROPS) {
+    return {
+        onPointerDown: props.mouseDownHandler,
+        onPointerEnter: props.mouseEnterHandler,
+        onPointerLeave: props.mouseLeaveHandler,
+    };
+}
 
 export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: number, y: number }): BASE_SHAPE {
     return {
@@ -78,18 +102,78 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
     return function BaseTool(props: BASE_SHAPE_PROPS) {
         const currentShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getCurrentShape(state, props.id));
         const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
+        const activeTool = useSelector<State, SHAPE_TYPES>(getActiveTool);
         const dispatch = useDispatch();
+        const draggingRef = useRef(false);
+        const lastClientRef = useRef({ x: 0, y: 0 });
+        const modeRef = useRef<TRANSFORM_MODE>(TRANSFORM_MODE.TRANSLATE);
+        const pendingTranslate = useRef({ x: 0, y: 0 });
+        const pendingScale = useRef({ x: 0, y: 0 });
+        const pendingRotate = useRef(0);
 
-        const mouseDownHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
-            // todo
-            // instead of adding previous coordinates to dx and dy , directly assign mouse position
-            // this will solve mouse leaving the shaoe sometimes while dragging
+        const flushGesture = useRAFThrottled(() => {
+            const { x, y } = pendingTranslate.current;
+            if (x || y) {
+                dispatch(translateActiveShape({ x, y }));
+                pendingTranslate.current = { x: 0, y: 0 };
+            }
+            const sx = pendingScale.current.x;
+            const sy = pendingScale.current.y;
+            if (sx || sy) {
+                dispatch(scaleActiveShape([sx, sy]));
+                pendingScale.current = { x: 0, y: 0 };
+            }
+            if (pendingRotate.current) {
+                dispatch(rotateActiveShape(pendingRotate.current));
+                pendingRotate.current = 0;
+            }
+        });
+
+        const stopListeningRef = useRef<(() => void) | null>(null);
+
+        const dragMove = useCallback((e: PointerEvent) => {
+            if (!draggingRef.current) {
+                return;
+            }
+            const dx = e.clientX - lastClientRef.current.x;
+            const dy = e.clientY - lastClientRef.current.y;
+            lastClientRef.current = { x: e.clientX, y: e.clientY };
+
+            if (modeRef.current === TRANSFORM_MODE.SCALE) {
+                pendingScale.current.x += dx * SCALE_PER_PIXEL;
+                pendingScale.current.y += dy * SCALE_PER_PIXEL;
+            } else if (modeRef.current === TRANSFORM_MODE.ROTATE) {
+                pendingRotate.current += dx * ROTATE_DEGREES_PER_PIXEL;
+            } else {
+                pendingTranslate.current.x += dx;
+                pendingTranslate.current.y += dy;
+            }
+            flushGesture();
+        }, [flushGesture]);
+
+        const endDrag = useCallback(() => {
+            stopListeningRef.current?.();
+            stopListeningRef.current = null;
+            if (!draggingRef.current) {
+                return;
+            }
+            draggingRef.current = false;
+            flushGesture.flush();
+            setGlobalCursor(null);
+        }, [flushGesture]);
+
+        // don't leave window listeners or a forced cursor behind if the shape is removed mid-drag
+        useEffect(() => endDrag, [endDrag]);
+
+        const mouseDownHandler = useCallback((e: ShapePointerEvent) => {
+            if (e.button === POINTER_BUTTON.PRIMARY && activeTool !== SHAPE_TYPES.PAN) {
+                // a drawing tool is active: let the press reach the canvas so it starts a new shape
+                return;
+            }
             e.preventDefault();
             e.stopPropagation();
-            e.cancelable = true;
 
-            if (e.buttons === 2) {
-                //right click
+            if (e.button === POINTER_BUTTON.SECONDARY) {
                 const svgEditor = document.getElementById('svgEditor')!;
                 const editorBBox = svgEditor.getBoundingClientRect();
                 const el = document.getElementById(currentShape.id)!;
@@ -98,55 +182,51 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                     x: c.x - editorBBox.x,
                     y: c.y - editorBBox.y
                 }));
+                return;
+            }
+
+            if (e.button !== POINTER_BUTTON.PRIMARY) {
+                return;
             }
 
             if (activeShapes.findIndex(shapeId => shapeId === currentShape.id) === -1) {
-                // if element not found in active element list
-                // ie element is not currently selected
                 dispatch(setActiveShape([currentShape.id]));
             }
 
-            let x = e.clientX;
-            let y = e.clientY;
+            draggingRef.current = true;
+            modeRef.current = getActiveTransformMode();
+            lastClientRef.current = { x: e.clientX, y: e.clientY };
+            pendingTranslate.current = { x: 0, y: 0 };
+            pendingScale.current = { x: 0, y: 0 };
+            pendingRotate.current = 0;
+            setGlobalCursor(DRAG_CURSOR_BY_MODE[modeRef.current]);
 
-            e.currentTarget.onmousemove = (ev) => {
-                e.preventDefault();
-                e.stopPropagation();
-                let x1 = ev.clientX;
-                let y1 = ev.clientY;
-                let dx = x1 - x;
-                let dy = y1 - y;
-                x = x1;
-                y = y1;
+            // Selecting a shape re-orders it in the DOM, which drops pointer capture,
+            // so the drag is tracked on window rather than on the element.
+            stopListeningRef.current?.();
+            window.addEventListener('pointermove', dragMove);
+            window.addEventListener('pointerup', endDrag);
+            window.addEventListener('pointercancel', endDrag);
+            stopListeningRef.current = () => {
+                window.removeEventListener('pointermove', dragMove);
+                window.removeEventListener('pointerup', endDrag);
+                window.removeEventListener('pointercancel', endDrag);
+            };
+        }, [activeShapes, activeTool, currentShape?.id, dispatch, dragMove, endDrag]);
 
-                if (document.body.style.cursor === TRANSFORM_CURSOR_MAPPING.SCALE) {
-                    dispatch(scaleActiveShape([dx, dy]));
-                }
-                else if (document.body.style.cursor === TRANSFORM_CURSOR_MAPPING.ROTATE) {
-                    dispatch(rotateActiveShape(dx));
-                }
-                else {
-                    dispatch(translateActiveShape({ x: dx, y: dy }));
-                }
+        const mouseEnterHandler = useCallback((e: ShapePointerEvent) => {
+            if (draggingRef.current) {
+                return;
             }
-            return false;
-        }, [activeShapes, currentShape?.id]);
-
-        const mouseUpHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
-            e.preventDefault();
-            e.stopPropagation();
-            e.currentTarget.onmousemove = null;
-        }, []);
-
-        const mouseEnterHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
             dispatch(setHoveredShape(currentShape.id));
-        }, []);
+        }, [currentShape?.id, dispatch]);
 
-        const mouseLeaveHandler = useCallback((e: React.MouseEvent<SVGElement>) => {
-            e.currentTarget.onmousemove = null;
+        const mouseLeaveHandler = useCallback((e: ShapePointerEvent) => {
+            if (draggingRef.current) {
+                return;
+            }
             dispatch(setHoveredShape(null));
-        }, []);
-
+        }, [dispatch]);
 
         if (!currentShape) {
             return null;
@@ -160,7 +240,6 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 mouseLeaveHandler={mouseLeaveHandler}
                 isActive={props.isActive}
                 hovered={props.hovered}
-                mouseUpHandler={mouseUpHandler}
             />
         );
     }

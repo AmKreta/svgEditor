@@ -50,7 +50,7 @@ const InputEditor: React.FC<props> = function ({ value, onChange, label, fullWid
     }
 
     return (
-        <Editor fullWidth={fullWidth}>
+        <Editor fullWidth={fullWidth} className={`valueEditor textEditor${fullWidth ? ' fullWidth' : ''}`}>
             <div className='label'>{label}</div>
             <input type='text' value={val} onChange={changeHandler} onFocus={setValueInInputElement} onBlur={blurHandler} onKeyDown={onKeyDown} placeholder={placeholder} />
         </Editor>
@@ -85,9 +85,16 @@ const Editor = styled.div<styleProps>`
                 width:${props.fullWidth ? 'auto' : '70px'};
                 margin:0 ${theme.spacing(.5)}px;
                 text-align: center;
-                border: 1px solid #555;
-                outline: none;
+                border: 1px solid #d1d5db;
                 border-radius: ${theme.spacing(.5)}px;
+                background-color: white;
+                font-size: 12px;
+                padding: 0 ${theme.spacing(.75)}px;
+                outline: none;
+                    &:focus{
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 2px rgba(59, 130, 246, .2);
+                    }
                 flex-grow: 1;
             }
 
