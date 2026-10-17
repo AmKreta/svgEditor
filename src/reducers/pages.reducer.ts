@@ -406,6 +406,12 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             return { ...state };
         }
 
+        case PAGES_ACTION_TYPES.SET_PAGE_LOOP: {
+            state.pages[state.activePageIndex] = { ...state.pages[state.activePageIndex], loop: action.payload };
+            state.pages = [...state.pages];
+            return { ...state };
+        }
+
         case PAGES_ACTION_TYPES.SET_PAGE_SHAPES: {
             const currentPage = state.pages[state.activePageIndex];
             state.pages[state.activePageIndex] = {

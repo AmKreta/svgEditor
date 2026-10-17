@@ -64,6 +64,7 @@ import {
     EDIT_SVG_STYLE_PAYLOAD,
     SET_PAGE_TIMELINES_ACTION,
     SET_PAGE_SHAPES_ACTION,
+    SET_PAGE_LOOP_ACTION,
     SET_PAGE_SHAPES_PAYLOAD,
     SET_PAGE_TIMELINES_PAYLOAD,
 } from "./pages.interface";
@@ -259,4 +260,8 @@ export const setPageTimelines = (timelines: SET_PAGE_TIMELINES_PAYLOAD): SET_PAG
 
 export const setPageShapes = (shapes: SET_PAGE_SHAPES_PAYLOAD): SET_PAGE_SHAPES_ACTION => {
     return { type: PAGES_ACTION_TYPES.SET_PAGE_SHAPES, payload: shapes };
+}
+
+export const setPageLoop = (loop: boolean): SET_PAGE_LOOP_ACTION => {
+    return { type: PAGES_ACTION_TYPES.SET_PAGE_LOOP, payload: loop };
 }

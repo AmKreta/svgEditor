@@ -44,7 +44,19 @@ export function enterCutscene(ref: CLIP_REF) {
         }
     });
 
-    const working: SHAPES_STATE = { ...cloneDeep(states.after), ...others };
+    // keep the timelines' drawing order: earlier timelines are drawn first (further back)
+    const working: SHAPES_STATE = {};
+    timelines.forEach(t => {
+        if (t.id === track.id) {
+            Object.assign(working, cloneDeep(states.after));
+        } else {
+            Object.keys(others).forEach(id => {
+                if (owners[id] === t.id) {
+                    working[id] = others[id];
+                }
+            });
+        }
+    });
     loadedShapes = Object.values(working);
     store.dispatch(setPlayback({ time: cutscene.end, playing: false, preview: null }));
     store.dispatch(setEditing({ timelineId: track.id, cutsceneId: cutscene.id, locked: Object.keys(others) }));

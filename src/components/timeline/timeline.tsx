@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useSta
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BsChevronDown, BsChevronUp, BsClipboard, BsFiles, BsPauseFill, BsPencil, BsPlayFill, BsPlusLg,
-    BsScissors, BsSkipStartFill, BsTrash, BsZoomIn, BsZoomOut, BsArrowsExpand, BsLayers
+    BsArrowRepeat, BsScissors, BsSkipStartFill, BsTrash, BsZoomIn, BsZoomOut, BsArrowsExpand, BsLayers
 } from 'react-icons/bs';
 import { IconType } from 'react-icons';
 import store, { State } from '../../store/store';
 import { getActivePageIndex, getPageTimelines, getTimelineUi } from '../../selector/selector';
-import { setPageTimelines } from '../../actions/pages/pages.actions';
+import { setPageLoop, setPageTimelines } from '../../actions/pages/pages.actions';
 import { setEditing, setPlayback, setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { timelinePlayer } from '../../timeline/player';
 import { enterCutscene, exitCutscene, showTimeOnCanvas, watchShapeEdits } from '../../timeline/editing';
@@ -94,6 +94,7 @@ const Timeline: React.FC = function () {
     const dispatch = useDispatch();
     const timelines = useSelector<State, TIMELINE_TRACK[]>(getPageTimelines);
     const activePageIndex = useSelector<State, number>(getActivePageIndex);
+    const loop = useSelector<State, boolean>(state => Boolean(state.page.pages[state.page.activePageIndex].loop));
     const { time, playing, selection, editing } = useSelector(getTimelineUi);
 
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -228,9 +229,10 @@ const Timeline: React.FC = function () {
             () => {
                 dispatch(setPlayback({ playing: false }));
                 openCutsceneAt(focusTimelineId, store.getState().timeline.time);
-            }
+            },
+            loop
         );
-    }, [dispatch, duration, focusTimelineId, openCutsceneAt, time]);
+    }, [dispatch, duration, focusTimelineId, loop, openCutsceneAt, time]);
 
     const togglePlay = () => playing ? pause() : play();
 
@@ -653,6 +655,15 @@ const Timeline: React.FC = function () {
             <Toolbar>
                 {toolButton(playing ? BsPauseFill : BsPlayFill, playing ? 'Pause (Space)' : 'Play (Space)', togglePlay, duration <= 0, 'iconButton play')}
                 {toolButton(BsSkipStartFill, 'Back to start (Home)', () => seekAndEdit(0))}
+                <button
+                    className={`iconButton toggle${loop ? ' on' : ''}`}
+                    onClick={() => dispatch(setPageLoop(!loop))}
+                    title={loop ? 'Loop is on' : 'Loop is off'}
+                    aria-label='Loop'
+                    aria-pressed={loop}
+                >
+                    <BsArrowRepeat />
+                </button>
                 <span className='time'>
                     {formatTime(time)} <span className='total'>/ {formatTime(duration)}</span>
                 </span>

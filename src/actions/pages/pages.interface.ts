@@ -20,6 +20,8 @@ export type SHAPE_COLLECTION = {
     svgStyle: SVG_STYLE;
     /** animation timelines; missing on documents saved before timelines existed */
     timelines?: TIMELINE_TRACK[];
+    /** play the page's animation on repeat */
+    loop?: boolean;
 };
 
 export interface GRADIENT {
@@ -199,6 +201,8 @@ export type SET_PAGE_TIMELINES_ACTION = ACTION<PAGES_ACTION_TYPES.SET_PAGE_TIMEL
 export type SET_PAGE_SHAPES_PAYLOAD = { [key: string]: AVAILABLE_SHAPES };
 export type SET_PAGE_SHAPES_ACTION = ACTION<PAGES_ACTION_TYPES.SET_PAGE_SHAPES, SET_PAGE_SHAPES_PAYLOAD>;
 
+export type SET_PAGE_LOOP_ACTION = ACTION<PAGES_ACTION_TYPES.SET_PAGE_LOOP, boolean>;
+
 
 export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | ADD_SHAPE_ACTION
@@ -232,6 +236,7 @@ export type PAGE_ACTION = SET_ACTIVE_PAGE_ACTION
     | CREATE_NEW_FILE_ACTION
     | EDIT_SVG_STYLE_ACTION
     | SET_PAGE_TIMELINES_ACTION
-    | SET_PAGE_SHAPES_ACTION;
+    | SET_PAGE_SHAPES_ACTION
+    | SET_PAGE_LOOP_ACTION;
 
 

@@ -46,6 +46,9 @@ For any feature request Ping me on linkedIn 👇
 - Click on color , to add colors to palette.
 - Click on Insert, clipart search tool will open up for you.
 
+## Use it from an AI agent (MCP)
+The [MCP server](mcp-server/README.md) lets Claude or any other MCP client draw, animate and export in the editor tab you have open, while you watch. Run `npm install` in `mcp-server/`, start the editor with `npm start`, and Claude Code picks the server up from `.mcp.json`.
+
 ## What all features u get
 - The most complex project That I made is React Svg Editor, It's a in Browser Svg Design Tool has many use cases like Logo Designer, PPT, Ui/UX Design tool, have inbuilt components to search and user cliparts across your projects and other tools for adding effects like gradients, filters, shadows etc.
 - It includes shapes like Circle, Rectangle, ellipse, Text, Line, Ployline, Polygon, Pencil, Image etc, you can just open this app and start designing whatever u like, all designs will be saved in In Browser Database called IndexedDB.

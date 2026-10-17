@@ -70,6 +70,10 @@ export const Toolbar = styled.div`
         &:hover:not(:disabled){
             background-color: ${UI_COLORS.hover};
         }
+        &.toggle.on{
+            background-color: ${UI_COLORS.accentSoft};
+            color: ${UI_COLORS.accent};
+        }
         &.play{
             background-color: ${UI_COLORS.text};
             color: white;

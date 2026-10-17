@@ -14,4 +14,7 @@ const projects = {
 
 export const personalProjectIds = Object.keys(projects).map(name => projects[name].id);
 
+/** The original sample documents; no longer shown on the landing page but kept for later. */
+export const legacyProjects = projects;
+
 export default projects;

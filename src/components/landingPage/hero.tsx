@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { BsArrowRight, BsBezier2, BsDownload, BsFiles, BsPalette, BsUpload } from 'react-icons/bs';
 import { LANDING_ACTIONS, LandingButton } from './shared';
 import { UI_COLORS } from '../../theme/uiTokens';
-import RenderRawSvg from '../uiEditor/renderRawSvg';
-import selfprojects from '../../seed/index';
+import AnimatedPreview from './animatedPreview';
+import { getDemoProject } from '../../seed/demos';
 
 const FEATURES = [
     { icon: BsBezier2, text: 'Shapes, lines and freehand paths' },
@@ -13,9 +13,9 @@ const FEATURES = [
     { icon: BsDownload, text: 'Export to SVG or JSON' },
 ];
 
-const showcase = (selfprojects as any).foodCartSample;
 
 const Hero: React.FC<LANDING_ACTIONS> = function ({ onCreateNew, onImport }) {
+    const showcase = getDemoProject('demo-train-loop');
     return (
         <StyledHero>
             <div className='copy'>
@@ -53,12 +53,9 @@ const Hero: React.FC<LANDING_ACTIONS> = function ({ onCreateNew, onImport }) {
                                 <div className='windowBar'>
                                     <span /><span /><span />
                                 </div>
-                                <RenderRawSvg
-                                    innerHtml={showcase.snapshots[0]}
-                                    width='100%'
-                                    height='100%'
-                                    style={{ display: 'block', backgroundColor: showcase.pages[0].svgStyle.backgroundColor }}
-                                />
+                                <div className='stage'>
+                                    <AnimatedPreview doc={showcase} playing />
+                                </div>
                             </div>
                         </div>
                     )
@@ -147,11 +144,8 @@ const StyledHero = styled.section`
                     background-color: ${UI_COLORS.pressed};
                 }
             }
-            &>svg{
-                margin: 0;
-                outline: none;
-                aspect-ratio: 1175 / 580;
-                pointer-events: none;
+            &>.stage{
+                aspect-ratio: 1100 / 560;
             }
         }
     }
