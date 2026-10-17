@@ -1,17 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { BsCheckLg, BsEye, BsPencilFill } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
+import { BsPencilFill } from 'react-icons/bs';
 import { getPageTimelines, getTimelineUi } from '../../selector/selector';
 import { findCutscene } from '../../timeline/model';
-import { setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
 import { formatTime } from './format';
 
-/** Floating status over the canvas while editing a cutscene or previewing the animation. */
+/** Floating note over the canvas saying which cutscene canvas edits go into. */
 const TimelineCanvasBanner: React.FC = function () {
-    const dispatch = useDispatch();
-    const { preview, editing, time, playing } = useSelector(getTimelineUi);
+    const { editing } = useSelector(getTimelineUi);
     const timelines = useSelector(getPageTimelines);
 
     if (editing) {
@@ -26,18 +24,6 @@ const TimelineCanvasBanner: React.FC = function () {
                     <span>
                         <b>Editing {cutscene.name}</b> · {cutscene.isDefault ? 'the starting state' : `animates ${formatTime(cutscene.start)} → ${formatTime(cutscene.end)}`}
                     </span>
-                    <button className='primary' onClick={() => dispatch(setTimelineSelection([]))}><BsCheckLg /> Done</button>
-                </Banner>
-            </Sticky>
-        );
-    }
-
-    if (preview && !playing && !editing) {
-        return (
-            <Sticky>
-                <Banner>
-                    <BsEye className='icon' />
-                    <span>Previewing {formatTime(time)} · select a cutscene to edit</span>
                 </Banner>
             </Sticky>
         );
@@ -62,7 +48,7 @@ const Banner = styled.div`
     align-items: center;
     gap: 10px;
     margin-top: 12px;
-    padding: 6px 6px 6px 14px;
+    padding: 6px 14px;
     border: 1px solid ${UI_COLORS.border};
     border-radius: 999px;
     background-color: ${UI_COLORS.surface};

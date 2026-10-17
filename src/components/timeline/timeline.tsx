@@ -15,7 +15,7 @@ import {
     addCutscene, applyDraft, CLIPBOARD_ITEM, cloneCutscene, edgeLimits, findClips, moveLimits, nextTimelineName,
     pasteClips, removeClips, roundTime, snapEdges, TIME_DRAFT, updateClip
 } from '../../timeline/clipOps';
-import { createTimeline, findCutscene, isSnapshotFormat, orderedCutscenes } from '../../timeline/model';
+import { createTimeline, cutsceneAt, findCutscene, isSnapshotFormat, orderedCutscenes } from '../../timeline/model';
 import { CLIP_REF, CUTSCENE, MAX_ZOOM_SECONDS, MIN_ZOOM_SECONDS, TIMELINE_TRACK } from '../../timeline/timeline.types';
 import { useEventListener } from '../../hooks/useEventListener';
 import { formatTime } from './format';
@@ -149,12 +149,26 @@ const Timeline: React.FC = function () {
 
     // ---------- editing a cutscene follows the selection
 
-    const editKey = validSelection.length === 1 ? `${validSelection[0].timelineId}/${validSelection[0].id}` : null;
+    /** Selects and opens the cutscene under `time` in a timeline, so the canvas is always editable. */
+    const openCutsceneAt = useCallback((timelineId: string, t: number) => {
+        const tracks = latestTimelines();
+        const track = tracks.find(tr => tr.id === timelineId) || tracks[0];
+        const ref = { timelineId: track.id, id: cutsceneAt(track, t).id };
+        setSelection([ref]);
+        enterCutscene(ref);
+    }, [setSelection]);
+
+    // the last clicked cutscene is the one being edited; with nothing selected, the one under the playhead
+    const editTarget = validSelection[validSelection.length - 1];
+    const editKey = editTarget ? `${editTarget.timelineId}/${editTarget.id}` : null;
     useEffect(() => {
-        if (validSelection.length === 1) {
-            enterCutscene(validSelection[0]);
-        } else {
-            exitCutscene();
+        if (playing) {
+            return;
+        }
+        if (!editTarget) {
+            openCutsceneAt(focusTimelineId, time);
+        } else if (store.getState().timeline.editing?.cutsceneId !== editTarget.id) {
+            enterCutscene(editTarget);
         }
     }, [editKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -181,7 +195,8 @@ const Timeline: React.FC = function () {
     const pause = useCallback(() => {
         timelinePlayer.pause();
         dispatch(setPlayback({ playing: false }));
-    }, [dispatch]);
+        openCutsceneAt(focusTimelineId, store.getState().timeline.time);
+    }, [dispatch, focusTimelineId, openCutsceneAt]);
 
     const seek = useCallback((t: number) => {
         if (playing) {
@@ -191,12 +206,18 @@ const Timeline: React.FC = function () {
         showTimeOnCanvas(Math.max(0, roundTime(t)));
     }, [dispatch, playing]);
 
+    /** Moves the playhead and opens the cutscene there. */
+    const seekAndEdit = useCallback((t: number, timelineId = focusTimelineId) => {
+        exitCutscene(false);
+        seek(t);
+        openCutsceneAt(timelineId, Math.max(0, roundTime(t)));
+    }, [focusTimelineId, openCutsceneAt, seek]);
+
     const play = useCallback(() => {
         if (duration <= 0) {
             return;
         }
-        // leaving cutscene editing puts the shapes back before playing
-        setSelection([]);
+        // the canvas shows the animation while playing; editing resumes when it stops
         exitCutscene(false);
         const from = time >= duration - 0.01 ? 0 : time;
         dispatch(setPlayback({ playing: true }));
@@ -204,9 +225,12 @@ const Timeline: React.FC = function () {
         timelinePlayer.play(
             from,
             (t, preview) => dispatch(setPlayback({ time: t, preview })),
-            () => dispatch(setPlayback({ playing: false }))
+            () => {
+                dispatch(setPlayback({ playing: false }));
+                openCutsceneAt(focusTimelineId, store.getState().timeline.time);
+            }
         );
-    }, [dispatch, duration, setSelection, time]);
+    }, [dispatch, duration, focusTimelineId, openCutsceneAt, time]);
 
     const togglePlay = () => playing ? pause() : play();
 
@@ -337,11 +361,12 @@ const Timeline: React.FC = function () {
 
     const deleteSelection = useCallback(() => {
         if (validSelection.length) {
-            setSelection([]);
+            const timelineId = focusTimelineId;
             exitCutscene(false);
             commit(removeClips(latestTimelines(), validSelection));
+            openCutsceneAt(timelineId, store.getState().timeline.time);
         }
-    }, [commit, setSelection, validSelection]);
+    }, [commit, focusTimelineId, openCutsceneAt, validSelection]);
 
     const pasteAt = useCallback((at: number, targetTimelineId?: string) => {
         if (!clipboard.length) {
@@ -394,18 +419,23 @@ const Timeline: React.FC = function () {
         return Math.max(0, (clientX - rect.left - LABEL_WIDTH + body.scrollLeft) / pps);
     };
 
-    const startScrub = (e: React.PointerEvent) => {
+    /** Dragging shows the animation frame by frame; letting go opens the cutscene there. */
+    const startScrub = (e: React.PointerEvent, timelineId = focusTimelineId) => {
         if (e.button !== 0) {
             return;
         }
         containerRef.current?.focus();
-        setSelection([]);
         exitCutscene(false);
-        seek(timeFromClientX(e.clientX));
-        const onMove = (ev: PointerEvent) => seek(timeFromClientX(ev.clientX));
+        let t = timeFromClientX(e.clientX);
+        seek(t);
+        const onMove = (ev: PointerEvent) => {
+            t = timeFromClientX(ev.clientX);
+            seek(t);
+        };
         const onUp = () => {
             window.removeEventListener('pointermove', onMove);
             window.removeEventListener('pointerup', onUp);
+            openCutsceneAt(timelineId, roundTime(t));
         };
         window.addEventListener('pointermove', onMove);
         window.addEventListener('pointerup', onUp);
@@ -568,12 +598,12 @@ const Timeline: React.FC = function () {
         else if (e.key === 'Delete' || e.key === 'Backspace') deleteSelection();
         else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             const step = (e.shiftKey ? 1 : 0.1) * (e.key === 'ArrowLeft' ? -1 : 1);
-            validSelection.length ? nudgeSelection(step) : seek(time + step);
+            validSelection.length > 1 ? nudgeSelection(step) : seekAndEdit(time + step);
         }
-        else if (e.key === 'Home') seek(0);
-        else if (e.key === 'End') seek(duration);
+        else if (e.key === 'Home') seekAndEdit(0);
+        else if (e.key === 'End') seekAndEdit(duration);
         else if ((e.key === 'Enter' || e.key === 'F2') && validSelection.length === 1) setRenaming(validSelection[0].id);
-        else if (e.key === 'Escape') { setSelection([]); setMenu(null); }
+        else if (e.key === 'Escape') { editTarget && setSelection([editTarget]); setMenu(null); }
         else handled = false;
 
         if (handled) {
@@ -622,7 +652,7 @@ const Timeline: React.FC = function () {
         >
             <Toolbar>
                 {toolButton(playing ? BsPauseFill : BsPlayFill, playing ? 'Pause (Space)' : 'Play (Space)', togglePlay, duration <= 0, 'iconButton play')}
-                {toolButton(BsSkipStartFill, 'Back to start (Home)', () => { setSelection([]); seek(0); })}
+                {toolButton(BsSkipStartFill, 'Back to start (Home)', () => seekAndEdit(0))}
                 <span className='time'>
                     {formatTime(time)} <span className='total'>/ {formatTime(duration)}</span>
                 </span>
@@ -667,7 +697,7 @@ const Timeline: React.FC = function () {
                             <div className='content' style={{ width: LABEL_WIDTH + contentWidth }}>
                                 <div className='ruler'>
                                     <div className='corner'>Timelines</div>
-                                    <div className='scale' style={{ width: contentWidth }} onPointerDown={startScrub}>
+                                    <div className='scale' style={{ width: contentWidth }} onPointerDown={e => startScrub(e)}>
                                         <svg width={contentWidth} height={RULER_HEIGHT}>
                                             {
                                                 ticks.map(({ t, major }) => (
@@ -715,7 +745,7 @@ const Timeline: React.FC = function () {
                                                 <div
                                                     className='track'
                                                     style={{ width: contentWidth, backgroundSize: `${majorStep * pps}px 100%` }}
-                                                    onPointerDown={startScrub}
+                                                    onPointerDown={e => startScrub(e, track.id)}
                                                     onContextMenu={e => openMenu(e, track.id)}
                                                 >
                                                     {

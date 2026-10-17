@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { BsArrowCounterclockwise, BsCheckLg, BsX } from 'react-icons/bs';
+import { BsArrowCounterclockwise, BsX } from 'react-icons/bs';
 import { getPageTimelines, getShapesOfCurrentPage, getTimelineUi } from '../../selector/selector';
 import { setPageTimelines } from '../../actions/pages/pages.actions';
-import { setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { cutsceneStates, findCutscene } from '../../timeline/model';
 import { edgeLimits, moveLimits, roundTime, updateClip } from '../../timeline/clipOps';
 import { describeState } from '../../timeline/animatable';
@@ -198,9 +197,6 @@ const CutsceneProperties: React.FC = function () {
                     )
                     : null
             }
-            <button className='done' onClick={() => dispatch(setTimelineSelection([]))}>
-                <BsCheckLg /> Done editing cutscene
-            </button>
         </Card>
     );
 }

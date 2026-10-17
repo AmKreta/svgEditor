@@ -151,3 +151,18 @@ export function cutsceneStates(track: TIMELINE_TRACK, cutsceneId: string): { bef
     }
     return { before: index > 0 ? resolved[index - 1].state : {}, after: resolved[index].state };
 }
+
+/**
+ * The cutscene to edit for a playhead position: the one that ends at or after it, so a
+ * playhead on a cutscene's end edits that cutscene. Falls back to the last one, or Start at 0.
+ */
+export function cutsceneAt(track: TIMELINE_TRACK, time: number): CUTSCENE {
+    const ordered = orderedCutscenes(track);
+    let found = ordered[0];
+    ordered.forEach(c => {
+        if (c.start < time - 1e-6) {
+            found = c;
+        }
+    });
+    return found;
+}

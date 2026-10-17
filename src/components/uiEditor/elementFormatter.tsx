@@ -53,7 +53,7 @@ const ElementFormatter: React.FC<{}> = function () {
             <CutsceneProperties />
             {
                 !isEditingCutscene
-                    ? <p className='cutsceneHint'>The canvas is showing the animation. Select a cutscene in the timeline to edit its shapes.</p>
+                    ? <p className='cutsceneHint'>Playing the animation…</p>
                     : !activeShapesInfo?.length
                         ? <p className='cutsceneHint'>Select a shape on the canvas to change it in this cutscene, or draw a new one to bring it in.</p>
                         : null
