@@ -1,14 +1,15 @@
 import styled, { css } from 'styled-components';
 import { THEME } from '../theme/theme';
+import { UI_COLORS } from '../theme/uiTokens';
 
 export const PANEL_COLORS = {
-    border: '#e3e5e8',
-    sectionBg: '#fafbfc',
-    label: '#6b7280',
-    text: '#1f2937',
-    inputBorder: '#d1d5db',
-    focus: '#3b82f6',
-    hover: '#f3f4f6',
+    border: UI_COLORS.border,
+    sectionBg: UI_COLORS.surfaceMuted,
+    label: UI_COLORS.textMuted,
+    text: UI_COLORS.text,
+    inputBorder: UI_COLORS.inputBorder,
+    focus: UI_COLORS.accent,
+    hover: UI_COLORS.hover,
 };
 
 // Shared layout for the property panel. Every section uses the

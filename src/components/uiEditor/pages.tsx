@@ -2,7 +2,8 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { THEME } from '../../theme/theme';
 import Button from '../button.component';
-import { MdRemoveCircle, MdAddCircle } from 'react-icons/md';
+import { BsDash, BsPlus } from 'react-icons/bs';
+import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../store/store';
 import { SHAPE_COLLECTION } from '../../actions/pages/pages.interface';
@@ -41,8 +42,9 @@ const Pages: React.FC<props> = function ({ closePages }) {
             />
             <PagesContainer>
                 <div className='pageAction'>
-                    <Button title='Add' startIcon={MdAddCircle} iconSize={18} onClick={handleAdd} />
-                    <Button title='Remove' startIcon={MdRemoveCircle} iconSize={18} onClick={handleRemove} disabled={pages.length <= 1} />
+                    <span className='title'>Pages</span>
+                    <Button title='Add' startIcon={BsPlus} iconSize={16} onClick={handleAdd} />
+                    <Button title='Remove last' startIcon={BsDash} iconSize={16} onClick={handleRemove} disabled={pages.length <= 1} />
                 </div>
                 <div className='pageCollection'>
                     {
@@ -66,37 +68,66 @@ const PagesContainer = styled.div`
     ${props => {
         const theme = props.theme as THEME;
         return css`
-            width:20vw;
             position:absolute;
-            top:110%;
-            left:0%;
-            transform: translate(-5%,6.5%);
-            height:87.8vh;
+            top: calc(100% + ${theme.spacing(.5)}px);
+            left: 0;
             z-index: 4;
-            background-color: #ccc;
-            box-shadow:-1px -1px 6px #ccc, -1px -1px 3px #aaa;
             display: flex;
             flex-flow: column nowrap;
             align-items: stretch;
+            width: 280px;
+            max-height: 80vh;
+            background-color: ${UI_COLORS.surface};
+            border: 1px solid ${UI_COLORS.border};
+            border-radius: ${theme.spacing(1)}px;
+            box-shadow: ${UI_SHADOWS.popover};
+            overflow: hidden;
+
             &>div.pageAction{
                 display: flex;
+                align-items: center;
+                gap: ${theme.spacing(.5)}px;
+                padding: ${theme.spacing(1)}px;
+                border-bottom: 1px solid ${UI_COLORS.border};
+
+                &>.title{
+                    flex-grow: 1;
+                    font-weight: 600;
+                }
+
                 &>button{
-                    width:50%;
-                    &:hover{
-                        cursor: pointer;
-                        opacity:.7;
+                    height: 28px;
+                    padding: 0 ${theme.spacing(1)}px;
+                    border: 1px solid ${UI_COLORS.inputBorder};
+                    border-radius: ${theme.spacing(.75)}px;
+                    background-color: ${UI_COLORS.surface};
+                    font-size: 12px;
+                    font-weight: 500;
+                    &:hover:not(:disabled){
+                        opacity: 1;
+                        background-color: ${UI_COLORS.hover};
                     }
-                    &:active{
-                        opacity:.5;
+                    &:disabled{
+                        cursor: default;
+                        opacity: .4;
                     }
                 }
             }
             &>div.pageCollection{
                 flex-grow: 1;
-                padding:${theme.spacing(.5)}px;
+                display: flex;
+                flex-direction: column;
+                gap: ${theme.spacing(1)}px;
+                padding: ${theme.spacing(1.5)}px;
                 overflow-y: auto;
                 overflow-x: hidden;
-                padding-right: ${theme.spacing(1)}px;
+                background-color: ${UI_COLORS.surfaceMuted};
+
+                &>svg{
+                    flex-shrink: 0;
+                    margin: 0;
+                    border-radius: ${theme.spacing(.75)}px;
+                }
             }
         `;
     }}

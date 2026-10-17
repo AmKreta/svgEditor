@@ -10,6 +10,8 @@ import { createNewFile, saveFile, saveFileAS } from '../../actions/pages/pages.a
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDocId, getCurrentDocName } from '../../selector/selector';
 import { personalProjectIds } from '../../seed';
+import { BsBoxArrowLeft, BsChevronDown, BsDownload, BsFileEarmark, BsFileEarmarkPlus, BsFiles, BsBraces, BsSave } from 'react-icons/bs';
+import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
 
 const HeaderFileOptions: React.FC = function () {
 
@@ -23,7 +25,8 @@ const HeaderFileOptions: React.FC = function () {
     const options = useMemo(() => [
         {
             name: 'New',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            icon: BsFileEarmarkPlus,
+            onClick: () => {
                 toggleMenu();
                 const proceed = window.confirm('all your progress will be lost');
                 if (proceed) {
@@ -33,41 +36,48 @@ const HeaderFileOptions: React.FC = function () {
         },
         {
             name: 'Save',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            icon: BsSave,
+            onClick: () => {
                 toggleMenu();
                 dispatch(saveFile());
             },
             disabled: !currentDocName.length || personalProjectIds.includes(currentDocId)
         },
         {
-            name: 'Save as',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            name: 'Save as…',
+            icon: BsFiles,
+            onClick: () => {
                 toggleMenu();
                 toggleSaveAsModal();
             }
         },
         {
-            name: 'Export as json',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            name: 'Export as JSON',
+            icon: BsBraces,
+            separatorBefore: true,
+            onClick: () => {
                 toggleMenu();
                 exportAsJson();
             }
         },
         {
-            name: 'Export as svg',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            name: 'Export as SVG',
+            icon: BsDownload,
+            onClick: () => {
                 toggleMenu();
                 exportAsSvg();
             }
         },
         {
-            name: 'Exit',
-            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            name: 'Exit to home',
+            icon: BsBoxArrowLeft,
+            separatorBefore: true,
+            onClick: () => {
                 toggleMenu();
                 navigate('/');
             }
         }
-    ], []);
+    ], [currentDocName, currentDocId, dispatch, navigate]);
 
     const toggleMenu = function () {
         setShowMenu(prevState => !prevState);
@@ -84,22 +94,30 @@ const HeaderFileOptions: React.FC = function () {
 
     return (
         <HeaderOptionsContainer>
-            <div className='title' onClick={toggleMenu}>File</div>
+            <button className={`menuButton${showMenu ? ' open' : ''}`} onClick={toggleMenu} aria-haspopup='menu' aria-expanded={showMenu}>
+                <BsFileEarmark />
+                <span>File</span>
+                <BsChevronDown className='chevron' />
+            </button>
             {
                 showMenu
                     ? (
                         <>
-                            <div className='options'>
+                            <div className='options' role='menu'>
                                 {
                                     options.map((option, index) => (
-                                        <div
-                                            key={index}
-                                            className='option'
-                                            onClick={option.onClick}
-                                            style={{ pointerEvents: option.disabled ? 'none' : 'initial' }}
-                                        >
-                                            {option.name}
-                                        </div>
+                                        <React.Fragment key={index}>
+                                            {option.separatorBefore ? <div className='separator' /> : null}
+                                            <button
+                                                role='menuitem'
+                                                className='option'
+                                                onClick={option.onClick}
+                                                disabled={option.disabled}
+                                            >
+                                                <option.icon />
+                                                <span>{option.name}</span>
+                                            </button>
+                                        </React.Fragment>
                                     ))
                                 }
                             </div>
@@ -143,23 +161,52 @@ const HeaderOptionsContainer = styled.div`
         const theme = props.theme as THEME;
         return css`
             position:relative;
+
+            & .chevron{
+                height: 10px;
+                width: 10px;
+            }
+
             &>div.options{
-                text-align: left;
+                display: flex;
+                flex-direction: column;
                 position: absolute;
-                left:50%;
-                transform:translateX(-50%);
+                top: calc(100% + ${theme.spacing(.5)}px);
+                left: 0;
                 z-index: 5;
-                width:150px;
-                background-color: white;
-                box-shadow: 0 10px 50px 0 #ccc;
-                border:.5px solid #ccc;
+                min-width: 200px;
+                padding: ${theme.spacing(.5)}px;
+                background-color: ${UI_COLORS.surface};
+                border: 1px solid ${UI_COLORS.border};
                 border-radius: ${theme.spacing(1)}px;
-                overflow: hidden;
-                &>div.option{
-                    padding:${theme.spacing(1)}px ${theme.spacing(2)}px;
-                    border:.5px solid #ccc;
-                    &:hover{
-                        background-color: #ccc;
+                box-shadow: ${UI_SHADOWS.popover};
+
+                &>.separator{
+                    height: 1px;
+                    margin: ${theme.spacing(.5)}px ${theme.spacing(-.5)}px;
+                    background-color: ${UI_COLORS.border};
+                }
+
+                &>button.option{
+                    display: flex;
+                    align-items: center;
+                    gap: ${theme.spacing(1.25)}px;
+                    height: 32px;
+                    padding: 0 ${theme.spacing(1.25)}px;
+                    border: none;
+                    border-radius: ${theme.spacing(.75)}px;
+                    background: transparent;
+                    text-align: left;
+                    &>svg{
+                        flex-shrink: 0;
+                        color: ${UI_COLORS.textMuted};
+                    }
+                    &:hover:not(:disabled){
+                        background-color: ${UI_COLORS.hover};
+                    }
+                    &:disabled{
+                        cursor: default;
+                        opacity: .4;
                     }
                 }
             }
