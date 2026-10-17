@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { BsCheckLg, BsEye, BsPencilFill, BsSkipStartFill } from 'react-icons/bs';
+import { BsCheckLg, BsEye, BsPencilFill } from 'react-icons/bs';
 import { getPageTimelines, getTimelineUi } from '../../selector/selector';
-import { showTimeOnCanvas } from '../../timeline/editing';
 import { findCutscene } from '../../timeline/model';
 import { setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
@@ -24,20 +23,21 @@ const TimelineCanvasBanner: React.FC = function () {
             <Sticky>
                 <Banner className='editing'>
                     <BsPencilFill className='icon accent' />
-                    <span><b>Editing {cutscene.name}</b> · changes animate {formatTime(cutscene.start)} → {formatTime(cutscene.end)}</span>
+                    <span>
+                        <b>Editing {cutscene.name}</b> · {cutscene.isDefault ? 'the starting state' : `animates ${formatTime(cutscene.start)} → ${formatTime(cutscene.end)}`}
+                    </span>
                     <button className='primary' onClick={() => dispatch(setTimelineSelection([]))}><BsCheckLg /> Done</button>
                 </Banner>
             </Sticky>
         );
     }
 
-    if (preview && !playing) {
+    if (preview && !playing && !editing) {
         return (
             <Sticky>
                 <Banner>
                     <BsEye className='icon' />
-                    <span>Previewing {formatTime(time)} · select a cutscene to change it</span>
-                    <button onClick={() => showTimeOnCanvas(0)}><BsSkipStartFill /> Back to start</button>
+                    <span>Previewing {formatTime(time)} · select a cutscene to edit</span>
                 </Banner>
             </Sticky>
         );

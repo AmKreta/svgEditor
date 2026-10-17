@@ -43,7 +43,7 @@ const ElementFormatter: React.FC<{}> = function () {
     return (
         <StyledDiv>
             <div className='panelHeader'>
-                <span className='title'>{activeShapesInfo?.length ? 'Properties' : isEditingCutscene ? 'Cutscene' : 'Canvas'}</span>
+                <span className='title'>{isEditingCutscene && activeShapesInfo?.length ? 'Properties' : isEditingCutscene ? 'Cutscene' : 'Canvas'}</span>
                 {
                     activeShapesInfo?.length > 1
                         ? <span className='badge'>{activeShapesInfo.length} selected</span>
@@ -52,12 +52,14 @@ const ElementFormatter: React.FC<{}> = function () {
             </div>
             <CutsceneProperties />
             {
-                isEditingCutscene && !activeShapesInfo?.length
-                    ? <p className='cutsceneHint'>Select a shape on the canvas to animate it in this cutscene.</p>
-                    : null
+                !isEditingCutscene
+                    ? <p className='cutsceneHint'>The canvas is showing the animation. Select a cutscene in the timeline to edit its shapes.</p>
+                    : !activeShapesInfo?.length
+                        ? <p className='cutsceneHint'>Select a shape on the canvas to change it in this cutscene, or draw a new one to bring it in.</p>
+                        : null
             }
             {
-                activeShapesInfo?.length
+                isEditingCutscene && activeShapesInfo?.length
                     ? (
                         <div className='formatterList'>
                             {
@@ -78,7 +80,7 @@ const ElementFormatter: React.FC<{}> = function () {
                             }
                         </div>
                     )
-                    : isEditingCutscene ? null : <SvgContainerEditor />
+                    : <SvgContainerEditor />
             }
         </StyledDiv>
     );

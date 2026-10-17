@@ -34,8 +34,11 @@ const Group: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     const ref = useRef<any>(null);
     const [groupMidPoint, setGroupMidPoint] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const groupChildren = useSelector((state: State) => {
-        const groundChildren = shape.children.map(childId => state.page.pages[state.page.activePageIndex].shapes[childId]);
-        return groundChildren;
+        // in the timeline preview children may only exist in the preview
+        const shapes = state.page.pages[state.page.activePageIndex].shapes;
+        return shape.children
+            .map(childId => state.timeline.preview?.[childId] || shapes[childId])
+            .filter(Boolean);
     });
 
     useLayoutEffect(function () {

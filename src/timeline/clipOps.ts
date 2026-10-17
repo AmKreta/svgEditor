@@ -1,5 +1,7 @@
 import generateId from '../utils/idGenerator';
-import { CLIP_REF, CUTSCENE, DEFAULT_CUTSCENE_DURATION, DEFAULT_EASE, MIN_CUTSCENE_DURATION, TIMELINE_TRACK } from './timeline.types';
+import { cloneDeep } from 'lodash';
+import { emptyCutscene } from './model';
+import { CLIP_REF, CUTSCENE, DEFAULT_CUTSCENE_DURATION, MIN_CUTSCENE_DURATION, TIMELINE_TRACK } from './timeline.types';
 
 export interface CLIPBOARD_ITEM {
     timelineId: string;
@@ -16,10 +18,32 @@ const cutscenesOf = (tracks: TRACKS, timelineId: string) => tracks.find(t => t.i
 const mapTrack = (tracks: TRACKS, timelineId: string, fn: (cutscenes: CUTSCENE[]) => CUTSCENE[]): TRACKS =>
     tracks.map(t => t.id === timelineId ? { ...t, cutscenes: fn(t.cutscenes) } : t);
 
-export const cloneCutscene = (cutscene: CUTSCENE): CUTSCENE => ({
-    ...cutscene,
-    state: Object.fromEntries(Object.entries(cutscene.state).map(([id, s]) => [id, { ...s }])),
-});
+export const cloneCutscene = (cutscene: CUTSCENE): CUTSCENE => cloneDeep(cutscene);
+
+/**
+ * A pasted cutscene can't reuse the ids of the shapes it adds (they already exist), so those
+ * shapes get new ids; changes and removals still refer to the destination timeline's shapes.
+ */
+function withFreshShapeIds(cutscene: CUTSCENE): CUTSCENE {
+    const ids: { [oldId: string]: string } = {};
+    Object.keys(cutscene.added).forEach(id => {
+        ids[id] = generateId();
+    });
+    const rename = (id: string) => ids[id] || id;
+    const added: CUTSCENE['added'] = {};
+    Object.keys(cutscene.added).forEach(id => {
+        const shape: any = { ...cloneDeep(cutscene.added[id]), id: rename(id) };
+        if (Array.isArray(shape.children)) {
+            shape.children = shape.children.map(rename);
+        }
+        added[rename(id)] = shape;
+    });
+    const enter: CUTSCENE['enter'] = {};
+    Object.keys(cutscene.enter).forEach(id => {
+        enter[rename(id)] = cutscene.enter[id];
+    });
+    return { ...cloneDeep(cutscene), isDefault: undefined, added, enter };
+}
 
 export function findClips(tracks: TRACKS, refs: CLIP_REF[]): CLIPBOARD_ITEM[] {
     return refs
@@ -29,7 +53,8 @@ export function findClips(tracks: TRACKS, refs: CLIP_REF[]): CLIPBOARD_ITEM[] {
 
 export function nextCutsceneName(tracks: TRACKS) {
     const used = new Set(tracks.flatMap(t => t.cutscenes.map(c => c.name)));
-    let n = tracks.reduce((sum, t) => sum + t.cutscenes.length, 0) + 1;
+    // the default "Start" cutscenes don't count
+    let n = tracks.reduce((sum, t) => sum + t.cutscenes.filter(c => !c.isDefault).length, 0) + 1;
     while (used.has(`Cutscene ${n}`)) n++;
     return `Cutscene ${n}`;
 }
@@ -44,23 +69,21 @@ export function nextTimelineName(tracks: TRACKS) {
 /** Appends a 1 second cutscene after the last one in the timeline. */
 export function addCutscene(tracks: TRACKS, timelineId: string): { tracks: TRACKS, ref: CLIP_REF } {
     const start = Math.max(0, ...cutscenesOf(tracks, timelineId).map(c => c.end));
-    const cutscene: CUTSCENE = {
-        id: generateId(),
+    const cutscene = emptyCutscene({
         name: nextCutsceneName(tracks),
         start: roundTime(start),
         end: roundTime(start + DEFAULT_CUTSCENE_DURATION),
-        ease: DEFAULT_EASE,
-        state: {},
-    };
+    });
     return {
         tracks: mapTrack(tracks, timelineId, cutscenes => [...cutscenes, cutscene]),
         ref: { timelineId, id: cutscene.id },
     };
 }
 
+/** Removes cutscenes; a timeline's default cutscene always stays. */
 export function removeClips(tracks: TRACKS, refs: CLIP_REF[]): TRACKS {
     const ids = new Set(refs.map(ref => ref.id));
-    return tracks.map(t => ({ ...t, cutscenes: t.cutscenes.filter(c => !ids.has(c.id)) }));
+    return tracks.map(t => ({ ...t, cutscenes: t.cutscenes.filter(c => c.isDefault || !ids.has(c.id)) }));
 }
 
 export function updateClip(tracks: TRACKS, ref: CLIP_REF, patch: Partial<CUTSCENE>): TRACKS {
@@ -77,6 +100,12 @@ export function moveLimits(tracks: TRACKS, refs: CLIP_REF[]): [number, number] {
     let lo = -Infinity;
     let hi = Infinity;
     findClips(tracks, refs).forEach(({ timelineId, cutscene }) => {
+        if (cutscene.isDefault) {
+            // the default cutscene always starts the timeline
+            lo = Math.max(lo, 0);
+            hi = Math.min(hi, 0);
+            return;
+        }
         const others = cutscenesOf(tracks, timelineId).filter(c => !moving.has(c.id));
         const previousEnd = Math.max(0, ...others.filter(c => c.end <= cutscene.start + 1e-6).map(c => c.end));
         const nextStart = Math.min(Infinity, ...others.filter(c => c.start >= cutscene.end - 1e-6).map(c => c.start));
@@ -94,6 +123,9 @@ export function edgeLimits(tracks: TRACKS, ref: CLIP_REF, edge: 'start' | 'end')
     }
     const others = cutscenesOf(tracks, ref.timelineId).filter(c => c.id !== ref.id);
     if (edge === 'start') {
+        if (clip.isDefault) {
+            return [0, 0];
+        }
         const previousEnd = Math.max(0, ...others.filter(c => c.end <= clip.start + 1e-6).map(c => c.end));
         return [previousEnd, clip.end - MIN_CUTSCENE_DURATION];
     }
@@ -138,7 +170,7 @@ export function pasteClips(
         .map(item => ({
             timelineId: item.timelineId,
             cutscene: {
-                ...cloneCutscene(item.cutscene),
+                ...withFreshShapeIds(item.cutscene),
                 id: generateId(),
                 name: `${item.cutscene.name} copy`,
                 start: roundTime(item.cutscene.start - earliest + at),

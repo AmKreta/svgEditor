@@ -31,6 +31,14 @@ const ModifiedEditor = (WRAPPED_EDITOR: React.ComponentType<EditorProps>) => {
                         }}
                         fullWidth
                     />
+                    <NumberEditor
+                        value={shape.style.opacity ?? 1}
+                        label='Opacity'
+                        onChange={val => {
+                            val >= 0 && val <= 1 && dispatch(formatActiveShape({ id: shape.id, style: { opacity: Math.round(val * 100) / 100 } }));
+                        }}
+                        step={.1}
+                    />
                 </div>
                 <div className='EditorCaegoryContainer'>
                     <div className='editorCategory'>Border</div>

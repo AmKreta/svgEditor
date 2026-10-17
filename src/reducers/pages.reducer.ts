@@ -157,17 +157,11 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
                 shape.children = [...shape.children];
             }
 
-            const pastedIds: Array<[string, string]> = [];
 
             state.clipboard.forEach(item => {
                 let newShape: AVAILABLE_SHAPES;
                 newShape = cloneDeep(item);
                 newShape.id = generateId();
-                // copied shapes take their animation along: every cutscene on this page that
-                // animates the source shape now animates the copy too, offset like the copy
-                if (item.pageId === currentPage.id) {
-                    pastedIds.push([item.id, newShape.id]);
-                }
                 newShape.style.translate = [item.style.translate[0] + dx, item.style.translate[1] + dy];
                 shapesToPaste[newShape.id] = newShape;
                 if (newShape.type === SHAPE_TYPES.GROUP) {
@@ -179,25 +173,6 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
 
             // concatining newly shapes with existing shapes
             currentPage.shapes = { ...currentPage.shapes, ...shapesToPaste };
-            if (pastedIds.length && currentPage.timelines) {
-                currentPage.timelines = currentPage.timelines.map(track => ({
-                    ...track,
-                    cutscenes: track.cutscenes.map(cutscene => {
-                        const state = { ...cutscene.state };
-                        pastedIds.forEach(([sourceId, copyId]) => {
-                            if (!cutscene.state[sourceId]) {
-                                return;
-                            }
-                            // positions are absolute, so move them by the same offset as the pasted shape
-                            const copy = { ...cutscene.state[sourceId] };
-                            if (typeof copy['style.translate.0'] === 'number') copy['style.translate.0'] += dx;
-                            if (typeof copy['style.translate.1'] === 'number') copy['style.translate.1'] += dy;
-                            state[copyId] = copy;
-                        });
-                        return { ...cutscene, state };
-                    })
-                }));
-            }
             // setting these shapes as active shapes
             currentPage.activeShapes = Object.keys(shapesToPaste);
             return { ...state };
@@ -431,7 +406,18 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             return { ...state };
         }
 
-        case PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT as any: {
+        case PAGES_ACTION_TYPES.SET_PAGE_SHAPES: {
+            const currentPage = state.pages[state.activePageIndex];
+            state.pages[state.activePageIndex] = {
+                ...currentPage,
+                shapes: action.payload,
+                activeShapes: currentPage.activeShapes.filter(id => action.payload[id]),
+            };
+            state.pages = [...state.pages];
+            return { ...state, hoveredShapeId: null };
+        }
+
+                case PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT as any: {
             updateSnapshotOfCurrentPage();
             return { ...state };
         }

@@ -1,192 +1,173 @@
-import { isEqual } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 import store from '../store/store';
-import { formatActiveShape, setPageTimelines } from '../actions/pages/pages.actions';
+import { setPageShapes, setPageTimelines } from '../actions/pages/pages.actions';
 import { setEditing, setPlayback } from '../actions/timeline/timeline.actions';
 import { getPageTimelines, getShapesOfCurrentPage } from '../selector/selector';
 import { AVAILABLE_SHAPES } from '../shapes/availableShapes';
-import { applyFlatState, diffFlatState, flattenShape } from './animatable';
 import { timelinePlayer } from './player';
-import { cutsceneBaseline, findCutscene } from './model';
+import { applyPatch, cutsceneStates, findCutscene, shapeOwners, snapshotInto } from './model';
 import { updateClip } from './clipOps';
-import { CLIP_REF, FLAT_STATE } from './timeline.types';
+import { CLIP_REF, SHAPES_STATE, SHAPE_PATCH, TRANSITION } from './timeline.types';
 
-// each shape's animatable state as of the last sync; only properties that change after this
-// are written into the cutscene, so selecting a cutscene never rewrites what it already stores
-let lastSeen: { [shapeId: string]: FLAT_STATE } = {};
+// shapes exactly as a cutscene was loaded; nothing is saved until they change
+let loadedShapes: AVAILABLE_SHAPES[] = [];
 
-const sameValue = (a: number | string | undefined, b: number | string | undefined) =>
-    typeof a === 'number' && typeof b === 'number' ? Math.abs(a - b) < 1e-6 : a === b;
+const sameShapes = (a: AVAILABLE_SHAPES[], b: AVAILABLE_SHAPES[]) =>
+    a.length === b.length && a.every((shape, i) => shape === b[i]);
 
-function writeFlat(shape: AVAILABLE_SHAPES, flat: FLAT_STATE) {
-    if (!isEqual(flattenShape(shape), flat)) {
-        store.dispatch(formatActiveShape({ id: shape.id, properties: applyFlatState(shape, flat) as any }));
-    }
-}
-
-/** Shows the page as it looks at `time`; at 0 (or with no animation) the shapes themselves are shown. */
+/** Shows the page as it looks at `time`, view-only. */
 export function showTimeOnCanvas(time: number) {
-    const state = store.getState();
-    timelinePlayer.sync(getPageTimelines(state), getShapesOfCurrentPage(state));
-    const preview = time > 0 && !timelinePlayer.isEmpty ? timelinePlayer.evaluate(time) : null;
-    store.dispatch(setPlayback({ time, preview }));
+    timelinePlayer.sync(getPageTimelines(store.getState()));
+    store.dispatch(setPlayback({ time, preview: timelinePlayer.evaluate(time) }));
 }
 
 /**
- * Selecting a cutscene: the canvas shows every shape as it is when the cutscene ends and
- * stays editable. Shape edits from then on are saved into the cutscene by `syncEditedCutscene`.
+ * Loads a cutscene onto the canvas: its timeline's shapes as they are when it ends, plus the
+ * other timelines' shapes at that moment (locked). Canvas edits are then saved into it.
  */
 export function enterCutscene(ref: CLIP_REF) {
-    exitCutscene(false);
     timelinePlayer.pause();
-    const state = store.getState();
-    const timelines = getPageTimelines(state);
+    const timelines = getPageTimelines(store.getState());
+    const track = timelines.find(t => t.id === ref.timelineId);
     const cutscene = findCutscene(timelines, ref.timelineId, ref.id);
-    if (!cutscene) {
+    const states = track && cutsceneStates(track, ref.id);
+    if (!track || !cutscene || !states) {
         return;
     }
-    const shapes = getShapesOfCurrentPage(state);
-    const { from, to } = cutsceneBaseline(timelines, shapes, ref.id);
-    const backup: { [id: string]: FLAT_STATE } = {};
-    Object.keys(shapes).forEach(id => {
-        backup[id] = flattenShape(shapes[id]);
+    timelinePlayer.sync(timelines);
+    const owners = shapeOwners(timelines);
+    const others: SHAPES_STATE = {};
+    const atEnd = timelinePlayer.evaluate(cutscene.end);
+    Object.keys(atEnd).forEach(id => {
+        if (owners[id] !== track.id) {
+            others[id] = atEnd[id];
+        }
     });
 
-    lastSeen = to;
+    const working: SHAPES_STATE = { ...cloneDeep(states.after), ...others };
+    loadedShapes = Object.values(working);
     store.dispatch(setPlayback({ time: cutscene.end, playing: false, preview: null }));
-    store.dispatch(setEditing({ timelineId: ref.timelineId, cutsceneId: ref.id, backup, from }));
-    Object.keys(shapes).forEach(id => writeFlat(shapes[id], to[id]));
+    store.dispatch(setEditing({ timelineId: track.id, cutsceneId: cutscene.id, locked: Object.keys(others) }));
+    store.dispatch(setPageShapes(working));
 }
 
-/**
- * Saves shape edits into the selected cutscene. A property edited back to its value at the
- * cutscene's start stops being animated; properties nobody touched keep what's stored.
- */
+/** Saves the canvas into the cutscene being edited, as changes from the previous cutscene. */
 export function syncEditedCutscene() {
     const state = store.getState();
     const editing = state.timeline.editing;
     if (!editing) {
         return;
     }
-    const timelines = getPageTimelines(state);
-    const cutscene = findCutscene(timelines, editing.timelineId, editing.cutsceneId);
-    if (!cutscene) {
+    const shapes = getShapesOfCurrentPage(state);
+    if (sameShapes(Object.values(shapes), loadedShapes)) {
         return;
     }
-    const shapes = getShapesOfCurrentPage(state);
-    const next = { ...cutscene.state };
-    let changed = false;
-
-    Object.keys(editing.from).forEach(id => {
-        // shapes created while editing aren't animated
-        if (!shapes[id]) {
-            if (next[id]) {
-                delete next[id];
-                changed = true;
-            }
-            return;
+    const timelines = getPageTimelines(state);
+    const track = timelines.find(t => t.id === editing.timelineId);
+    const cutscene = findCutscene(timelines, editing.timelineId, editing.cutsceneId);
+    const states = track && cutsceneStates(track, editing.cutsceneId);
+    if (!cutscene || !states) {
+        return;
+    }
+    const locked = new Set(editing.locked);
+    const current: SHAPES_STATE = {};
+    Object.keys(shapes).forEach(id => {
+        if (!locked.has(id)) {
+            current[id] = shapes[id];
         }
-        const current = flattenShape(shapes[id]);
-        const seen = lastSeen[id] || current;
-        const edited = Object.keys(current).filter(key => !sameValue(current[key], seen[key]));
-        lastSeen[id] = current;
-        if (!edited.length) {
-            return;
-        }
-        const from = editing.from[id];
-        const target = { ...(next[id] || {}) };
-        edited.forEach(key => {
-            if (!(key in from) || sameValue(current[key], from[key])) {
-                delete target[key];
-            } else {
-                target[key] = diffFlatState({ [key]: from[key] }, { [key]: current[key] })[key];
-            }
-        });
-        if (Object.keys(target).length) {
-            next[id] = target;
-        } else {
-            delete next[id];
-        }
-        changed = true;
     });
-
-    if (changed && !isEqual(next, cutscene.state)) {
-        store.dispatch(setPageTimelines(updateClip(timelines, { timelineId: editing.timelineId, id: editing.cutsceneId }, { state: next })));
+    const next = snapshotInto(cutscene, states.before, current);
+    if (!isEqual(next, cutscene)) {
+        store.dispatch(setPageTimelines(updateClip(timelines, { timelineId: editing.timelineId, id: cutscene.id }, next)));
     }
 }
 
-/** Leaves cutscene editing and puts the shapes' own animatable properties back. */
+/** Leaves cutscene editing; the canvas goes back to a view-only preview. */
 export function exitCutscene(refresh = true) {
-    const state = store.getState();
-    const editing = state.timeline.editing;
-    if (!editing) {
+    if (!store.getState().timeline.editing) {
         return;
     }
     syncEditedCutscene();
-    // leave editing first so restoring the shapes isn't saved into the cutscene
     store.dispatch(setEditing(null));
-    const shapes = getShapesOfCurrentPage(store.getState());
-    Object.keys(editing.backup).forEach(id => {
-        // only animatable properties are restored, so e.g. a rename while editing is kept
-        shapes[id] && writeFlat(shapes[id], editing.backup[id]);
-    });
     if (refresh) {
         showTimeOnCanvas(store.getState().timeline.time);
     }
 }
 
-/**
- * Stops the selected cutscene animating `keys` of a shape (all of them when omitted) and puts
- * those properties back to how they are when the cutscene starts.
- */
-export function revertInCutscene(shapeId: string, keys?: string[]) {
+function editedCutscene() {
     const state = store.getState();
     const editing = state.timeline.editing;
-    const shape = getShapesOfCurrentPage(state)[shapeId];
+    if (!editing) {
+        return null;
+    }
     const timelines = getPageTimelines(state);
-    const cutscene = editing && findCutscene(timelines, editing.timelineId, editing.cutsceneId);
-    if (!editing || !cutscene || !shape || !editing.from[shapeId]) {
-        return;
-    }
-    const nextState = { ...cutscene.state };
-    const target = { ...(nextState[shapeId] || {}) };
-    (keys || Object.keys(target)).forEach(key => delete target[key]);
-    if (Object.keys(target).length) {
-        nextState[shapeId] = target;
-    } else {
-        delete nextState[shapeId];
-    }
-    store.dispatch(setPageTimelines(updateClip(timelines, { timelineId: editing.timelineId, id: editing.cutsceneId }, { state: nextState })));
-
-    const from = editing.from[shapeId];
-    const next = { ...flattenShape(shape) };
-    (keys || Object.keys(from)).forEach(key => {
-        if (key in from) {
-            next[key] = from[key];
-        }
-    });
-    writeFlat(shape, next);
+    const track = timelines.find(t => t.id === editing.timelineId);
+    const cutscene = findCutscene(timelines, editing.timelineId, editing.cutsceneId);
+    const states = track && cutsceneStates(track, editing.cutsceneId);
+    return cutscene && states ? { editing, timelines, cutscene, states, shapes: getShapesOfCurrentPage(state) } : null;
 }
 
 /**
- * Watches shape edits: while a cutscene is selected they're saved into it, and while a paused
- * preview is showing it's refreshed. Reducers update shapes inside the same object, so changes
- * are detected by comparing each shape. Returns the unsubscribe function.
+ * Undoes part of what the edited cutscene does to a shape: takes an entering shape back out,
+ * brings an exiting shape back, or puts `keys` (all when omitted) of a changed shape back to
+ * the previous cutscene's values.
+ */
+export function revertInCutscene(shapeId: string, keys?: string[]) {
+    const context = editedCutscene();
+    if (!context) {
+        return;
+    }
+    const { states, shapes } = context;
+    const before = states.before[shapeId];
+    const current = shapes[shapeId];
+    const next = { ...shapes };
+    if (!before) {
+        delete next[shapeId];
+    } else if (!current || !keys) {
+        next[shapeId] = cloneDeep(before);
+    } else {
+        const patch: SHAPE_PATCH = {};
+        keys.forEach(key => {
+            if (key.startsWith('style.')) {
+                patch.style = { ...(patch.style || {}), [key.slice(6)]: (before.style as any)[key.slice(6)] };
+            } else {
+                patch[key] = (before as any)[key];
+            }
+        });
+        next[shapeId] = applyPatch(current, patch);
+    }
+    store.dispatch(setPageShapes(next));
+}
+
+/** Picks the entry or exit animation of a shape in the edited cutscene. */
+export function setTransition(shapeId: string, kind: 'enter' | 'exit', type: TRANSITION) {
+    const context = editedCutscene();
+    if (!context) {
+        return;
+    }
+    const { editing, timelines, cutscene } = context;
+    store.dispatch(setPageTimelines(updateClip(
+        timelines,
+        { timelineId: editing.timelineId, id: cutscene.id },
+        { [kind]: { ...cutscene[kind], [shapeId]: type } }
+    )));
+}
+
+/**
+ * Saves canvas edits into the selected cutscene as they happen. Reducers update shapes inside
+ * the same object, so changes are detected by comparing each shape. Returns the unsubscribe.
  */
 export function watchShapeEdits(): () => void {
-    let lastShapes: AVAILABLE_SHAPES[] = [];
+    let last: AVAILABLE_SHAPES[] = [];
     return store.subscribe(() => {
         const state = store.getState();
         const shapes = Object.values(getShapesOfCurrentPage(state));
-        const changed = shapes.length !== lastShapes.length || shapes.some((shape, i) => shape !== lastShapes[i]);
-        if (!changed) {
+        if (sameShapes(shapes, last)) {
             return;
         }
-        lastShapes = shapes;
-        const { editing, playing, time } = state.timeline;
-        if (editing) {
+        last = shapes;
+        if (state.timeline.editing) {
             syncEditedCutscene();
-        } else if (!playing && time > 0) {
-            showTimeOnCanvas(time);
         }
     });
 }

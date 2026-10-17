@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { State } from '../store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { getActiveShapesInfo, getActiveTool, getCurrentShape, getDisplayedShape } from '../selector/selector';
+import { getActiveShapesInfo, getActiveTool, getDisplayedShape } from '../selector/selector';
 import { AVAILABLE_SHAPES } from './availableShapes';
 import { translateActiveShape, toggleContextMenu, scaleActiveShape, rotateActiveShape } from '../actions/pages/pages.actions';
 import {
@@ -54,6 +54,8 @@ export interface WRAPPED_SHAPE_PROPS {
     hovered: boolean;
     isActive: boolean;
     shape: AVAILABLE_SHAPES;
+    /** belongs to another timeline than the cutscene being edited: shown, not editable */
+    locked?: boolean;
 };
 
 export function shapePointerProps(props: WRAPPED_SHAPE_PROPS) {
@@ -61,6 +63,7 @@ export function shapePointerProps(props: WRAPPED_SHAPE_PROPS) {
         onPointerDown: props.mouseDownHandler,
         onPointerEnter: props.mouseEnterHandler,
         onPointerLeave: props.mouseLeaveHandler,
+        'data-locked': props.locked ? 'true' : undefined,
     };
 }
 
@@ -85,6 +88,7 @@ export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: 
             strokeOpacity: 1,
             strokeLinejoin: 'miter',
             strokeMitterlimit: 4,
+            opacity: 1,
             fillOpacity: 1,
             rotate: 0,
             translate: [0, 0],
@@ -100,9 +104,9 @@ export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: 
 
 const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) => {
     return function BaseTool(props: BASE_SHAPE_PROPS) {
-        const currentShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getCurrentShape(state, props.id));
         // the animated version while the timeline is previewing, otherwise the shape itself
         const displayedShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getDisplayedShape(state, props.id));
+        const locked = useSelector<State, boolean>((state: State) => Boolean(state.timeline.editing?.locked.includes(props.id)));
         const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
         const activeTool = useSelector<State, SHAPE_TYPES>(getActiveTool);
         const dispatch = useDispatch();
@@ -176,9 +180,13 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
             e.stopPropagation();
 
             if (e.button === POINTER_BUTTON.SECONDARY) {
+                // the context menu acts on the selection, so right-clicking a shape selects it first
+                if (!activeShapes.includes(props.id)) {
+                    dispatch(setActiveShape([props.id]));
+                }
                 const svgEditor = document.getElementById('svgEditor')!;
                 const editorBBox = svgEditor.getBoundingClientRect();
-                const el = document.getElementById(currentShape.id)!;
+                const el = document.getElementById(props.id)!;
                 const c = getBoundingRectMidPoint(el.getBoundingClientRect());
                 dispatch(toggleContextMenu({
                     x: c.x - editorBBox.x,
@@ -191,8 +199,8 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 return;
             }
 
-            if (activeShapes.findIndex(shapeId => shapeId === currentShape.id) === -1) {
-                dispatch(setActiveShape([currentShape.id]));
+            if (activeShapes.findIndex(shapeId => shapeId === props.id) === -1) {
+                dispatch(setActiveShape([props.id]));
             }
 
             draggingRef.current = true;
@@ -214,14 +222,14 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
                 window.removeEventListener('pointerup', endDrag);
                 window.removeEventListener('pointercancel', endDrag);
             };
-        }, [activeShapes, activeTool, currentShape?.id, dispatch, dragMove, endDrag]);
+        }, [activeShapes, activeTool, props.id, dispatch, dragMove, endDrag]);
 
         const mouseEnterHandler = useCallback((e: ShapePointerEvent) => {
             if (draggingRef.current) {
                 return;
             }
-            dispatch(setHoveredShape(currentShape.id));
-        }, [currentShape?.id, dispatch]);
+            dispatch(setHoveredShape(props.id));
+        }, [props.id, dispatch]);
 
         const mouseLeaveHandler = useCallback((e: ShapePointerEvent) => {
             if (draggingRef.current) {
@@ -230,13 +238,15 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
             dispatch(setHoveredShape(null));
         }, [dispatch]);
 
-        if (!currentShape) {
+        // shapes only on screen in the timeline preview aren't part of the page being edited
+        if (!displayedShape) {
             return null;
         }
 
         return (
             <WRAPPED_SHAPE
                 shape={displayedShape}
+                locked={locked}
                 mouseDownHandler={mouseDownHandler}
                 mouseEnterHandler={mouseEnterHandler}
                 mouseLeaveHandler={mouseLeaveHandler}

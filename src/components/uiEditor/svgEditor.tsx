@@ -49,7 +49,10 @@ const SvgEditor: React.FC<{}> = function () {
     const svgStyle = useSelector(getSvgStyle);
     const { preview, editing } = useSelector(getTimelineUi);
     // while the timeline previews a moment other than the start, the canvas is view-only
-    const isPreviewing = Boolean(preview) && !editing;
+    // the canvas is editable only while a cutscene is loaded; otherwise it shows the timeline preview
+    const isPreviewing = !editing;
+    const shapesToShow = (isPreviewing && preview) || shapesOfCurrentPage;
+    const activeToShow = isPreviewing ? [] : activeShapes;
 
     const [shapeSelectorProps, setShapeSelectorProps] = useState<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
     const [pointsArray, setPointsArray] = useState<Array<[number, number]>>([]);
@@ -287,7 +290,8 @@ const SvgEditor: React.FC<{}> = function () {
                     const shape = (node as SVGElement).getBoundingClientRect();
                     if (areColliding(selector, shape)) {
                         const el = node as SVGElement;
-                        if (el.id && el.id !== 'Shape-Selector') {
+                        // shapes of other timelines can't be selected while editing a cutscene
+                        if (el.id && el.id !== 'Shape-Selector' && !el.dataset.locked) {
                             selectedShapes.push(el.id);
                         }
                     }
@@ -337,11 +341,11 @@ const SvgEditor: React.FC<{}> = function () {
                     (
                         function () {
                             const shapesToDraw: any = [];
-                            for (let id in shapesOfCurrentPage) {
-                                if (shapesOfCurrentPage[id].render && !activeShapes.find(shapeId => shapeId === id)) {
+                            for (let id in shapesToShow) {
+                                if (shapesToShow[id].render && !activeToShow.find(shapeId => shapeId === id)) {
                                     shapesToDraw.push(
                                         <DrawShapes
-                                            shape={shapesOfCurrentPage[id]}
+                                            shape={shapesToShow[id]}
                                             isActive={false}
                                             hovered={hoveredShapeId === id}
                                             key={id}
@@ -349,11 +353,11 @@ const SvgEditor: React.FC<{}> = function () {
                                     )
                                 }
                             }
-                            activeShapes.forEach((shapeId) => {
-                                if (shapesOfCurrentPage[shapeId].render) {
+                            activeToShow.forEach((shapeId) => {
+                                if (shapesToShow[shapeId]?.render) {
                                     shapesToDraw.push(
                                         <DrawShapes
-                                            shape={shapesOfCurrentPage[shapeId]}
+                                            shape={shapesToShow[shapeId]}
                                             isActive={true}
                                             hovered={hoveredShapeId === shapeId}
                                             key={shapeId}
@@ -430,6 +434,10 @@ const SvgContainer = styled.div`
 
     &.previewing>#svgEditor{
         pointer-events: none;
+    }
+    & #svgEditor>[data-locked='true']{
+        pointer-events: none;
+        opacity: .45;
     }
 
     min-width: 0;

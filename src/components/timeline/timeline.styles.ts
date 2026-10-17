@@ -250,12 +250,12 @@ export const Body = styled.div`
             flex-shrink: 0;
             background-image: linear-gradient(to right, ${UI_COLORS.hover} 1px, transparent 1px);
             &>.trackHint{
-                position: sticky;
-                left: 12px;
+                position: absolute;
+                top: 0;
                 display: inline-flex;
                 align-items: center;
                 height: 100%;
-                padding-left: 12px;
+                white-space: nowrap;
                 color: ${UI_COLORS.textMuted};
                 pointer-events: none;
             }
@@ -315,6 +315,9 @@ export const Body = styled.div`
                 opacity: .75;
                 font-weight: 400;
             }
+        }
+        &.default{
+            background-image: linear-gradient(rgba(17, 24, 39, .22), rgba(17, 24, 39, .22));
         }
         &.noChanges{
             background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, .18) 0 6px, transparent 6px 12px);

@@ -6,20 +6,18 @@ import {
 } from 'react-icons/bs';
 import { IconType } from 'react-icons';
 import store, { State } from '../../store/store';
-import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
-import { getActivePageIndex, getPageTimelines, getShapesOfCurrentPage, getTimelineUi } from '../../selector/selector';
+import { getActivePageIndex, getPageTimelines, getTimelineUi } from '../../selector/selector';
 import { setPageTimelines } from '../../actions/pages/pages.actions';
-import { setPlayback, setTimelineSelection } from '../../actions/timeline/timeline.actions';
+import { setEditing, setPlayback, setTimelineSelection } from '../../actions/timeline/timeline.actions';
 import { timelinePlayer } from '../../timeline/player';
 import { enterCutscene, exitCutscene, showTimeOnCanvas, watchShapeEdits } from '../../timeline/editing';
 import {
     addCutscene, applyDraft, CLIPBOARD_ITEM, cloneCutscene, edgeLimits, findClips, moveLimits, nextTimelineName,
     pasteClips, removeClips, roundTime, snapEdges, TIME_DRAFT, updateClip
 } from '../../timeline/clipOps';
-import { findCutscene } from '../../timeline/model';
+import { createTimeline, findCutscene, isSnapshotFormat, orderedCutscenes } from '../../timeline/model';
 import { CLIP_REF, CUTSCENE, MAX_ZOOM_SECONDS, MIN_ZOOM_SECONDS, TIMELINE_TRACK } from '../../timeline/timeline.types';
 import { useEventListener } from '../../hooks/useEventListener';
-import generateId from '../../utils/idGenerator';
 import { formatTime } from './format';
 import { Body, CLIP_GAP, ClipMenu, LABEL_WIDTH, ROW_COLORS, RULER_HEIGHT, TimelineContainer, Toolbar } from './timeline.styles';
 
@@ -95,7 +93,6 @@ const InlineRename: React.FC<{ value: string, onDone: (value: string | null) => 
 const Timeline: React.FC = function () {
     const dispatch = useDispatch();
     const timelines = useSelector<State, TIMELINE_TRACK[]>(getPageTimelines);
-    const shapes = useSelector<State, { [id: string]: AVAILABLE_SHAPES }>(getShapesOfCurrentPage);
     const activePageIndex = useSelector<State, number>(getActivePageIndex);
     const { time, playing, selection, editing } = useSelector(getTimelineUi);
 
@@ -114,8 +111,8 @@ const Timeline: React.FC = function () {
 
     // ---------- derived data
 
-    timelinePlayer.sync(timelines, shapes);
-    const duration = useMemo(() => timelinePlayer.duration, [timelines, shapes]); // eslint-disable-line react-hooks/exhaustive-deps
+    timelinePlayer.sync(timelines);
+    const duration = useMemo(() => timelinePlayer.duration, [timelines]); // eslint-disable-line react-hooks/exhaustive-deps
     const shownTimelines = useMemo(() => draft ? applyDraft(timelines, draft) : timelines, [timelines, draft]);
 
     const validSelection = useMemo(
@@ -203,7 +200,7 @@ const Timeline: React.FC = function () {
         exitCutscene(false);
         const from = time >= duration - 0.01 ? 0 : time;
         dispatch(setPlayback({ playing: true }));
-        timelinePlayer.sync(latestTimelines(), getShapesOfCurrentPage(store.getState()));
+        timelinePlayer.sync(latestTimelines());
         timelinePlayer.play(
             from,
             (t, preview) => dispatch(setPlayback({ time: t, preview })),
@@ -213,12 +210,19 @@ const Timeline: React.FC = function () {
 
     const togglePlay = () => playing ? pause() : play();
 
-    // a different page has different timelines
+    // a different page has different timelines: create them if the page has none yet
+    // (older documents), then open the first timeline's default cutscene for editing
     useEffect(() => {
         timelinePlayer.pause();
-        exitCutscene(false);
-        setSelection([]);
+        dispatch(setEditing(null));
         dispatch(setPlayback({ playing: false, time: 0, preview: null }));
+        const page = store.getState().page.pages[activePageIndex];
+        let tracks = page.timelines;
+        if (!isSnapshotFormat(tracks)) {
+            tracks = [createTimeline('Timeline 1', page.shapes)];
+            dispatch(setPageTimelines(tracks));
+        }
+        setSelection([{ timelineId: tracks[0].id, id: orderedCutscenes(tracks[0])[0].id }]);
     }, [activePageIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => () => {
@@ -289,8 +293,9 @@ const Timeline: React.FC = function () {
     }, [commit, setSelection]);
 
     const addTimeline = () => {
-        const track: TIMELINE_TRACK = { id: generateId(), name: nextTimelineName(timelines), cutscenes: [] };
-        commit([...timelines, track]);
+        const track = createTimeline(nextTimelineName(timelines));
+        commit([...latestTimelines(), track]);
+        setSelection([{ timelineId: track.id, id: track.cutscenes[0].id }]);
         setRenaming(track.id);
     };
 
@@ -595,7 +600,17 @@ const Timeline: React.FC = function () {
     );
 
     const hasSelection = validSelection.length > 0;
-    const shapeCount = (cutscene: CUTSCENE) => Object.keys(cutscene.state).filter(id => shapes[id]).length;
+    /** e.g. "3 shapes" for a default cutscene, "+1 in · 2 changed · 1 out" for the rest */
+    const describeCutscene = (cutscene: CUTSCENE) => {
+        const added = Object.keys(cutscene.added).length;
+        const changed = Object.keys(cutscene.changed).length;
+        const removed = cutscene.removed.length;
+        if (cutscene.isDefault) {
+            return `${added} shape${added === 1 ? '' : 's'}`;
+        }
+        const parts = [added && `${added} in`, changed && `${changed} changed`, removed && `${removed} out`].filter(Boolean);
+        return parts.length ? parts.join(' · ') : 'no changes';
+    };
 
     return (
         <TimelineContainer
@@ -704,25 +719,26 @@ const Timeline: React.FC = function () {
                                                     onContextMenu={e => openMenu(e, track.id)}
                                                 >
                                                     {
-                                                        track.cutscenes.length === 0
-                                                            ? <span className='trackHint'>No cutscenes yet. Press + to add one.</span>
+                                                        track.cutscenes.length === 1
+                                                            ? <span className='trackHint' style={{ left: track.cutscenes[0].end * pps + 12 }}>Press + to add a cutscene</span>
                                                             : null
                                                     }
                                                     {
                                                         track.cutscenes.map(cutscene => {
                                                             const selected = selectedIds.has(cutscene.id);
-                                                            const count = shapeCount(cutscene);
+                                                            const summary = describeCutscene(cutscene);
+                                                            const isEmpty = !cutscene.isDefault && summary === 'no changes';
                                                             return (
                                                                 <div
                                                                     key={cutscene.id}
-                                                                    className={`clip${selected ? ' selected' : ''}${draft?.[cutscene.id] ? ' dragging' : ''}${count ? '' : ' noChanges'}`}
+                                                                    className={`clip${selected ? ' selected' : ''}${draft?.[cutscene.id] ? ' dragging' : ''}${isEmpty ? ' noChanges' : ''}${cutscene.isDefault ? ' default' : ''}`}
                                                                     style={{
                                                                         // inset so back-to-back cutscenes keep a visible gap
                                                                         left: cutscene.start * pps + CLIP_GAP,
                                                                         width: Math.max(6, (cutscene.end - cutscene.start) * pps - CLIP_GAP * 2),
                                                                         backgroundColor: color,
                                                                     }}
-                                                                    title={`${cutscene.name}\n${formatTime(cutscene.start)} → ${formatTime(cutscene.end)}\nClick to edit · double-click to rename`}
+                                                                    title={`${cutscene.name}${cutscene.isDefault ? ' (starting state)' : ''}\n${formatTime(cutscene.start)} → ${formatTime(cutscene.end)} · ${summary}\nClick to edit · double-click to rename`}
                                                                     onPointerDown={e => startClipDrag(e, track.id, cutscene, 'move')}
                                                                     onDoubleClick={() => setRenaming(cutscene.id)}
                                                                     onContextMenu={e => openMenu(e, track.id, cutscene)}
@@ -733,7 +749,7 @@ const Timeline: React.FC = function () {
                                                                             : (
                                                                                 <span className='clipLabel'>
                                                                                     {cutscene.name}
-                                                                                    <span className='clipMeta'>{count ? ` · ${count} shape${count > 1 ? 's' : ''}` : ' · empty'}</span>
+                                                                                    <span className='clipMeta'> · {summary}</span>
                                                                                 </span>
                                                                             )
                                                                     }

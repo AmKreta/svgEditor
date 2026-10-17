@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { BsCheckLg, BsX } from 'react-icons/bs';
+import { BsArrowCounterclockwise, BsCheckLg, BsX } from 'react-icons/bs';
 import { getPageTimelines, getShapesOfCurrentPage, getTimelineUi } from '../../selector/selector';
 import { setPageTimelines } from '../../actions/pages/pages.actions';
 import { setTimelineSelection } from '../../actions/timeline/timeline.actions';
-import { findCutscene } from '../../timeline/model';
+import { cutsceneStates, findCutscene } from '../../timeline/model';
 import { edgeLimits, moveLimits, roundTime, updateClip } from '../../timeline/clipOps';
 import { describeState } from '../../timeline/animatable';
-import { revertInCutscene } from '../../timeline/editing';
-import { CUTSCENE, EASES, MIN_CUTSCENE_DURATION } from '../../timeline/timeline.types';
+import { revertInCutscene, setTransition } from '../../timeline/editing';
+import { CUTSCENE, EASES, FLAT_STATE, MIN_CUTSCENE_DURATION, SHAPE_PATCH, TRANSITION, TRANSITIONS } from '../../timeline/timeline.types';
 import { UI_COLORS } from '../../theme/uiTokens';
+
+/** Changed property names of a patch, as `key` / `style.key`. */
+const patchKeys = (patch: SHAPE_PATCH): FLAT_STATE => {
+    const keys: FLAT_STATE = {};
+    Object.keys(patch).forEach(key => {
+        if (key !== 'style') keys[key] = 1;
+    });
+    Object.keys(patch.style || {}).forEach(key => {
+        keys[`style.${key}`] = 1;
+    });
+    return keys;
+};
 
 /** Property panel card for the selected cutscene: name, timing, easing and what it animates. */
 const CutsceneProperties: React.FC = function () {
@@ -31,7 +43,11 @@ const CutsceneProperties: React.FC = function () {
     const ref = { timelineId: editing.timelineId, id: cutscene.id };
     const timeline = timelines.find(t => t.id === editing.timelineId);
     const update = (patch: Partial<CUTSCENE>) => dispatch(setPageTimelines(updateClip(timelines, ref, patch)));
-    const animated = Object.keys(cutscene.state).filter(id => shapes[id]);
+    const states = timeline ? cutsceneStates(timeline, cutscene.id) : null;
+    const nameOf = (id: string) => (shapes[id] || states?.before[id] || cutscene.added[id])?.name || 'Shape';
+    const entering = Object.keys(cutscene.added);
+    const changing = Object.keys(cutscene.changed);
+    const leaving = cutscene.removed;
 
     const saveName = () => {
         const trimmed = name.trim();
@@ -90,31 +106,98 @@ const CutsceneProperties: React.FC = function () {
                     </select>
                 </label>
             </div>
-            <div className='animates'>
-                <span className='label'>Animates</span>
-                {
-                    animated.length === 0
-                        ? <p className='hint'>Nothing yet. Move, resize or restyle shapes and the changes animate over this cutscene.</p>
-                        : animated.map(id => (
-                            <div className='shape' key={id}>
-                                <span className='shapeName'>{shapes[id].name}</span>
-                                {
-                                    describeState(cutscene.state[id]).map(group => (
-                                        <span className='chip' key={group.label}>
-                                            {group.label}
-                                            <button title={`Stop animating ${group.label.toLowerCase()}`} onClick={() => revertInCutscene(id, group.keys)}>
-                                                <BsX />
-                                            </button>
-                                        </span>
-                                    ))
-                                }
-                                <button className='remove' title='Remove this shape from the cutscene' onClick={() => revertInCutscene(id)}>
-                                    <BsX />
-                                </button>
-                            </div>
-                        ))
-                }
-            </div>
+            {
+                entering.length === 0 && changing.length === 0 && leaving.length === 0
+                    ? (
+                        <p className='hint'>
+                            {cutscene.isDefault
+                                ? 'This is where the timeline starts. Shapes you draw here are on screen from the beginning.'
+                                : 'Nothing changes yet. Draw shapes to bring them in, move or restyle shapes to animate them, delete shapes to take them out.'}
+                        </p>
+                    )
+                    : null
+            }
+            {
+                entering.length
+                    ? (
+                        <div className='group'>
+                            <span className='label'>{cutscene.isDefault ? 'On screen' : 'Enters'}</span>
+                            {
+                                entering.map(id => (
+                                    <div className='shape' key={id}>
+                                        <span className='shapeName'>{nameOf(id)}</span>
+                                        <select
+                                            value={cutscene.enter[id] || 'none'}
+                                            onChange={e => setTransition(id, 'enter', e.target.value as TRANSITION)}
+                                            title='Entry animation'
+                                        >
+                                            {TRANSITIONS.map(t => <option key={t.value} value={t.value}>{t.value === 'none' ? (cutscene.isDefault ? 'Already there' : 'Appear') : t.label}</option>)}
+                                        </select>
+                                        <button className='remove' title={cutscene.isDefault ? 'Delete this shape' : 'Take this shape out of the cutscene'} onClick={() => revertInCutscene(id)}>
+                                            <BsX />
+                                        </button>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    )
+                    : null
+            }
+            {
+                changing.length
+                    ? (
+                        <div className='group'>
+                            <span className='label'>Changes</span>
+                            {
+                                changing.map(id => (
+                                    <div className='shape' key={id}>
+                                        <span className='shapeName'>{nameOf(id)}</span>
+                                        {
+                                            describeState(patchKeys(cutscene.changed[id])).map(group => (
+                                                <span className='chip' key={group.label}>
+                                                    {group.label}
+                                                    <button title={`Keep ${group.label.toLowerCase()} as before`} onClick={() => revertInCutscene(id, group.keys)}>
+                                                        <BsX />
+                                                    </button>
+                                                </span>
+                                            ))
+                                        }
+                                        <button className='remove' title='Undo all changes to this shape' onClick={() => revertInCutscene(id)}>
+                                            <BsX />
+                                        </button>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    )
+                    : null
+            }
+            {
+                leaving.length
+                    ? (
+                        <div className='group'>
+                            <span className='label'>Exits</span>
+                            {
+                                leaving.map(id => (
+                                    <div className='shape' key={id}>
+                                        <span className='shapeName'>{nameOf(id)}</span>
+                                        <select
+                                            value={cutscene.exit[id] || 'none'}
+                                            onChange={e => setTransition(id, 'exit', e.target.value as TRANSITION)}
+                                            title='Exit animation'
+                                        >
+                                            {TRANSITIONS.map(t => <option key={t.value} value={t.value}>{t.value === 'none' ? 'Disappear' : t.label}</option>)}
+                                        </select>
+                                        <button className='remove' title='Keep this shape' onClick={() => revertInCutscene(id)}>
+                                            <BsArrowCounterclockwise />
+                                        </button>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    )
+                    : null
+            }
             <button className='done' onClick={() => dispatch(setTimelineSelection([]))}>
                 <BsCheckLg /> Done editing cutscene
             </button>
@@ -197,7 +280,13 @@ const Card = styled.section`
         }
     }
 
-    & .animates{
+    &>.hint{
+        color: ${UI_COLORS.textMuted};
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    & .group{
         display: flex;
         flex-direction: column;
         gap: 6px;
@@ -212,6 +301,14 @@ const Card = styled.section`
             line-height: 1.4;
         }
         &>.shape{
+            &>select{
+                height: 24px;
+                margin-left: auto;
+                padding: 0 4px;
+            }
+            &>select+.remove{
+                margin-left: 0;
+            }
             display: flex;
             flex-wrap: wrap;
             align-items: center;

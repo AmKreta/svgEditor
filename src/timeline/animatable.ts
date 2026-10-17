@@ -22,6 +22,7 @@ export function flattenShape(shape: AVAILABLE_SHAPES): FLAT_STATE {
             flat[`points.${i}.1`] = py;
         });
     }
+    flat['style.opacity'] = typeof s.style.opacity === 'number' ? s.style.opacity : 1;
     STYLE_KEYS.forEach(key => {
         const value = s.style[key];
         if (typeof value === 'number' || typeof value === 'string') {
@@ -83,12 +84,15 @@ const PROPERTY_GROUPS: Array<{ label: string, test: (key: string) => boolean }> 
     { label: 'Scale', test: key => key.startsWith('style.scale') },
     { label: 'Rotation', test: key => key === 'style.rotate' },
     { label: 'Skew', test: key => key === 'style.skewX' || key === 'style.skewY' },
+    { label: 'Opacity', test: key => key === 'style.opacity' },
     { label: 'Fill', test: key => key === 'style.fill' },
     { label: 'Stroke', test: key => key === 'style.stroke' || key === 'style.strokeWidth' },
     { label: 'Opacity', test: key => key === 'style.fillOpacity' || key === 'style.strokeOpacity' },
     { label: 'Corners', test: key => key === 'rx' || key === 'ry' },
-    { label: 'Points', test: key => key.startsWith('points.') },
-    { label: 'Font', test: key => key === 'fontSize' || key === 'fontWeight' },
+    { label: 'Points', test: key => key === 'points' || key.startsWith('points.') },
+    { label: 'Font', test: key => ['fontSize', 'fontWeight', 'fontStyle', 'fontFamily', 'genericFontFamily'].includes(key) },
+    { label: 'Text', test: key => key === 'text' },
+    { label: 'Name', test: key => key === 'name' },
 ];
 
 /** Human readable groups for a set of animated keys, e.g. ['Position', 'Fill']. */
