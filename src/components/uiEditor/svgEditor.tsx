@@ -25,7 +25,6 @@ import { eventToSvgPoint, pointDistance, tryReleasePointerCapture, trySetPointer
 import { BOX_DRAWN_SHAPES, getDrawnShapeGeometry } from '../../utils/shapeGeometry';
 import { CURSORS } from '../../utils/cursor';
 import SelectionOverlay from './selectionOverlay';
-import TimelineCanvasBanner from '../timeline/timelineCanvasBanner';
 import { getTimelineUi } from '../../selector/selector';
 
 type CanvasGesture = 'none' | 'path' | 'marquee' | 'create' | 'line';
@@ -388,7 +387,6 @@ const SvgEditor: React.FC<{}> = function () {
             </StyledSvg>
             <SelectionOverlay svgEditorRef={svgEditorRef} hidden={isCreating || isPreviewing} />
             <ContextMenu />
-            <TimelineCanvasBanner />
         </SvgContainer>
     );
 }
