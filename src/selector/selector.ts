@@ -5,6 +5,7 @@ import { CONTEXT_MENU_INTERFACE, ACTIVE_SHAPE_INFO, GRADIENT, SVG_STYLE } from "
 import { AVAILABLE_FILTERS } from "../filters/availableFilters";
 import { HELPERS } from "../actions/helpers/helpers.interface";
 import { SHAPE_COLLECTION } from "../actions/pages/pages.interface";
+import { TIMELINE } from "../timeline/timeline.types";
 
 // used in base shape , gets info about current shape being rendered in base shape
 export function getCurrentShape(state: State, shapeId: string): AVAILABLE_SHAPES {
@@ -112,4 +113,18 @@ export function getCurrentDocumentPreview(state: State): string {
 
 export function getCurrentDocId(state: State): string {
     return state.page.id;
+}
+const EMPTY_TIMELINE: TIMELINE = {};
+
+export function getPageTimeline(state: State): TIMELINE {
+    return state.page.pages[state.page.activePageIndex].timeline || EMPTY_TIMELINE;
+}
+
+export function getTimelineUi(state: State) {
+    return state.timeline;
+}
+
+/** Shape as currently displayed: its animated preview when one is showing, otherwise its own state. */
+export function getDisplayedShape(state: State, shapeId: string): AVAILABLE_SHAPES {
+    return state.timeline.preview?.[shapeId] || getCurrentShape(state, shapeId);
 }

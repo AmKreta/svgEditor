@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { State } from '../store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { getActiveShapesInfo, getActiveTool, getCurrentShape } from '../selector/selector';
+import { getActiveShapesInfo, getActiveTool, getCurrentShape, getDisplayedShape } from '../selector/selector';
 import { AVAILABLE_SHAPES } from './availableShapes';
 import { translateActiveShape, toggleContextMenu, scaleActiveShape, rotateActiveShape } from '../actions/pages/pages.actions';
 import {
@@ -101,6 +101,8 @@ export function getBaseToolDefaultProps({ type, x, y }: { type: SHAPE_TYPES, x: 
 const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) => {
     return function BaseTool(props: BASE_SHAPE_PROPS) {
         const currentShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getCurrentShape(state, props.id));
+        // the animated version while the timeline is previewing, otherwise the shape itself
+        const displayedShape = useSelector<State, AVAILABLE_SHAPES>((state: State) => getDisplayedShape(state, props.id));
         const activeShapes = useSelector<State, string[]>(getActiveShapesInfo, isEqual);
         const activeTool = useSelector<State, SHAPE_TYPES>(getActiveTool);
         const dispatch = useDispatch();
@@ -234,7 +236,7 @@ const ModifiedShape = (WRAPPED_SHAPE: React.ComponentType<WRAPPED_SHAPE_PROPS>) 
 
         return (
             <WRAPPED_SHAPE
-                shape={currentShape}
+                shape={displayedShape}
                 mouseDownHandler={mouseDownHandler}
                 mouseEnterHandler={mouseEnterHandler}
                 mouseLeaveHandler={mouseLeaveHandler}

@@ -25,6 +25,8 @@ import { eventToSvgPoint, pointDistance, tryReleasePointerCapture, trySetPointer
 import { BOX_DRAWN_SHAPES, getDrawnShapeGeometry } from '../../utils/shapeGeometry';
 import { CURSORS } from '../../utils/cursor';
 import SelectionOverlay from './selectionOverlay';
+import TimelineCanvasBanner from '../timeline/timelineCanvasBanner';
+import { getTimelineUi } from '../../selector/selector';
 
 type CanvasGesture = 'none' | 'path' | 'marquee' | 'create' | 'line';
 
@@ -45,6 +47,9 @@ const SvgEditor: React.FC<{}> = function () {
     const hoveredShapeId = useSelector<State, string | null>(getHoveredShapeId);
     const helpers = useSelector<State, HELPERS>(getHelpers, isEqual);
     const svgStyle = useSelector(getSvgStyle);
+    const { preview, recording } = useSelector(getTimelineUi);
+    // while the timeline previews a moment other than the start, the canvas is view-only
+    const isPreviewing = Boolean(preview) && !recording;
 
     const [shapeSelectorProps, setShapeSelectorProps] = useState<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
     const [pointsArray, setPointsArray] = useState<Array<[number, number]>>([]);
@@ -293,7 +298,11 @@ const SvgEditor: React.FC<{}> = function () {
     }
 
     return (
-        <SvgContainer onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }} style={{ overflow: 'scroll' }}>
+        <SvgContainer
+            onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}
+            style={{ overflow: 'scroll' }}
+            className={recording ? 'recording' : isPreviewing ? 'previewing' : ''}
+        >
             {
                 helpers.gridHelpers
                     ? <GridHelper />
@@ -373,8 +382,9 @@ const SvgEditor: React.FC<{}> = function () {
                     show={shapeSelectorProps.show}
                 />
             </StyledSvg>
-            <SelectionOverlay svgEditorRef={svgEditorRef} hidden={isCreating} />
+            <SelectionOverlay svgEditorRef={svgEditorRef} hidden={isCreating || isPreviewing} />
             <ContextMenu />
+            <TimelineCanvasBanner />
         </SvgContainer>
     );
 }
@@ -417,6 +427,11 @@ const StyledSvg = styled.svg`
 
 const SvgContainer = styled.div`
     grid-area:svgEditor;
+
+    &.previewing>#svgEditor{
+        pointer-events: none;
+    }
+
     min-width: 0;
     height:100%;
     width:100%;
