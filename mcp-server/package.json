@@ -1,0 +1,22 @@
+{
+  "name": "svgtool-mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server that lets AI agents drive a running React Svg Editor",
+  "type": "module",
+  "bin": {
+    "svgtool-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "ws": "^8.22.0",
+    "zod": "^4.6.7"
+  }
+}
