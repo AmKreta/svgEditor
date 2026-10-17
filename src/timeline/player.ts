@@ -43,7 +43,7 @@ interface TRACK_PLAN {
  * holding its flattened animatable properties; GSAP tweens the proxies (morphs between
  * cutscenes, entries and exits) and `frame` turns them back into shapes for the canvas.
  */
-class TimelinePlayer {
+export class TimelinePlayer {
     private tl: gsap.core.Timeline | null = null;
     private proxies: { [id: string]: FLAT_STATE } = {};
     private plans: TRACK_PLAN[] = [];
@@ -162,16 +162,22 @@ class TimelinePlayer {
         return this.frame(time);
     }
 
-    play(from: number, onFrame: (time: number, preview: PREVIEW) => void, onEnd: () => void) {
+    /** Plays from `from`; with `loop` it starts over at the end instead of stopping. */
+    play(from: number, onFrame: (time: number, preview: PREVIEW) => void, onEnd: () => void, loop = false) {
         const tl = this.ensureBuilt();
         const end = this.duration;
-        const startedAt = performance.now() - from * 1000;
+        let startedAt = performance.now() - from * 1000;
         gsap.ticker.remove(this.tick);
         this.tick = () => {
-            const t = Math.min(end, (performance.now() - startedAt) / 1000);
+            let t = (performance.now() - startedAt) / 1000;
+            if (loop && end > 0 && t >= end) {
+                startedAt += Math.floor(t / end) * end * 1000;
+                t = (performance.now() - startedAt) / 1000;
+            }
+            t = Math.min(end, t);
             tl.seek(t, true);
             onFrame(t, this.frame(t));
-            if (t >= end) {
+            if (!loop && t >= end) {
                 gsap.ticker.remove(this.tick);
                 onEnd();
             }

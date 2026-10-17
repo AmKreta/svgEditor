@@ -10,6 +10,7 @@ import { createNewFile, saveFile, saveFileAS } from '../../actions/pages/pages.a
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDocId, getCurrentDocName } from '../../selector/selector';
 import { personalProjectIds } from '../../seed';
+import { demoProjectIds } from '../../seed/demos';
 import { BsBoxArrowLeft, BsChevronDown, BsDownload, BsFileEarmark, BsFileEarmarkPlus, BsFiles, BsBraces, BsSave } from 'react-icons/bs';
 import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
 
@@ -41,7 +42,7 @@ const HeaderFileOptions: React.FC = function () {
                 toggleMenu();
                 dispatch(saveFile());
             },
-            disabled: !currentDocName.length || personalProjectIds.includes(currentDocId)
+            disabled: !currentDocName.length || [...personalProjectIds, ...demoProjectIds].includes(currentDocId)
         },
         {
             name: 'Save as…',

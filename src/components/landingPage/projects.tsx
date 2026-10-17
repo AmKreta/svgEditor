@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { db } from '../../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -7,27 +7,41 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createNewFile } from '../../actions/pages/pages.actions';
 import { PAGES } from '../../actions/pages/pages.interface';
-import { BsPlusLg, BsTrash } from 'react-icons/bs';
-import selfprojects from '../../seed/index';
+import { BsPlayFill, BsPlusLg, BsTrash } from 'react-icons/bs';
+import { getDemoProjects } from '../../seed/demos';
+import AnimatedPreview from './animatedPreview';
 import { UI_COLORS } from '../../theme/uiTokens';
 
 interface props {
     onCreateNew: () => void;
 }
 
-const examples: PAGES[] = Object.values(selfprojects as any);
 
 const pageCount = (doc: PAGES) => `${doc.pages.length} ${doc.pages.length === 1 ? 'page' : 'pages'}`;
+
+/** e.g. "10.6s · 7 timelines" for documents with animation */
+const animationSummary = (doc: PAGES) => {
+    const timelines = doc.pages[0]?.timelines || [];
+    const end = Math.max(0, ...timelines.flatMap(t => t.cutscenes.map(c => c.end)));
+    return `${Math.round(end * 10) / 10}s · ${timelines.length} timeline${timelines.length === 1 ? '' : 's'}`;
+};
 
 interface CARD_PROPS {
     doc: PAGES;
     onOpen: (doc: PAGES) => void;
     onDelete?: (doc: PAGES) => void;
+    /** animated example: plays while hovered or focused */
+    animated?: boolean;
 }
 
-const ProjectCard: React.FC<CARD_PROPS> = function ({ doc, onOpen, onDelete }) {
+const ProjectCard: React.FC<CARD_PROPS> = function ({ doc, onOpen, onDelete, animated = false }) {
+    const [active, setActive] = useState(false);
     return (
         <Card
+            onMouseEnter={() => setActive(true)}
+            onMouseLeave={() => setActive(false)}
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
             role='button'
             tabIndex={0}
             onClick={() => onOpen(doc)}
@@ -35,12 +49,17 @@ const ProjectCard: React.FC<CARD_PROPS> = function ({ doc, onOpen, onDelete }) {
             aria-label={`Open ${doc.name}`}
         >
             <div className='thumbnail' style={{ backgroundColor: doc.pages[0]?.svgStyle.backgroundColor }}>
-                <RenderRawSvg innerHtml={doc.snapshots[0] || ''} width='100%' height='100%' />
+                {
+                    animated
+                        ? <AnimatedPreview doc={doc} playing={active} />
+                        : <RenderRawSvg innerHtml={doc.snapshots[0] || ''} width='100%' height='100%' />
+                }
+                {animated ? <span className={`badge${active ? ' playing' : ''}`}><BsPlayFill /> {active ? 'Playing' : 'Hover to play'}</span> : null}
             </div>
             <div className='meta'>
                 <div>
                     <div className='name' title={doc.name}>{doc.name || 'Untitled'}</div>
-                    <div className='pages'>{pageCount(doc)}</div>
+                    <div className='pages'>{animated ? animationSummary(doc) : pageCount(doc)}</div>
                 </div>
                 {
                     onDelete
@@ -110,12 +129,12 @@ const Projects: React.FC<props> = function ({ onCreateNew }) {
             <Section id='examples'>
                 <div className='sectionHeader'>
                     <h2>Examples</h2>
-                    <span className='hint'>Open one to see how it's built</span>
+                    <span className='hint'>Animated with timelines · open one to see how it's built</span>
                 </div>
                 <div className='grid'>
                     {
-                        examples.map(doc => (
-                            <ProjectCard key={doc.id} doc={doc} onOpen={openProject} />
+                        getDemoProjects().map(doc => (
+                            <ProjectCard key={doc.id} doc={doc} onOpen={openProject} animated />
                         ))
                     }
                 </div>
@@ -181,9 +200,29 @@ const Card = styled.div`
     }
 
     &>.thumbnail{
+        position: relative;
         aspect-ratio: 1175 / 580;
         border-bottom: 1px solid ${UI_COLORS.border};
         overflow: hidden;
+        &>.badge{
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px 3px 6px;
+            border-radius: 999px;
+            background-color: rgba(17, 24, 39, .6);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            transition: opacity .2s;
+            &.playing{
+                opacity: 0;
+            }
+        }
         &>svg{
             display: block;
             margin: 0;
