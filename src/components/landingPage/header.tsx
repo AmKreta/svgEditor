@@ -1,97 +1,82 @@
-import React, { useRef } from 'react';
-import Styled, { css } from 'styled-components';
-import { THEME } from '../../theme/theme';
-import Button from '../button.component';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { createNewFile } from '../../actions/pages/pages.actions';
-import { PAGES } from '../../actions/pages/pages.interface';
-import generateId from '../../utils/idGenerator';
+import React from 'react';
+import styled from 'styled-components';
+import { BsPlusLg, BsUpload } from 'react-icons/bs';
+import { LANDING_ACTIONS, LandingButton } from './shared';
+import { UI_COLORS } from '../../theme/uiTokens';
 
-const Header: React.FC = function () {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const fileInputRef = useRef<HTMLInputElement>(null);
+export const Logo: React.FC = function () {
+    return (
+        <StyledLogo>
+            <svg viewBox='0 0 32 32' aria-hidden='true'>
+                <rect x='2' y='2' width='28' height='28' rx='8' fill={UI_COLORS.accent} />
+                <path d='M9 21 L16 9 L23 21 Z' fill='none' stroke='white' strokeWidth='2.2' strokeLinejoin='round' />
+                <circle cx='16' cy='9' r='2.4' fill='white' />
+                <circle cx='9' cy='21' r='2.4' fill='white' />
+                <circle cx='23' cy='21' r='2.4' fill='white' />
+            </svg>
+            <span>UiEditor</span>
+        </StyledLogo>
+    );
+}
 
-    const createNewFileHandler = () => {
-        dispatch(createNewFile());
-        navigate('/editor');
-    }
-
-    const importJsonHandler = () => {
-        fileInputRef.current?.click();
-    }
-
-    const fileChangeHandler = function (e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files![0];
-        if (file) {
-            let fileReader = new FileReader();
-            fileReader.addEventListener('load', ev => {
-                try {
-                    let data: PAGES = (JSON.parse(ev.target!.result as string));
-                    data.id = generateId();
-                    dispatch(createNewFile(data));
-                    navigate('./editor');
-                }
-                catch (err) {
-                    alert('cant convert file content to json, err:- invalid file format');
-                }
-            });
-            fileReader.readAsText(file);
-        }
-        else {
-            alert('accepts only json files');
-        }
-    }
-
+const Header: React.FC<LANDING_ACTIONS> = function ({ onCreateNew, onImport }) {
     return (
         <StyledHeader>
-            <div className='logo'>
-                UiEditor
-            </div>
+            <Logo />
             <nav>
-                <Button title='Import Json' onClick={importJsonHandler} />
-                <Button title='Create new file' onClick={createNewFileHandler} />
+                <LandingButton onClick={onImport}>
+                    <BsUpload />
+                    <span>Import JSON</span>
+                </LandingButton>
+                <LandingButton variant='primary' onClick={onCreateNew}>
+                    <BsPlusLg />
+                    <span>New file</span>
+                </LandingButton>
             </nav>
-            <input type='file' ref={fileInputRef} style={{ display: 'none' }} onChange={fileChangeHandler} />
         </StyledHeader>
     );
 }
 
-const StyledHeader = Styled.header`
-    ${props => {
-        const theme = props.theme as THEME;
-        return css`
-                height:10%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding:0 ${theme.spacing(4)}px;
-                position:sticky;
-                top:0;
-                left:0;
-                background-color: white;
-                box-shadow:0 1px 2px rgba(0,0,0,.09);
-                &>.logo{
-                    font-family: 'Dancing Script', cursive;
-                    font-size: 40px;
-                    font-weight: bold;
-                }
-                &>nav{
-                    display: flex;
-                    align-items: center;
-                    &>button:first-child{
-                        margin-right:${theme.spacing(2)}px;
-                    }
-                    &>button:nth-child(2){
-                        background-color:#333;
-                        color:white;
-                        border-radius: 8px;
-                        transform:scale(1.1)
-                    }
-                }
-            `;
+const StyledLogo = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    &>svg{
+        height: 32px;
+        width: 32px;
     }
+    &>span{
+        font-family: 'Dancing Script', cursive;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1;
+    }
+`;
+
+const StyledHeader = styled.header`
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 32px;
+    background-color: rgba(255, 255, 255, .85);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid ${UI_COLORS.border};
+
+    &>nav{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    @media (max-width: 640px){
+        padding: 0 16px;
+        & nav button:first-child>span{
+            display: none;
+        }
     }
 `;
 

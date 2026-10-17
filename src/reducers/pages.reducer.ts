@@ -3,7 +3,7 @@ import { PAGES_ACTION_TYPES } from "../actions/pages/pages.actionTypes";
 import generateId from "../utils/idGenerator";
 import { PAGES } from "../actions/pages/pages.interface";
 import { Reducer } from "redux";
-import { SHAPE_TYPES } from "../utils/constant";
+import { MIN_SHAPE_SCALE, SHAPE_TYPES } from "../utils/constant";
 import { AVAILABLE_SHAPES } from "../shapes/availableShapes";
 import { getGroupDefaultProps, GROUP_SHAPE } from "../shapes/group";
 import { cloneDeep } from 'lodash';
@@ -156,6 +156,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
                 }
                 shape.children = [...shape.children];
             }
+
 
             state.clipboard.forEach(item => {
                 let newShape: AVAILABLE_SHAPES;
@@ -347,8 +348,7 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
 
             activeShapes.forEach(shapeId => {
                 const s = shapes[shapeId];
-                const dTheta = action.payload;
-                s.style.rotate += dTheta < 0 ? -2 : dTheta > 0 ? 2 : 0;
+                s.style.rotate += action.payload;
                 shapes[shapeId] = { ...s };
             });
 
@@ -365,8 +365,8 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             activeShapes.forEach(shapeId => {
                 const s = shapes[shapeId];
                 const [dx, dy] = action.payload;
-                s.style.scale[0] += dx < 0 ? -.15 : dx > 0 ? .15 : 0;
-                s.style.scale[1] += dy < 0 ? -.15 : dy > 0 ? .15 : 0;
+                s.style.scale[0] = Math.max(MIN_SHAPE_SCALE, s.style.scale[0] + dx);
+                s.style.scale[1] = Math.max(MIN_SHAPE_SCALE, s.style.scale[1] + dy);
                 shapes[shapeId] = { ...s };
             });
 
@@ -399,7 +399,25 @@ const pagesReducer: Reducer<PAGES, PAGE_ACTION> = function (state: PAGES = clone
             return { ...state };
         }
 
-        case PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT as any: {
+        case PAGES_ACTION_TYPES.SET_PAGE_TIMELINES: {
+            const currentPage = state.pages[state.activePageIndex];
+            state.pages[state.activePageIndex] = { ...currentPage, timelines: action.payload };
+            state.pages = [...state.pages];
+            return { ...state };
+        }
+
+        case PAGES_ACTION_TYPES.SET_PAGE_SHAPES: {
+            const currentPage = state.pages[state.activePageIndex];
+            state.pages[state.activePageIndex] = {
+                ...currentPage,
+                shapes: action.payload,
+                activeShapes: currentPage.activeShapes.filter(id => action.payload[id]),
+            };
+            state.pages = [...state.pages];
+            return { ...state, hoveredShapeId: null };
+        }
+
+                case PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT as any: {
             updateSnapshotOfCurrentPage();
             return { ...state };
         }

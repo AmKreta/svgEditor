@@ -61,7 +61,11 @@ import {
     CREATE_NEW_FILE_ACTION,
     CREATE_NEW_FILE_PAYLOAD,
     EDIT_SVG_STYLE_ACTION,
-    EDIT_SVG_STYLE_PAYLOAD
+    EDIT_SVG_STYLE_PAYLOAD,
+    SET_PAGE_TIMELINES_ACTION,
+    SET_PAGE_SHAPES_ACTION,
+    SET_PAGE_SHAPES_PAYLOAD,
+    SET_PAGE_TIMELINES_PAYLOAD,
 } from "./pages.interface";
 import { getImageDefaultProps } from "../../shapes/image";
 import { getLineDefaultProps } from "../../shapes/line";
@@ -248,4 +252,11 @@ export const editSvgStyle = function (style: EDIT_SVG_STYLE_PAYLOAD): EDIT_SVG_S
 
 export function updateCurrentPageSnapshot() {
     return { type: PAGES_ACTION_TYPES.UPDATE_CURRENT_PAGE_SNAPSHOT };
+}
+export const setPageTimelines = (timelines: SET_PAGE_TIMELINES_PAYLOAD): SET_PAGE_TIMELINES_ACTION => {
+    return { type: PAGES_ACTION_TYPES.SET_PAGE_TIMELINES, payload: timelines };
+}
+
+export const setPageShapes = (shapes: SET_PAGE_SHAPES_PAYLOAD): SET_PAGE_SHAPES_ACTION => {
+    return { type: PAGES_ACTION_TYPES.SET_PAGE_SHAPES, payload: shapes };
 }

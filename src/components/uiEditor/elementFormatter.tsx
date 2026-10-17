@@ -16,101 +16,71 @@ import ImageEditor from '../../shapeEditor/imageEditor';
 import GroupEditor from '../../shapeEditor/groupEditor';
 import PathEditor from '../../shapeEditor/pathEditor';
 import SvgContainerEditor from '../../shapeEditor/svgEditor';
+import CutsceneProperties from '../timeline/cutsceneProperties';
+import { getTimelineUi } from '../../selector/selector';
+import { EditorProps } from '../../shapeEditor/baseShapeEditor';
+
+const SHAPE_EDITORS: Partial<Record<SHAPE_TYPES, React.ComponentType<EditorProps>>> = {
+    [SHAPE_TYPES.CIRCLE]: CircleEditor,
+    [SHAPE_TYPES.RECTANGLE]: RectangleEditor,
+    [SHAPE_TYPES.LINE]: LineEditor,
+    [SHAPE_TYPES.POLYGON]: PolygonEditor,
+    [SHAPE_TYPES.POLYLINE]: PolylineEditor,
+    [SHAPE_TYPES.ELLIPSE]: EllipseEditor,
+    [SHAPE_TYPES.TEXT]: SvgTextEditor,
+    [SHAPE_TYPES.IMAGE]: ImageEditor,
+    [SHAPE_TYPES.GROUP]: GroupEditor,
+    [SHAPE_TYPES.PATH]: PathEditor,
+};
 
 const ElementFormatter: React.FC<{}> = function () {
 
     // edits dimensions, add filters and edit styles, add masks, add pattern fills,
     const activeShapesInfo = useSelector<State, string[]>(getActiveShapesInfo);
     const shapeWithId = useSelector<State, (id: string) => AVAILABLE_SHAPES>(getShapeWithId);
+    const isEditingCutscene = Boolean(useSelector(getTimelineUi).editing);
 
     return (
         <StyledDiv>
-            <h4>ElementFormatter</h4>
+            <div className='panelHeader'>
+                <span className='title'>{isEditingCutscene && activeShapesInfo?.length ? 'Properties' : isEditingCutscene ? 'Cutscene' : 'Canvas'}</span>
+                {
+                    activeShapesInfo?.length > 1
+                        ? <span className='badge'>{activeShapesInfo.length} selected</span>
+                        : null
+                }
+            </div>
+            <CutsceneProperties />
             {
-                activeShapesInfo?.length
+                !isEditingCutscene
+                    ? <p className='cutsceneHint'>Playing the animation…</p>
+                    : !activeShapesInfo?.length
+                        ? <p className='cutsceneHint'>Select a shape on the canvas to change it in this cutscene, or draw a new one to bring it in.</p>
+                        : null
+            }
+            {
+                isEditingCutscene && activeShapesInfo?.length
                     ? (
                         <div className='formatterList'>
                             {
                                 activeShapesInfo.map((shapeId, idx) => {
                                     const shape = shapeWithId(shapeId);
-                                    switch (shape.type) {
-                                        case SHAPE_TYPES.CIRCLE: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <CircleEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.RECTANGLE: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <RectangleEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.LINE: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <LineEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.POLYGON: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <PolygonEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.POLYLINE: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <PolylineEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.ELLIPSE: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <EllipseEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.TEXT: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <SvgTextEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.IMAGE: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <ImageEditor shape={shape} />
-                                            </details>
-                                        );
-
-                                        case SHAPE_TYPES.GROUP: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <GroupEditor shape={shape} />
-                                            </details>
-                                        )
-
-                                        case SHAPE_TYPES.PATH: return (
-                                            <details key={shape.id} open={idx === 0}>
-                                                <summary>{shape.name}</summary>
-                                                <PathEditor shape={shape} />
-                                            </details>
-                                        )
-
-                                        default: return null;
-                                    }
+                                    const Editor = SHAPE_EDITORS[shape.type];
+                                    if (!Editor) return null;
+                                    return (
+                                        <details key={shape.id} open={idx === 0}>
+                                            <summary>
+                                                <span className='shapeName'>{shape.name}</span>
+                                                <span className='shapeType'>{shape.type === SHAPE_TYPES.IMAGE ? 'Image' : shape.type}</span>
+                                            </summary>
+                                            <Editor shape={shape} />
+                                        </details>
+                                    );
                                 })
                             }
                         </div>
                     )
-                    :<SvgContainerEditor />
+                    : <SvgContainerEditor />
             }
         </StyledDiv>
     );
@@ -123,14 +93,95 @@ const StyledDiv = styled.div`
     align-items: stretch;
     height:100%;
 
+    &>.panelHeader{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e3e5e8;
+
+        &>.title{
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        &>.badge{
+            font-size: 11px;
+            font-weight: 500;
+            color: #3b82f6;
+            background-color: #eff6ff;
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+    }
+
+    &>.cutsceneHint{
+        margin: 8px 16px;
+        color: #6b7280;
+        font-size: 12px;
+        line-height: 1.4;
+        text-align: left;
+    }
+
     &>.formatterList{
         flex-grow: 1;
-        overflow-y: scroll;
-        margin-top:8px;
+        overflow-y: auto;
+        padding: 4px 0;
 
-        &>details>summary{
+        & details>summary{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            cursor: pointer;
+            margin: 4px 8px 0;
+            padding: 6px 8px;
+            border-radius: 6px;
             text-align: left;
-            margin: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+
+            &::-webkit-details-marker{
+                display: none;
+            }
+            &::before{
+                content: '';
+                flex-shrink: 0;
+                width: 0;
+                height: 0;
+                border-top: 4px solid transparent;
+                border-bottom: 4px solid transparent;
+                border-left: 5px solid #6b7280;
+                transition: transform .15s ease-in-out;
+            }
+            &:hover{
+                background-color: #f3f4f6;
+            }
+
+            &>.shapeName{
+                flex-grow: 1;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            &>.shapeType{
+                flex-shrink: 0;
+                font-size: 10px;
+                font-weight: 500;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+                color: #6b7280;
+                background-color: #f3f4f6;
+                padding: 2px 6px;
+                border-radius: 4px;
+            }
+        }
+
+        & details[open]>summary::before{
+            transform: rotate(90deg);
         }
     }
 `;

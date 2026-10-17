@@ -1,8 +1,8 @@
-import { BsCircle, BsSquare, BsPencil } from 'react-icons/bs';
-import { AiOutlineLine } from 'react-icons/ai';
-import { FaDrawPolygon, FaSortAlphaUp } from 'react-icons/fa';
+import React from 'react';
+import { IconType } from 'react-icons';
+import { BsCircle, BsSquare, BsPencil, BsCursor, BsSlashLg, BsFonts, BsImage } from 'react-icons/bs';
+import { FaDrawPolygon } from 'react-icons/fa';
 import { CgShapeZigzag } from 'react-icons/cg';
-import { FaExpandArrowsAlt, FaImage } from 'react-icons/fa';
 
 export enum SHAPE_TYPES {
     CIRCLE = 'CIRCLE',
@@ -39,48 +39,18 @@ export const multiPointShpes = [
     SHAPE_TYPES.LINE
 ];
 
-export const TOOLS = [
-    {
-        icon: BsCircle,
-        title: SHAPE_TYPES.CIRCLE
-    },
-    {
-        icon: BsSquare,
-        title: SHAPE_TYPES.RECTANGLE
-    },
-    {
-        icon: AiOutlineLine,
-        title: SHAPE_TYPES.LINE
-    },
-    {
-        icon: FaDrawPolygon,
-        title: SHAPE_TYPES.POLYGON
-    },
-    {
-        icon: CgShapeZigzag,
-        title: SHAPE_TYPES.POLYLINE
-    },
-    {
-        icon: BsCircle,
-        title: SHAPE_TYPES.ELLIPSE,
-        style: { transform: 'scaleX(1.5)' }
-    },
-    {
-        icon: BsPencil,
-        title: SHAPE_TYPES.PATH
-    },
-    {
-        icon: FaSortAlphaUp,
-        title: SHAPE_TYPES.TEXT
-    },
-    {
-        icon: FaImage,
-        title: SHAPE_TYPES.IMAGE
-    },
-    {
-        icon: FaExpandArrowsAlt,
-        title: SHAPE_TYPES.PAN
-    },
+/** Toolbar tools; a divider is drawn wherever `group` changes. */
+export const TOOLS: Array<{ icon: IconType, title: SHAPE_TYPES, label: string, group: number, style?: React.CSSProperties }> = [
+    { icon: BsCursor, title: SHAPE_TYPES.PAN, label: 'Select', group: 0 },
+    { icon: BsSquare, title: SHAPE_TYPES.RECTANGLE, label: 'Rectangle', group: 1 },
+    { icon: BsCircle, title: SHAPE_TYPES.CIRCLE, label: 'Circle', group: 1 },
+    { icon: BsCircle, title: SHAPE_TYPES.ELLIPSE, label: 'Ellipse', group: 1, style: { transform: 'scaleX(1.4)' } },
+    { icon: BsSlashLg, title: SHAPE_TYPES.LINE, label: 'Line', group: 2 },
+    { icon: CgShapeZigzag, title: SHAPE_TYPES.POLYLINE, label: 'Polyline (right-click to finish)', group: 2 },
+    { icon: FaDrawPolygon, title: SHAPE_TYPES.POLYGON, label: 'Polygon (right-click to finish)', group: 2 },
+    { icon: BsPencil, title: SHAPE_TYPES.PATH, label: 'Pencil', group: 2 },
+    { icon: BsFonts, title: SHAPE_TYPES.TEXT, label: 'Text', group: 3 },
+    { icon: BsImage, title: SHAPE_TYPES.IMAGE, label: 'Image', group: 3 },
 ];
 
 export const availableFonts = [
@@ -150,8 +120,22 @@ export const availableFonts = [
     "Zapfino"
 ];
 
-export enum TRANSFORM_CURSOR_MAPPING {
-    SCALE = 'cell',
-    ROTATE = 'alias',
-    DEFAULT = 'default'
+export enum TRANSFORM_MODE {
+    TRANSLATE = 'TRANSLATE',
+    SCALE = 'SCALE',
+    ROTATE = 'ROTATE'
 }
+
+export const POINTER_BUTTON = {
+    PRIMARY: 0,
+    MIDDLE: 1,
+    SECONDARY: 2
+} as const;
+
+/** Scale factor applied per CSS pixel of drag while Ctrl is held. */
+export const SCALE_PER_PIXEL = 0.01;
+/** Rotation in degrees applied per CSS pixel of horizontal drag while Shift is held. */
+export const ROTATE_DEGREES_PER_PIXEL = 0.5;
+export const MIN_SHAPE_SCALE = 0.05;
+/** Skip path samples closer than this (svg units) so freehand paths stay lighter. */
+export const MIN_PATH_POINT_DISTANCE = 2;

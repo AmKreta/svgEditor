@@ -1,9 +1,10 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 import { THEME } from '../../theme/theme';
-import { FaCut, FaCopy, FaPaste, FaSave } from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
-import Icon from '../icon.component';
+import { IconType } from 'react-icons';
+import { BsClipboard, BsCollection, BsFiles, BsScissors, BsTrash } from 'react-icons/bs';
+import { UI_COLORS, UI_SHADOWS } from '../../theme/uiTokens';
+import { useEventListener } from '../../hooks/useEventListener';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../store/store';
 import { getContextMenuState, getActiveShapesInfo, getClipBoard } from '../../selector/selector';
@@ -19,112 +20,199 @@ const ContextMenu: React.FC = function () {
     const clipboard = useSelector<State, Array<AVAILABLE_SHAPES>>(getClipBoard);
     const dispatch = useDispatch();
 
-    const contextMenuItems = [
+    const menuRef = useRef<HTMLDivElement>(null);
+    const [position, setPosition] = useState({ x, y });
+
+    const close = () => dispatch(toggleContextMenu());
+
+    const contextMenuItems: CONTEXT_MENU_ITEM[] = [
         {
-            name: 'cut',
+            name: 'Cut',
             disabled: activeShapes.length === 0,
-            icon: FaCut,
+            icon: BsScissors,
             action() {
                 dispatch(cutSelectedShapes())
             }
         },
         {
-            name: 'copy',
+            name: 'Copy',
             disabled: activeShapes.length === 0,
-            icon: FaCopy,
+            icon: BsFiles,
             action() {
                 dispatch(copySelectedShapes())
             }
         },
         {
-            name: 'paste',
+            name: 'Paste',
             disabled: clipboard.length === 0,
-            icon: FaPaste,
+            icon: BsClipboard,
             action() {
                 dispatch(pasteSelectedShape())
             },
         },
         {
-            name: 'save as group',
+            name: 'Group selection',
             disabled: activeShapes.length < 2,
-            icon: FaSave,
+            icon: BsCollection,
+            separatorBefore: true,
             action() {
                 dispatch(saveSelectedShapesAsGroup());
             }
         },
         {
-            name: 'remove',
+            name: 'Delete',
             disabled: activeShapes.length === 0,
-            icon: MdDelete,
+            icon: BsTrash,
+            danger: true,
+            separatorBefore: true,
             action() {
                 dispatch(removeSelectedShapes());
             }
         },
     ];
 
+    // keep the menu inside the canvas when opened near its right/bottom edge
+    useLayoutEffect(() => {
+        const menu = menuRef.current;
+        const container = menu?.offsetParent as HTMLElement | null;
+        if (!show || !menu || !container) {
+            return;
+        }
+        const maxX = container.scrollLeft + container.clientWidth - menu.offsetWidth - MENU_EDGE_GAP;
+        const maxY = container.scrollTop + container.clientHeight - menu.offsetHeight - MENU_EDGE_GAP;
+        setPosition({
+            x: Math.max(MENU_EDGE_GAP, Math.min(x, maxX)),
+            y: Math.max(MENU_EDGE_GAP, Math.min(y, maxY)),
+        });
+    }, [show, x, y]);
+
+    useEventListener('keydown', (e: KeyboardEvent) => {
+        if (show && e.key === 'Escape') {
+            close();
+        }
+    });
+
+    useEventListener('pointerdown', (e: PointerEvent) => {
+        // right-clicks are handled by whoever opens the menu
+        if (show && e.button !== 2 && !menuRef.current?.contains(e.target as Node)) {
+            close();
+        }
+    });
+
     if (!show) {
         return null;
     }
 
     return (
-        <ContextMenuContainer style={{ top: y, left: x }}>
+        <ContextMenuContainer
+            ref={menuRef}
+            role='menu'
+            style={{ top: position.y, left: position.x }}
+            onContextMenu={e => e.preventDefault()}
+        >
             {
-                contextMenuItems.map((item, index) => {
-                    return (
-                        <div
-                            className={`contextMenuItem ${item.disabled ? 'disabled' : null}`}
-                            key={index}
-                            onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                contextMenuItems.map((item, index) => (
+                    <React.Fragment key={item.name}>
+                        {item.separatorBefore && index > 0 ? <div className='separator' /> : null}
+                        <button
+                            role='menuitem'
+                            className={`contextMenuItem${item.danger ? ' danger' : ''}`}
+                            disabled={item.disabled}
+                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                item.action && item.action();
-                                dispatch(toggleContextMenu());
+                                item.action();
+                                close();
                             }}
                         >
-                            <span><Icon Icon={item.icon} /></span>
+                            <item.icon />
                             <span>{item.name}</span>
-                        </div>
-                    );
-                })
+                        </button>
+                    </React.Fragment>
+                ))
             }
         </ContextMenuContainer>
     );
 }
+
+const MENU_EDGE_GAP = 8;
+
+interface CONTEXT_MENU_ITEM {
+    name: string;
+    icon: IconType;
+    disabled: boolean;
+    action: () => void;
+    danger?: boolean;
+    separatorBefore?: boolean;
+}
+
+const menuIn = keyframes`
+    from{ opacity: 0; transform: scale(.97); }
+    to{ opacity: 1; transform: scale(1); }
+`;
 
 const ContextMenuContainer = styled.div`
    ${props => {
         const theme = props.theme as THEME;
         return css`
             position:absolute;
-            width:200px;
-            box-shadow: 0 0 3px #ccc;
-            border:1px solid #ccc;
-            text-align: left;
-            text-transform: capitalize;
-            background-color: white;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+            padding: ${theme.spacing(.5)}px;
+            background-color: ${UI_COLORS.surface};
+            border: 1px solid ${UI_COLORS.border};
+            border-radius: ${theme.spacing(1)}px;
+            box-shadow: ${UI_SHADOWS.popover};
+            color: ${UI_COLORS.text};
+            font-size: 13px;
+            text-align: left;
+            animation: ${menuIn} .1s ease-out;
+            transform-origin: top left;
+
+            &>.separator{
+                height: 1px;
+                margin: ${theme.spacing(.5)}px ${theme.spacing(-.5)}px;
+                background-color: ${UI_COLORS.border};
+            }
+
             &>.contextMenuItem{
-                padding:${theme.spacing(1)}px;
-                border:1px solid #ccc;
-                &>span{
-                    vertical-align: middle;
-                    margin:0 4px;
-                    &:last-child{
-                        position:relative;
-                        bottom:2px;
-                        font-weight: bold;
+                display: flex;
+                align-items: center;
+                gap: ${theme.spacing(1.25)}px;
+                height: 32px;
+                padding: 0 ${theme.spacing(1.25)}px;
+                border: none;
+                border-radius: ${theme.spacing(.75)}px;
+                background: transparent;
+                font: inherit;
+                color: inherit;
+                text-align: left;
+                cursor: pointer;
+
+                &>svg{
+                    flex-shrink: 0;
+                    color: ${UI_COLORS.textMuted};
+                }
+                &:hover:not(:disabled){
+                    background-color: ${UI_COLORS.hover};
+                }
+                &:active:not(:disabled){
+                    background-color: ${UI_COLORS.pressed};
+                }
+                &.danger{
+                    color: ${UI_COLORS.danger};
+                    &>svg{
+                        color: ${UI_COLORS.danger};
+                    }
+                    &:hover:not(:disabled){
+                        background-color: ${UI_COLORS.dangerSoft};
                     }
                 }
-                &:hover{
-                    cursor:pointer;
-                    background-color: #ccc;
-                }
-                &:active{
-                    background-color: #ddd;
-                }
-                &.disabled{
-                    pointer-events: none;
-                    opacity: .6;
+                &:disabled{
+                    cursor: default;
+                    opacity: .4;
                 }
             }
        `;

@@ -34,6 +34,7 @@ export function getStyleObj(style: STYLE) {
     const s = style;
     const styleObj = {
         fill: s.fill,
+        opacity: s.opacity ?? 1,
         fillOpacity: s.fillOpacity,
         fillRule: s.fillRule,
         stroke: s.stroke,

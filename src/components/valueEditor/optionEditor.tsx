@@ -17,7 +17,7 @@ const OptionEditor: React.FC<props> = function ({ value, onChange, label, option
     }
 
     return (
-        <Editor>
+        <Editor className='valueEditor optionEditor'>
             <div className='label'>{label}</div>
             <select value={value} onChange={changeHandler}>
                 {
@@ -50,11 +50,18 @@ const Editor = styled.div`
             }
 
             &>select{
-                border:1px solid #555;
-                outline:none;
-                height:25px;
-                padding:0 2px;
+                border:1px solid #d1d5db;
+                background-color: white;
+                height:28px;
+                padding:0 4px;
                 border-radius:4px;
+                font-size: 12px;
+                text-transform: capitalize;
+                outline: none;
+                    &:focus{
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 2px rgba(59, 130, 246, .2);
+                    }
                 &:hover{
                     cursor: pointer;
                 }

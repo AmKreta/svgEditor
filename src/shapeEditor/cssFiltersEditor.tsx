@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { EditorProps } from './baseShapeEditor';
-import styled, { css } from 'styled-components';
-import { THEME } from '../theme/theme';
+import styled from 'styled-components';
+import { DeleteSpan } from './editorPanel.styles';
 import NumberEditor from '../components/valueEditor/numberEditor';
 import ColorEditor from '../components/valueEditor/colorEditor';
 import { useState } from 'react';
@@ -239,7 +239,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
                 }
                 step={10}
             />
-            <Button title='Add Drop-Shadow' onClick={addDropShadow} style={{ margin: 'auto', marginTop: '16px' }} />
+            <Button title='+ Add Drop Shadow' onClick={addDropShadow} />
             {
                 shape.style.cssFilters?.dropShadow?.map((shadow, idx) => (
                     <React.Fragment key={idx + shadow.toString()}>
@@ -254,8 +254,8 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
                             }}
                             label={
                                 <>
-                                    <DeleteSpan className='delete' data-index={idx} title='delete this shadow' onClick={removeDropShadowAtIndex}>❌</DeleteSpan>
-                                    <span>s[{idx}] X</span>
+                                    <DeleteSpan className='delete' data-index={idx} title='Remove' onClick={removeDropShadowAtIndex}>✕</DeleteSpan>
+                                    <span>Shadow {idx + 1} · X</span>
                                 </>
                             }
                             step={5}
@@ -271,8 +271,8 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
                             }}
                             label={
                                 <>
-                                    <DeleteSpan className='delete' data-index={idx} title='delete this shadow' onClick={removeDropShadowAtIndex}>❌</DeleteSpan>
-                                    <span>s[{idx}] Y</span>
+                                    <DeleteSpan className='delete' data-index={idx} title='Remove' onClick={removeDropShadowAtIndex}>✕</DeleteSpan>
+                                    <span>Shadow {idx + 1} · Y</span>
                                 </>
                             }
                             step={5}
@@ -288,8 +288,8 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
                             }}
                             label={
                                 <>
-                                    <DeleteSpan className='delete' data-index={idx} title='delete this shadow' onClick={removeDropShadowAtIndex}>❌</DeleteSpan>
-                                    <span>s[{idx}] Blur</span>
+                                    <DeleteSpan className='delete' data-index={idx} title='Remove' onClick={removeDropShadowAtIndex}>✕</DeleteSpan>
+                                    <span>Shadow {idx + 1} · Blur</span>
                                 </>
                             }
                             step={5}
@@ -303,8 +303,8 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
                             }}
                             label={
                                 <>
-                                    <DeleteSpan className='delete' data-index={idx} title='delete this shadow' onClick={removeDropShadowAtIndex}>❌</DeleteSpan>
-                                    <span>s[{idx}] Color</span>
+                                    <DeleteSpan className='delete' data-index={idx} title='Remove' onClick={removeDropShadowAtIndex}>✕</DeleteSpan>
+                                    <span>Shadow {idx + 1} · Color</span>
                                 </>
                             }
                         />
@@ -318,32 +318,7 @@ const CssFiltersEditor: React.FC<EditorProps> = function ({ shape }) {
 export default CssFiltersEditor;
 
 const Checkbox = styled.input`
-    ${props => {
-        const theme = props.theme as THEME;
-        return css`
-                vertical-align: middle;
-                margin-right: ${theme.spacing(.5)}px;
-                position:relative;
-                bottom:2px;
-            }
-        `;
-    }}
-`;
-
-const DeleteSpan = styled.span`
-     ${props => {
-        const theme = props.theme as THEME;
-        return css`
-                vertical-align: middle;
-                margin-right: ${theme.spacing(.5)}px;
-                position:relative;
-                bottom:2px;
-                font-size: .8em;
-                opacity: .7;
-                &:hover{
-                    cursor: pointer;
-                }
-            }
-        `;
-    }}
+    margin: 0;
+    cursor: pointer;
+    accent-color: #3b82f6;
 `;

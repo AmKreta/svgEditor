@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { getActiveShapesInfo, getActiveTool, getHoveredShapeId, getShapesOfCurrentPage, getContextMenuState, getHelpers, getSvgStyle } from '../../selector/selector';
 import { State } from '../../store/store';
 import { AVAILABLE_SHAPES } from '../../shapes/availableShapes';
-import { multiPointShpes, SHAPE_TYPES, TRANSFORM_CURSOR_MAPPING } from '../../utils/constant';
+import { MIN_PATH_POINT_DISTANCE, multiPointShpes, POINTER_BUTTON, SHAPE_TYPES } from '../../utils/constant';
 import { useDispatch } from 'react-redux';
-import { addShape, setActiveShape, toggleContextMenu } from '../../actions/pages/pages.actions';
+import { addShape, formatActiveShape, setActiveShape, setActiveTool, toggleContextMenu } from '../../actions/pages/pages.actions';
 import DrawShapes from './drawShape';
 import ShapeSelector, { SHAPE_SELECTOR_PROPS, initialShapeSelectorProps } from './shapeSelector';
 import { areColliding } from '../../utils/utils';
@@ -20,6 +20,24 @@ import { isEqual } from 'lodash';
 import { HELPERS } from '../../actions/helpers/helpers.interface';
 import PointerHelper from './pointerHelper';
 import GridHelper from './gridHelper';
+import { useRAFThrottled, useSvgPointerPosition, useTransformMode } from '../../hooks';
+import { eventToSvgPoint, pointDistance, tryReleasePointerCapture, trySetPointerCapture } from '../../utils/svgCoords';
+import { BOX_DRAWN_SHAPES, getDrawnShapeGeometry } from '../../utils/shapeGeometry';
+import { CURSORS } from '../../utils/cursor';
+import SelectionOverlay from './selectionOverlay';
+import { getTimelineUi } from '../../selector/selector';
+
+type CanvasGesture = 'none' | 'path' | 'marquee' | 'create' | 'line';
+
+/** Pointer travel (svg units) before a press counts as a drag rather than a click. */
+const DRAG_THRESHOLD = 3;
+
+interface CreateGesture {
+    tool: SHAPE_TYPES;
+    start: { x: number, y: number };
+    /** set once the drag passes DRAG_THRESHOLD and the shape is added */
+    shapeId: string | null;
+}
 
 const SvgEditor: React.FC<{}> = function () {
     const shapesOfCurrentPage = useSelector<State, { [key: string]: AVAILABLE_SHAPES; }>(getShapesOfCurrentPage);
@@ -28,152 +46,266 @@ const SvgEditor: React.FC<{}> = function () {
     const hoveredShapeId = useSelector<State, string | null>(getHoveredShapeId);
     const helpers = useSelector<State, HELPERS>(getHelpers, isEqual);
     const svgStyle = useSelector(getSvgStyle);
+    const { preview, editing } = useSelector(getTimelineUi);
+    // while the timeline previews a moment other than the start, the canvas is view-only
+    // the canvas is editable only while a cutscene is loaded; otherwise it shows the timeline preview
+    const isPreviewing = !editing;
+    const shapesToShow = (isPreviewing && preview) || shapesOfCurrentPage;
+    const activeToShow = isPreviewing ? [] : activeShapes;
 
     const [shapeSelectorProps, setShapeSelectorProps] = useState<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
     const [pointsArray, setPointsArray] = useState<Array<[number, number]>>([]);
+    const pointsArrayRef = useRef<Array<[number, number]>>([]);
     const contextMenu = useSelector<State, CONTEXT_MENU_INTERFACE>(getContextMenuState);
     const svgEditorRef = useRef<SVGSVGElement>(null);
+    const gestureRef = useRef<CanvasGesture>('none');
+    const pendingPathPoint = useRef<[number, number] | null>(null);
+    const marqueeRef = useRef<SHAPE_SELECTOR_PROPS>(initialShapeSelectorProps);
+    const lastMarqueePoint = useRef({ x: 0, y: 0 });
+    const readSvgPoint = useSvgPointerPosition(svgEditorRef);
+    const createRef = useRef<CreateGesture | null>(null);
+    const pendingCreatePoint = useRef<{ x: number, y: number, shiftKey: boolean } | null>(null);
+    const [isCreating, setIsCreating] = useState(false);
 
     const dispatch = useDispatch();
+    useTransformMode();
 
-    useEffect(function () {
-        window.onkeydown = (e) => {
-            if (e.key === 'Control') {
-                document.body.style.cursor = TRANSFORM_CURSOR_MAPPING.SCALE;
+    /** Once a shape is finished, go back to the select tool so it can be moved/resized straight away. */
+    const finishDrawing = () => dispatch(setActiveTool(SHAPE_TYPES.PAN));
+
+    const flushPathPoint = useRAFThrottled(() => {
+        const next = pendingPathPoint.current;
+        if (!next) {
+            return;
+        }
+        pendingPathPoint.current = null;
+        const last = pointsArrayRef.current[pointsArrayRef.current.length - 1];
+        if (last && pointDistance(last, next) < MIN_PATH_POINT_DISTANCE) {
+            return;
+        }
+        const nextPoints = [...pointsArrayRef.current, next];
+        pointsArrayRef.current = nextPoints;
+        setPointsArray(nextPoints);
+    });
+
+    const flushMarquee = useRAFThrottled(() => {
+        setShapeSelectorProps({ ...marqueeRef.current });
+    });
+
+    const flushCreate = useRAFThrottled(() => {
+        const gesture = createRef.current;
+        const point = pendingCreatePoint.current;
+        if (!gesture || !point) {
+            return;
+        }
+        if (!gesture.shapeId) {
+            if (pointDistance(gesture.start, point) < DRAG_THRESHOLD) {
+                return;
             }
-            else if (e.key === 'Shift') {
-                document.body.style.cursor = TRANSFORM_CURSOR_MAPPING.ROTATE;
+            const action = addShape({ shape: gesture.tool, x: gesture.start.x, y: gesture.start.y });
+            if (!action) {
+                return;
             }
+            dispatch(action);
+            gesture.shapeId = action.payload.id;
         }
-        window.onkeyup = () => {
-            document.body.style.cursor = TRANSFORM_CURSOR_MAPPING.DEFAULT;
-        }
+        dispatch(formatActiveShape({
+            id: gesture.shapeId,
+            properties: getDrawnShapeGeometry(gesture.tool, gesture.start, point, point.shiftKey)
+        }));
+    });
 
-        return () => {
-            window.onkeydown = null;
-            window.onkeyup = null;
-        }
-    }, []);
-
-    function mouseDownHandler(e: React.MouseEvent<SVGSVGElement>) {
+    function pointerDownHandler(e: React.PointerEvent<SVGSVGElement>) {
         e.preventDefault();
         e.stopPropagation();
 
-        const element = e.currentTarget as SVGElement;
-        const boundingRect = element.getBoundingClientRect();
-        let x = e.clientX - boundingRect.x;
-        let y = e.clientY - boundingRect.y;
+        const element = e.currentTarget;
+        const { x, y } = readSvgPoint(e);
 
-        if (e.buttons === 2) {
+        if (e.button === POINTER_BUTTON.SECONDARY) {
             if ((activeTool === SHAPE_TYPES.POLYGON || activeTool === SHAPE_TYPES.POLYLINE) && pointsArray.length >= 2) {
-                // if active tool is polygon, polyline
                 dispatch(addShape({ shape: activeTool, x, y, pointsArray }));
+                finishDrawing();
+                pointsArrayRef.current = [];
                 setPointsArray([]);
             }
             else {
-                // right click
-                // show context menu
                 dispatch(toggleContextMenu({ x, y }));
             }
             return;
         }
 
+        if (e.button !== POINTER_BUTTON.PRIMARY) {
+            return;
+        }
+
         if (contextMenu.show) {
-            // if context menu is already geting displayed
-            // hide it on click
             dispatch(toggleContextMenu());
             return;
         }
 
-
-        // check if there is any active shape, empty active shape array
-        // if polygon , polyline or line are selected , add points to  points array
-        // if any  tool is selected other than PAN, add active tool shape
-        // shape selected logic
-
         if (activeShapes.length) {
-            // if not clicked on any shape (clicked on svg canvas)
-            // removed all elements from active shape array
             dispatch(setActiveShape([]));
         }
 
-        else if (multiPointShpes.includes(activeTool)) {
-            // adding points to array
+        if (multiPointShpes.includes(activeTool)) {
             if (activeTool === SHAPE_TYPES.LINE && pointsArray.length === 1) {
                 dispatch(addShape({ shape: activeTool, x, y, pointsArray: [...pointsArray, [x, y]] }));
+                finishDrawing();
+                pointsArrayRef.current = [];
                 setPointsArray([]);
             }
+            else if (activeTool === SHAPE_TYPES.LINE) {
+                // drag out a line; a plain click falls back to click-to-place the end point
+                gestureRef.current = 'line';
+                pointsArrayRef.current = [[x, y]];
+                setPointsArray([[x, y]]);
+                trySetPointerCapture(element, e.pointerId);
+            }
             else if (activeTool === SHAPE_TYPES.PATH) {
-                let draw = true;
-                element.onmousemove = function (ev) {
-                    if (draw) {
-                        const x1 = ev.clientX - boundingRect.x, y1 = ev.clientY - boundingRect.y;
-                        setPointsArray(prevState => [...prevState, [x1, y1]]);
-                        draw = false;
-                        let timeout = setTimeout(function () {
-                            draw = true;
-                            clearTimeout(timeout);
-                        }, 15);
-                    }
-                }
+                gestureRef.current = 'path';
+                pendingPathPoint.current = null;
+                pointsArrayRef.current = [[x, y]];
+                setPointsArray([[x, y]]);
+                trySetPointerCapture(element, e.pointerId);
             }
             else {
-                setPointsArray(prevState => ([...prevState, [x, y]]));
+                const nextPoints = [...pointsArrayRef.current, [x, y]] as Array<[number, number]>;
+                pointsArrayRef.current = nextPoints;
+                setPointsArray(nextPoints);
             }
+        }
+
+        else if (BOX_DRAWN_SHAPES.includes(activeTool)) {
+            gestureRef.current = 'create';
+            createRef.current = { tool: activeTool, start: { x, y }, shapeId: null };
+            pendingCreatePoint.current = null;
+            setIsCreating(true);
+            trySetPointerCapture(element, e.pointerId);
         }
 
         else if (activeTool !== SHAPE_TYPES.PAN) {
-            // id active tool is not pan 
-            // add shape according to the selected tool
             dispatch(addShape({ shape: activeTool, x, y, pointsArray: [[x, y]] }));
+            finishDrawing();
         }
 
         else {
-            // shape selector logic
-            // if clicked on any tool or shape selector is in use
-            // select shapes
-            setShapeSelectorProps(prevState => ({ ...prevState, show: true, x, y }));
-            e.currentTarget.onmousemove = ev => {
-                const x1 = ev.clientX - boundingRect.x, y1 = ev.clientY - boundingRect.y;
-                const dx = x1 - x, dy = y1 - y;
-                x = x1; y = y1;
-                setShapeSelectorProps(prevState => ({
-                    ...prevState,
-                    height: prevState.height + dy,
-                    width: prevState.width + dx
-                }));
-            }
+            gestureRef.current = 'marquee';
+            lastMarqueePoint.current = { x, y };
+            marqueeRef.current = { show: true, x, y, height: 0, width: 0 };
+            setShapeSelectorProps(marqueeRef.current);
+            trySetPointerCapture(element, e.pointerId);
         }
     }
 
-    const mouseUpHandler = (e: React.MouseEvent<SVGElement>) => {
-        e.currentTarget.onmousemove = null;
+    const pointerMoveHandler = (e: React.PointerEvent<SVGSVGElement>) => {
+        if (gestureRef.current === 'none') {
+            return;
+        }
 
-        if (activeTool === SHAPE_TYPES.PATH && pointsArray.length) {
-            dispatch(addShape({ shape: activeTool, pointsArray, x: 0, y: 0 }));
+        const { x: x1, y: y1 } = eventToSvgPoint(svgEditorRef.current, e);
+
+        if (gestureRef.current === 'path') {
+            pendingPathPoint.current = [x1, y1];
+            flushPathPoint();
+            return;
+        }
+
+        if (gestureRef.current === 'create') {
+            pendingCreatePoint.current = { x: x1, y: y1, shiftKey: e.shiftKey };
+            flushCreate();
+            return;
+        }
+
+        if (gestureRef.current === 'marquee') {
+            const dx = x1 - lastMarqueePoint.current.x;
+            const dy = y1 - lastMarqueePoint.current.y;
+            lastMarqueePoint.current = { x: x1, y: y1 };
+            marqueeRef.current = {
+                ...marqueeRef.current,
+                height: marqueeRef.current.height + dy,
+                width: marqueeRef.current.width + dx
+            };
+            flushMarquee();
+        }
+    }
+
+    const pointerUpHandler = (e: React.PointerEvent<SVGSVGElement>) => {
+        const element = e.currentTarget;
+        tryReleasePointerCapture(element, e.pointerId);
+
+        if (gestureRef.current === 'path') {
+            flushPathPoint.flush();
+            gestureRef.current = 'none';
+            pendingPathPoint.current = null;
+            const drawnPoints = pointsArrayRef.current;
+            if (drawnPoints.length) {
+                dispatch(addShape({ shape: activeTool, pointsArray: drawnPoints, x: 0, y: 0 }));
+                finishDrawing();
+            }
+            pointsArrayRef.current = [];
             setPointsArray([]);
             return;
         }
 
-        if (shapeSelectorProps.show) {
+        if (gestureRef.current === 'create') {
+            flushCreate.flush();
+            gestureRef.current = 'none';
+            const gesture = createRef.current;
+            createRef.current = null;
+            pendingCreatePoint.current = null;
+            setIsCreating(false);
+            if (gesture && !gesture.shapeId) {
+                // plain click: add the shape at its default size
+                dispatch(addShape({ shape: gesture.tool, x: gesture.start.x, y: gesture.start.y }));
+            }
+            gesture && finishDrawing();
+            return;
+        }
+
+        if (gestureRef.current === 'line') {
+            gestureRef.current = 'none';
+            const start = pointsArrayRef.current[0];
+            const { x, y } = eventToSvgPoint(svgEditorRef.current, e);
+            if (start && pointDistance(start, [x, y]) >= DRAG_THRESHOLD) {
+                dispatch(addShape({ shape: SHAPE_TYPES.LINE, x, y, pointsArray: [start, [x, y]] }));
+                finishDrawing();
+                pointsArrayRef.current = [];
+                setPointsArray([]);
+            }
+            return;
+        }
+
+        if (gestureRef.current === 'marquee') {
+            flushMarquee.flush();
+            gestureRef.current = 'none';
             const selectedShapes: string[] = [];
-            const selector = (document.querySelector('#Shape-Selector') as SVGPolygonElement).getBoundingClientRect();
+            const selector = (document.querySelector('#Shape-Selector') as SVGPolygonElement | null)?.getBoundingClientRect();
+            const currentMarquee = marqueeRef.current;
             setShapeSelectorProps(initialShapeSelectorProps);
-            e.currentTarget.childNodes.forEach((node) => {
-                const shape = (node as SVGElement).getBoundingClientRect();
-                if (areColliding(selector, shape)) {
-                    const el = node as SVGElement;
-                    if (el.id !== 'Shape-Selector') {
-                        selectedShapes.push(el.id);
+            marqueeRef.current = initialShapeSelectorProps;
+            if (selector && currentMarquee.show) {
+                element.childNodes.forEach((node) => {
+                    const shape = (node as SVGElement).getBoundingClientRect();
+                    if (areColliding(selector, shape)) {
+                        const el = node as SVGElement;
+                        // shapes of other timelines can't be selected while editing a cutscene
+                        if (el.id && el.id !== 'Shape-Selector' && !el.dataset.locked) {
+                            selectedShapes.push(el.id);
+                        }
                     }
-                }
-            });
-            selectedShapes.length && dispatch(setActiveShape(selectedShapes));
+                });
+                selectedShapes.length && dispatch(setActiveShape(selectedShapes));
+            }
         }
     }
 
     return (
-        <SvgContainer onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }} style={{overflow:'scroll'}}>
+        <SvgContainer
+            onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}
+            style={{ overflow: 'scroll' }}
+            className={isPreviewing ? 'previewing' : ''}
+        >
             {
                 helpers.gridHelpers
                     ? <GridHelper />
@@ -182,14 +314,17 @@ const SvgEditor: React.FC<{}> = function () {
             <StyledSvg
                 height={`${svgStyle.height}%`}
                 width={`${svgStyle.width}%`}
-                onMouseDown={mouseDownHandler}
-                onMouseUp={mouseUpHandler}
+                onPointerDown={pointerDownHandler}
+                onPointerMove={pointerMoveHandler}
+                onPointerUp={pointerUpHandler}
+                onPointerCancel={pointerUpHandler}
                 id='svgEditor'
+                data-tool={activeTool}
                 ref={svgEditorRef}
                 xmlns='http://www.w3.org/2000/svg'
                 xmlnsXlink='http://www.w3.org/1999/xlink'
                 version='1.1'
-                style={{ backgroundColor: svgStyle.backgroundColor,backgroundImage:'url("#gridHelper")' }}
+                style={{ backgroundColor: svgStyle.backgroundColor, backgroundImage: 'url("#gridHelper")' }}
             >
                 <defs>
                     <Filters />
@@ -205,11 +340,11 @@ const SvgEditor: React.FC<{}> = function () {
                     (
                         function () {
                             const shapesToDraw: any = [];
-                            for (let id in shapesOfCurrentPage) {
-                                if (shapesOfCurrentPage[id].render && !activeShapes.find(shapeId => shapeId === id)) {
+                            for (let id in shapesToShow) {
+                                if (shapesToShow[id].render && !activeToShow.find(shapeId => shapeId === id)) {
                                     shapesToDraw.push(
                                         <DrawShapes
-                                            shape={shapesOfCurrentPage[id]}
+                                            shape={shapesToShow[id]}
                                             isActive={false}
                                             hovered={hoveredShapeId === id}
                                             key={id}
@@ -217,13 +352,11 @@ const SvgEditor: React.FC<{}> = function () {
                                     )
                                 }
                             }
-                            // rendering active shape at last so that there is no 
-                            // problem in moving active element
-                            activeShapes.forEach((shapeId) => {
-                                if (shapesOfCurrentPage[shapeId].render) {
+                            activeToShow.forEach((shapeId) => {
+                                if (shapesToShow[shapeId]?.render) {
                                     shapesToDraw.push(
                                         <DrawShapes
-                                            shape={shapesOfCurrentPage[shapeId]}
+                                            shape={shapesToShow[shapeId]}
                                             isActive={true}
                                             hovered={hoveredShapeId === shapeId}
                                             key={shapeId}
@@ -240,6 +373,7 @@ const SvgEditor: React.FC<{}> = function () {
                         ? <PointsArrayFigureViewer
                             pointsArray={pointsArray}
                             type={activeTool}
+                            svgEditorRef={svgEditorRef}
                         />
                         : null
                 }
@@ -251,6 +385,7 @@ const SvgEditor: React.FC<{}> = function () {
                     show={shapeSelectorProps.show}
                 />
             </StyledSvg>
+            <SelectionOverlay svgEditorRef={svgEditorRef} hidden={isCreating || isPreviewing} />
             <ContextMenu />
         </SvgContainer>
     );
@@ -263,10 +398,46 @@ const StyledSvg = styled.svg`
     position: absolute;
     top:0;
     left: 0;
+    touch-action: none;
+
+    /* drawing tools: every press starts a new shape, even on top of another one */
+    cursor: crosshair;
+    &:not([data-tool='${SHAPE_TYPES.PAN}']) *{
+        cursor: inherit;
+    }
+    &[data-tool='${SHAPE_TYPES.TEXT}']{
+        cursor: text;
+    }
+
+    /* select tool: pointer to pick a shape, grab to drag the selected one */
+    &[data-tool='${SHAPE_TYPES.PAN}']{
+        cursor: default;
+        &>.inactive, &>.hovered{
+            cursor: pointer;
+        }
+        &>.active{
+            cursor: grab;
+        }
+    }
+    body[data-transform-mode='SCALE'] &[data-tool='${SHAPE_TYPES.PAN}']>:is(.active, .inactive, .hovered){
+        cursor: ${CURSORS.SCALE};
+    }
+    body[data-transform-mode='ROTATE'] &[data-tool='${SHAPE_TYPES.PAN}']>:is(.active, .inactive, .hovered){
+        cursor: ${CURSORS.ROTATE};
+    }
 `;
 
 const SvgContainer = styled.div`
     grid-area:svgEditor;
+
+    &.previewing>#svgEditor{
+        pointer-events: none;
+    }
+    & #svgEditor>[data-locked='true']{
+        pointer-events: none;
+        opacity: .45;
+    }
+
     min-width: 0;
     height:100%;
     width:100%;

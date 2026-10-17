@@ -15,13 +15,11 @@ const Modal: React.FC<Props> = function ({ overlayStyle = {}, modalStyle = {}, c
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
     function disableScroll() {
-        document.body.style.maxHeight = '100vh';
+        // the overlay is position:fixed, so the page can stay where it is
         document.body.style.overflow = 'hidden';
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
 
     function enableScroll() {
-        document.body.style.maxHeight = 'auto';
         document.body.style.overflow = 'visible';
     }
 

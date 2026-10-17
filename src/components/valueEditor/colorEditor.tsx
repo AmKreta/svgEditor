@@ -51,7 +51,7 @@ const ColorEditor: React.FC<props> = function ({ value, onChange, label, disable
     }
 
     return (
-        <Editor disabled={disabled}>
+        <Editor disabled={disabled} className='valueEditor colorEditor'>
             <div className='label'>{label}</div>
             {
                 showPalette
@@ -96,21 +96,23 @@ const Editor = styled.div<styleProps>`
             vertical-align: middle;
             text-align: center;
             
-            &>input{
-                height: 25px;
-                width:35px;
+            & input[type='color']{
+                height: 28px;
+                width:36px;
                 margin:0 ${theme.spacing(.5)}px;
+                padding: 2px;
                 text-align: center;
-                border: none;
+                border: 1px solid #d1d5db;
                 outline: none;
                 border-radius: ${theme.spacing(.5)}px;
+                background-color: white;
                 ${() => props.disabled && css`
                     pointer-events: none;
                     opacity:.5;
                 `}
             }
 
-            &>input:hover{
+            & input[type='color']:hover{
                 cursor:pointer;
             }    
 

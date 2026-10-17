@@ -1,5 +1,5 @@
 import React,{useState,useLayoutEffect,useRef} from 'react';
-import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
+import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, shapePointerProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
 import { getBoundingRectMidPoint, getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
 
@@ -29,11 +29,8 @@ const Path: React.FC<WRAPPED_SHAPE_PROPS> = function (props:WRAPPED_SHAPE_PROPS)
     return (
         <path
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             {...getStyleObj(shape.style)}
             d={(function () {
                 let [p1, ...p] = shape.points || [[0, 0], [0, 0]];

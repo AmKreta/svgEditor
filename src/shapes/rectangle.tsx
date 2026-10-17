@@ -1,4 +1,4 @@
-import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
+import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, shapePointerProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
 import { MEASUREMENT } from './style';
 import { getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
@@ -36,11 +36,8 @@ const Rectangle: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             height={`${shape.height}${shape.height_unit}`}
             width={`${shape.width}${shape.width_unit}`}
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             {...getStyleObj(shape.style)}
             transform-origin={`${shape.x + shape.width / 2} ${shape.y + shape.height / 2}`}
             rx={shape.rx}

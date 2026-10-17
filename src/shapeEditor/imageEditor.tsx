@@ -49,7 +49,7 @@ const ImageEditor: React.FC<EditorProps> = function ({ shape }) {
             </div>
             <div className='EditorCaegoryContainer'>
                 <div className='editorCategory'>Content</div>
-                <ImageEditorButton>
+                <ImageEditorButton className='fullRow'>
                     <div className='title'>Image</div>
                     <Button title='Change Image' onClick={clickHandler} />
                     <input type='file' accept="image/*" ref={fileInputRef} onChange={changeHandler} />
@@ -63,20 +63,23 @@ const ImageEditorButton = styled.div`
     ${props => {
         const theme = props.theme as THEME;
         return css`
-            margin:${theme.spacing(1)}px;
-            &>*{
-                display: inline-block;
-                vertical-align: middle;
-            }
+            display: flex;
+            align-items: center;
+            gap: ${theme.spacing(1)}px;
 
             &>div.title{
-                margin-right: ${theme.spacing(.5)}px;
-                font-weight: bold;
-                font-size: .8em;
+                font-size: 11px;
+                font-weight: 500;
+                color: #6b7280;
             }
 
             &>button{
-                width:80%;
+                flex-grow: 1;
+                justify-content: center;
+                height: 28px;
+                border: 1px solid #d1d5db;
+                border-radius: ${theme.spacing(.5)}px;
+                background-color: white;
             }
 
             &>input{

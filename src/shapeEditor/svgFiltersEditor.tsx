@@ -11,8 +11,7 @@ import { State } from '../store/store';
 import { AVAILABLE_FILTERS } from '../filters/availableFilters';
 import NumberEditor from '../components/valueEditor/numberEditor';
 import ColorEditor from '../components/valueEditor/colorEditor';
-import styled, { css } from 'styled-components';
-import { THEME } from '../theme/theme';
+import { DeleteSpan } from './editorPanel.styles';
 import { getOutlineDefaultProps, OUTLINE_FILTER } from '../filters/outline.filter';
 
 const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
@@ -56,7 +55,7 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
     return (
         <div className='EditorCaegoryContainer'>
             <div className='editorCategory'>SVG Filters</div>
-            <Button title='Add Inset Shadow' onClick={addInsetShadow} style={{ margin: '16px auto' }} />
+            <Button title='+ Add Inset Shadow' onClick={addInsetShadow} />
             {
                 shape.style.svgFilters[FILTER_TYPES.INSET_SHADOW]?.map((filterId, idx) => {
                     const filter = filtersOfCurrentPage[filterId] as INSET_SHADOW_FILTER;
@@ -69,8 +68,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>s[{idx}] X</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Shadow {idx + 1} · X</span>
                                     </>
                                 }
                                 step={5}
@@ -82,8 +81,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>s[{idx}] Y</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Shadow {idx + 1} · Y</span>
                                     </>
                                 }
                                 step={5}
@@ -95,8 +94,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>s[{idx}] Blur</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Shadow {idx + 1} · Blur</span>
                                     </>
                                 }
                                 step={5}
@@ -108,8 +107,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>s[{idx}] Color</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Shadow {idx + 1} · Color</span>
                                     </>
                                 }
                             />
@@ -117,7 +116,7 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                     );
                 })
             }
-            <Button title='Add Outline' onClick={addOutline} style={{ margin: '16px auto' }} />
+            <Button title='+ Add Outline' onClick={addOutline} />
             {
                 shape.style.svgFilters[FILTER_TYPES.OUTLINE]?.map((filterId, idx) => {
                     const filter = filtersOfCurrentPage[filterId] as OUTLINE_FILTER;
@@ -130,8 +129,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>Outline[{idx}] R</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Outline {idx + 1} · Radius</span>
                                     </>
                                 }
                                 step={5}
@@ -143,8 +142,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>Outline[{idx}] Blur</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Outline {idx + 1} · Blur</span>
                                     </>
                                 }
                                 step={5}
@@ -156,8 +155,8 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
                                 }}
                                 label={
                                     <>
-                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='delete this shadow' onClick={deleteFilter}>❌</DeleteSpan>
-                                        <span>Outline[{idx}] Fill</span>
+                                        <DeleteSpan className='delete' data-filterid={filter.id} data-filtertype={filter.type} title='Remove' onClick={deleteFilter}>✕</DeleteSpan>
+                                        <span>Outline {idx + 1} · Fill</span>
                                     </>
                                 }
                             />
@@ -170,22 +169,3 @@ const SvgFilterEditor: React.FC<EditorProps> = function ({ shape }) {
 }
 
 export default SvgFilterEditor;
-
-const DeleteSpan = styled.span`
-     ${props => {
-        const theme = props.theme as THEME;
-        return css`
-                vertical-align: middle;
-                margin-right: ${theme.spacing(.5)}px;
-                position:relative;
-                bottom:2px;
-                font-size: .8em;
-                opacity: .7;
-                &:hover{
-                    cursor: pointer;
-                }
-            }
-        `;
-    }}
-`;
-

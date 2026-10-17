@@ -26,6 +26,8 @@ export interface SVG_FILTERS {
 }
 
 export interface STYLE {
+    /** whole-shape opacity; 0 hides the shape (e.g. before it enters in a cutscene). Missing means 1. */
+    opacity?: number;
     fill: string;
     fillOpacity: number;
     fillRule: 'nonzero' | 'evenodd' | 'inherit';

@@ -1,4 +1,4 @@
-import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
+import BaseTool, { BASE_SHAPE, getBaseToolDefaultProps, shapePointerProps, WRAPPED_SHAPE_PROPS } from "./baseShapes";
 import { getStyleObj, getTransformOrigin } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
 
@@ -24,11 +24,8 @@ const Polygon: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
     return (
         <line
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             {...getStyleObj(shape.style)}
             x1={x1}
             y1={y1}

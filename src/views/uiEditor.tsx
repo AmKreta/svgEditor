@@ -4,6 +4,7 @@ import EditorHeader from '../components/uiEditor/editorHeader';
 //import ElementTree from '../components/uiEditor/elementTree';
 import SvgEditor from '../components/uiEditor/svgEditor';
 import ElementFormatter from '../components/uiEditor/elementFormatter';
+import Timeline from '../components/timeline/timeline';
 //import EditorFooter from '../components/uiEditor/editorFooter';
 import { THEME } from '../theme/theme';
 
@@ -13,6 +14,7 @@ const NftEditor: React.FC<{}> = function () {
             <EditorHeader />
             <SvgEditor />
             <ElementFormatter />
+            <Timeline />
         </EditorContainer>
     );
 };
@@ -23,12 +25,12 @@ const EditorContainer = styled.div`
         return css`
         height:100%;
         display:grid;
-        grid-template-rows:10fr 70fr 20fr;
+        grid-template-rows:minmax(88px, auto) minmax(0, 1fr) auto;
         grid-template-columns:10fr 70fr 20fr;
         grid-template-areas:
-            "header    header    elementformatter" 
+            "header    header    elementformatter"
             "svgEditor svgEditor elementformatter"
-            "svgEditor svgEditor elementformatter";
+            "timeline  timeline  elementformatter";
         grid-gap:${theme.spacing(1)}px;    
         padding:${theme.spacing(1)}px;
         min-width: 0;

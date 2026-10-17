@@ -1,5 +1,5 @@
 import React from "react";
-import BaseTool, { BASE_SHAPE, WRAPPED_SHAPE_PROPS, getBaseToolDefaultProps } from "./baseShapes";
+import BaseTool, { BASE_SHAPE, WRAPPED_SHAPE_PROPS, getBaseToolDefaultProps, shapePointerProps } from "./baseShapes";
 import { MEASUREMENT } from './style';
 import { getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
@@ -34,11 +34,8 @@ const Ellipse: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             rx={`${shape.radiusX}${shape.radiusX_unit}`}
             ry={`${shape.radiusY}${shape.radiusY_unit}`}
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             {...getStyleObj(shape.style)}
             transform-origin={`${shape.x} ${shape.y}`}
         />

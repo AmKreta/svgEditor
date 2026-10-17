@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
-import BaseTool, { BASE_SHAPE, WRAPPED_SHAPE_PROPS, getBaseToolDefaultProps } from "./baseShapes";
+import BaseTool, { BASE_SHAPE, WRAPPED_SHAPE_PROPS, getBaseToolDefaultProps, shapePointerProps } from "./baseShapes";
 import { getBoundingRectMidPoint, getStyleObj } from "../utils/utils";
 import { SHAPE_TYPES } from "../utils/constant";
 
@@ -42,11 +42,8 @@ const Text: React.FC<WRAPPED_SHAPE_PROPS> = function (props) {
             x={`${shape.x}${shape.x_unit}`}
             y={`${shape.y}${shape.y_unit}`}
             id={shape.id}
-            onMouseDown={props.mouseDownHandler}
-            onMouseUp={props.mouseUpHandler}
-            onMouseEnter={props.mouseEnterHandler}
-            onMouseLeave={props.mouseLeaveHandler}
-            className={props.hovered || props.isActive ? 'active' : 'inactive'}
+            {...shapePointerProps(props)}
+            className={props.isActive ? 'active' : props.hovered ? 'hovered' : 'inactive'}
             fontSize={shape.fontSize}
             fontWeight={shape.fontWeight}
             fontStyle={shape.fontStyle}

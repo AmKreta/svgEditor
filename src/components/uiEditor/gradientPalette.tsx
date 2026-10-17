@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { SiAddthis } from 'react-icons/si';
+import { BsPlus } from 'react-icons/bs';
+import { Swatch, Swatches } from './colorPalette';
 import Button from '../button.component';
 import Modal from '../modal.component';
 import CreateGradient from './createGradient';
@@ -7,8 +8,6 @@ import { useSelector } from 'react-redux';
 import { getCurrentProjectGradients } from '../../selector/selector';
 import { State } from '../../store/store';
 import { GRADIENT } from '../../actions/pages/pages.interface';
-import styled, { css } from 'styled-components';
-import { THEME } from '../../theme/theme';
 import { AiOutlineClose } from 'react-icons/ai';
 import Icon from '../icon.component';
 import { useDispatch } from 'react-redux';
@@ -46,19 +45,24 @@ const GradientPalette = function () {
 
     return (
         <>
-            <GradientContainer>
+            <Swatches>
+                {
+                    Object.keys(gradients).length === 0
+                        ? <span className='empty'>No gradients yet. Create one to use it as a fill.</span>
+                        : null
+                }
                 {
                     Object.keys(gradients).map(gradientId => {
                         return (
-                            <div onClick={selectGradient} key={gradientId} data-id={gradientId}>
+                            <Swatch onClick={selectGradient} key={gradientId} data-id={gradientId} title='Click to edit'>
                                 <GradientRenderer gradientId={gradientId}/>
-                                <Icon Icon={AiOutlineClose} onClick={removeGradient} data-id={gradientId} />
-                            </div>
+                                <Icon Icon={AiOutlineClose} onClick={removeGradient} data-id={gradientId} title='Remove gradient' />
+                            </Swatch>
                         );
                     })
                 }
-            </GradientContainer>
-            <Button startIcon={SiAddthis} title='Add' onClick={toggleCreateGradientModal} />
+            </Swatches>
+            <Button startIcon={BsPlus} iconSize={16} title='New gradient' onClick={toggleCreateGradientModal} />
             {
                 createGradient
                     ? (
@@ -82,42 +86,3 @@ const GradientPalette = function () {
 }
 
 export default GradientPalette;
-
-const GradientContainer = styled.div`
-    ${props => {
-        const theme = props.theme as THEME;
-        return css`
-            display: flex;
-            flex-grow: 1;
-            &>div{
-                height:25px;
-                width:25px;
-                position:relative;
-                
-                &:not(:last-child){
-                    margin-right:${theme.spacing(2)}px;
-                }
-                
-                &>svg{
-                    height:100%;
-                    width:100%;
-                }
-
-                &>.icon{
-                position:absolute;
-                top:0;
-                right:0;
-                transform:translate(50%,-50%) scale(.8);
-                background-color: white;
-                box-shadow: 0px 0px 3px #ccc;
-                border-radius: 50%;
-                padding:${theme.spacing(.5)}px;
-                    &:hover{
-                        background-color: black;
-                        color:white
-                    }
-                }
-            }
-        `;
-    }}
-`;
